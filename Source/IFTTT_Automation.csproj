@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{CD9EA9B6-88C7-417F-B9AC-B43FF6500001}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>IFTTT_Automation</RootNamespace>
+        <AssemblyName>IFTTT_Automation</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+      <Compile Include="ApplyTemplateTool.cs" />
+      <Compile Include="Configurator.cs" />
+      <Compile Include="Properties\AssemblyInfo.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <Reference Include="BepInEx, Version=5.4.21.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Dependencies\Timberborn\BepInEx.dll</HintPath>
+      </Reference>
+      <Reference Include="Bindito.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Dependencies\Timberborn\Bindito.Core.dll</HintPath>
+      </Reference>
+      <Reference Include="TimberApi, Version=0.5.5.3, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Dependencies\Timberborn\TimberApi.dll</HintPath>
+      </Reference>
+      <Reference Include="TimberApi.Common, Version=0.5.5.3, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Dependencies\Timberborn\TimberApi.Common.dll</HintPath>
+      </Reference>
+      <Reference Include="Timberborn.AreaSelectionSystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>U:\Timberborn_Data\Managed\Timberborn.AreaSelectionSystem.dll</HintPath>
+      </Reference>
+      <Reference Include="Timberborn.BaseComponentSystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Dependencies\Timberborn\Timberborn.BaseComponentSystem.dll</HintPath>
+      </Reference>
+      <Reference Include="Timberborn.BlockSystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>U:\Timberborn_Data\Managed\Timberborn.BlockSystem.dll</HintPath>
+      </Reference>
+      <Reference Include="Timberborn.BottomBarSystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>U:\Timberborn_Data\Managed\Timberborn.BottomBarSystem.dll</HintPath>
+      </Reference>
+      <Reference Include="Timberborn.BuilderPrioritySystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>U:\Timberborn_Data\Managed\Timberborn.BuilderPrioritySystem.dll</HintPath>
+      </Reference>
+      <Reference Include="Timberborn.ConstructibleSystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>U:\Timberborn_Data\Managed\Timberborn.ConstructibleSystem.dll</HintPath>
+      </Reference>
+      <Reference Include="Timberborn.CoreUI, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>U:\Timberborn_Data\Managed\Timberborn.CoreUI.dll</HintPath>
+      </Reference>
+      <Reference Include="Timberborn.InputSystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>U:\Timberborn_Data\Managed\Timberborn.InputSystem.dll</HintPath>
+      </Reference>
+      <Reference Include="Timberborn.Localization, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>U:\Timberborn_Data\Managed\Timberborn.Localization.dll</HintPath>
+      </Reference>
+      <Reference Include="Timberborn.SingletonSystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>U:\Timberborn_Data\Managed\Timberborn.SingletonSystem.dll</HintPath>
+      </Reference>
+      <Reference Include="Timberborn.ToolSystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Dependencies\Timberborn\Timberborn.ToolSystem.dll</HintPath>
+      </Reference>
+      <Reference Include="Timberborn.WorldSerialization, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Dependencies\Timberborn\Timberborn.WorldSerialization.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityDev_Utils, Version=1.0.8536.42668, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Binaries\UnityDev_Utils.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Dependencies\Unity\UnityEngine.CoreModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UIElementsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Dependencies\Unity\UnityEngine.UIElementsModule.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+    <Target Name="AfterBuild">
+        <Exec Command="xcopy /i /Y $(TargetPath) u:\BepInEx\plugins\IFTTT_Automation" />
+    </Target>
+</Project>

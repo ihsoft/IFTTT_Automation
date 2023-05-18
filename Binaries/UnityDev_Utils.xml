@@ -1,0 +1,798 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>UnityDev_Utils</name>
+    </assembly>
+    <members>
+        <member name="T:UnityDev.Utils.Configs.ConfigNode">
+            <summary>Object to keep structured run-time data.</summary>
+            <seealso cref="T:UnityDev.Utils.Configs.PersistentNode"/>
+        </member>
+        <member name="P:UnityDev.Utils.Configs.ConfigNode.Name">
+            <summary>Name of this node.</summary>
+            <remarks>When node is in hierarchy, then this name is a name of the property in the parent.</remarks>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.ConfigNode.#ctor(System.String)">
+            <summary>Creates a named node with optional comment node.</summary>
+        </member>
+        <member name="F:UnityDev.Utils.Configs.ConfigNode._nodeFields">
+            <summary>All node fields.</summary>
+        </member>
+        <member name="F:UnityDev.Utils.Configs.ConfigNode._valueFields">
+            <summary>All simple string fields.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.ConfigNode.IsEmpty">
+            <summary>Tells if the node has no fields.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.ConfigNode.ClearField(System.String)">
+            <summary>Removes the field and all its content.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.ConfigNode.ClearData">
+            <summary>Clears all data in the node.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.ConfigNode.SetValue(System.String,System.String,System.String)">
+            <summary>Sets a string value to the field.</summary>
+            <remarks>This method overwrites the old value regardless to its type.</remarks>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.ConfigNode.GetValue(System.String)">
+            <summary>Returns string value of the field.</summary>
+            <param name="key">
+            The field name. If the field exists, but it's type is not string, then it's assumed the field doesn't exist. If
+            field has multiple values, then the first value is returned.
+            </param>
+            <returns>String value of the field or <c>null</c> if the field is not found or the type is wrong.</returns>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.ConfigNode.AddValue(System.String,System.String,System.String)">
+            <summary>Adds a string value into the repeated field.</summary>
+            <remarks>If there are nodes at this key, then they will be dropped.</remarks>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.ConfigNode.GetValues(System.String)">
+            <summary>Returns strings from the repeated field.</summary>
+            <returns>Collection of strings or empty list if the field is not found or the type is wrong.</returns>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.ConfigNode.SetNode(System.String,UnityDev.Utils.Configs.ConfigNode)">
+            <summary>Sets config node as a value of the field.</summary>
+            <remarks>This method overwrites the old value regardless to its type. The node name will be set to key.</remarks>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.ConfigNode.GetNode(System.String,System.Boolean)">
+            <summary>Returns config node from the field.</summary>
+            <param name="key">
+            The field name. If the field exists, but it's type is not config node, then it's assumed the field doesn't exist.
+            </param>
+            <param name="createIfMissing">
+            Indicates that if the field is not found, then a new empty value should be created for it.
+            </param>
+            <returns>Config node or <c>null</c> if the field is not found or the type is wrong.</returns>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.ConfigNode.AddNode(System.String,UnityDev.Utils.Configs.ConfigNode)">
+            <summary>Adds a config node to the repeated field.</summary>
+            <remarks>
+            If the requested field doesn't exist or has a non-repeated type, then it will be assigned with a new repeated
+            config node type.
+            </remarks>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.ConfigNode.AddNode(System.String)">
+            <summary>Creates and returns an empty child node.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.ConfigNode.GetAllNodeFields">
+            <summary>Returns names of all fields that contain nodes.</summary>
+            <remarks>The sorting order of the names can be unstable.</remarks>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.ConfigNode.GetAllValueFields">
+            <summary>Returns names of all fields that contain nodes.</summary>
+            <remarks>The sorting order of the names can be unstable.</remarks>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.ConfigNode.GetNodes(System.String)">
+            <summary>Returns list of config nodes from the repeated field.</summary>
+            <returns>Collection of config nodes or empty list the field is not found or the type is wrong.</returns>
+        </member>
+        <member name="T:UnityDev.Utils.Configs.PersistentNode">
+            <summary>Class that can save/restore its fields to/from <c>ConfigNode</c>.</summary>
+            <remarks>
+            <p>
+            Due to config node limitations a list of lists cannot be handled. The descendants can override
+            <see cref="M:UnityDev.Utils.Configs.PersistentNode.GetPersistentFields"/> method to explicitly specify which fields to persist. By default, all public
+            non-static fields will be attempted to persist.
+            </p>
+            <p>
+            Collections must be descendants of <c>ICollection&lt;T&gt;</c>. The collection field can be read-only if it's not
+            not NULL. If the field is NULL, then the content will be created on load. If it's an existing collection, then it
+            will be cleared before reading new values.  
+            </p>
+            <p>
+            Nested nodes must be descendants of <c>PersistentNode</c>. If it's not readonly and NULL, then a new empty node will
+            be created on load. If it's an existing node, then the loaded content will be merged.
+            </p>
+            <p>Also supported some stock Unity types: <c>Vector2</c>, <c>Vector3</c>, <c>Vector4</c>, and <c>Color</c>.</p>
+            <p>
+            Extra custom types can be handled via overriding <see cref="M:UnityDev.Utils.Configs.PersistentNode.TryParseCustomType(System.Object@,System.Type,System.String)"/> and
+            <see cref="M:UnityDev.Utils.Configs.PersistentNode.CustomTypeToString(System.Object)"/>.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.PersistentNode.LoadFromConfigNode(UnityDev.Utils.Configs.ConfigNode)">
+            <summary>Loads node from config.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.PersistentNode.MergeToConfigNode(UnityDev.Utils.Configs.ConfigNode)">
+            <summary>Stores node state into an existing config node. Only non-null fields are stored.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.PersistentNode.GetConfigNode(System.String)">
+            <summary>Captures node state into a new config node. Only non-null fields are captured.</summary>
+            <returns>The captured state. It's never <c>null</c>.</returns>
+            <seealso cref="M:UnityDev.Utils.Configs.ConfigNode.IsEmpty"/>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.PersistentNode.GetPersistentFields">
+            <summary>Returns fields that should be persisted.</summary>
+            <remarks>The default implementation will attempt all non-static public fields.</remarks>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.PersistentNode.TryParseCustomType(System.Object@,System.Type,System.String)">
+            <summary>Tries to parse a value that was not recognized by the implementation.</summary>
+            <remarks>This method can only deal with a single string serialized value.</remarks>
+            <param name="fieldValue">
+            The current value from the target type. It can be <c>null</c>. Update this reference if the result must be
+            accepted.
+            </param>
+            <param name="valueType">The value type.</param>
+            <param name="serializedValue">String value from the related config node.</param>
+            <returns><c>true</c> if the value should be accepted.</returns>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.PersistentNode.CustomTypeToString(System.Object)">
+            <summary>Returns string representation of the value.</summary>
+            <param name="value">Object to serialize. It's never <c>null</c>.</param>
+            <returns>The serialized string or <c>null</c> if the type is unexpected or unknown.</returns>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.PersistentNode.ParseVector2(System.String)">
+            <summary>Parses a vector from serialized string</summary>
+            <seealso cref="M:UnityDev.Utils.Configs.PersistentNode.VectorToString(UnityEngine.Vector2)"/>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.PersistentNode.ParseVector3(System.String)">
+            <inheritdoc cref="M:UnityDev.Utils.Configs.PersistentNode.ParseVector2(System.String)"/>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.PersistentNode.ParseVector4(System.String)">
+            <inheritdoc cref="M:UnityDev.Utils.Configs.PersistentNode.ParseVector2(System.String)"/>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.PersistentNode.VectorToString(UnityEngine.Vector2)">
+            <summary>Returns serialized string for vector type.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.PersistentNode.VectorToString(UnityEngine.Vector3)">
+            <inheritdoc cref="M:UnityDev.Utils.Configs.PersistentNode.VectorToString(UnityEngine.Vector2)"/>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.PersistentNode.VectorToString(UnityEngine.Vector4)">
+            <inheritdoc cref="M:UnityDev.Utils.Configs.PersistentNode.VectorToString(UnityEngine.Vector2)"/>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.PersistentNode.ParseFieldValue(System.Object,System.Type,System.String,UnityDev.Utils.Configs.ConfigNode)">
+            <summary>Parses serialized state from the node into an object of the specified type.</summary>
+            <remarks>If config node doesn't have a value for teh field, then it stays unchanged.</remarks>
+            <param name="fieldValue">The old value from the existing target class. It can be <c>null</c>.</param>
+            <param name="valueType">Value type.</param>
+            <param name="fieldName">Field name in the target class.</param>
+            <param name="node">The persisted state for this level of the nested nodes.</param>
+            <returns>The value to store to the target class.</returns>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.PersistentNode.ParseCollection(System.Object@,System.Type,System.String,UnityDev.Utils.Configs.ConfigNode)">
+            <summary>Parses a field of type ICollection&lt;T&gt;.</summary>
+            <remarks>The collection element type must be constructable via <c>Activator</c>.</remarks>
+        </member>
+        <member name="T:UnityDev.Utils.Configs.SimpleTextSerializer">
+            <summary>Implements serializer for simple text format that supports structure and comments.</summary>
+            <remarks>This format is simple and human friendly. However, it's not efficient performance wise.</remarks>
+            <example><code><![CDATA[
+            NodeName {
+              value : 123 // comment
+              SubNodeName {
+                value2 : 321 // element #0
+                value2 : 321 // element #1
+              }
+             ArrayNodeName {} // empty node element #0
+             ArrayNodeName {} // empty node element #1
+            }
+            ]]></code></example>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.SimpleTextSerializer.Deserialize(System.String)">
+            <summary>Makes config node from it's serialized state.</summary>
+            <returns>The node or <c>null</c> if the content cannot be parsed.</returns>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.SimpleTextSerializer.LoadFromFile(System.String,System.Boolean)">
+            <summary>Loads config node from a file on disk.
+            </summary>
+            <param name="filename">The file name. It must exist.</param>
+            <param name="ignoreMissing">
+            If <c>false</c>, then in case of missing file an exception is thrown. Otherwise, a<c>null</c> value is returned.
+            </param>
+            <returns>Config node or <c>null</c> if the node cannot be made from the file content.</returns>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.SimpleTextSerializer.Serialize(UnityDev.Utils.Configs.ConfigNode)">
+            <summary>Serializes config node into a multi-line string.</summary>
+            <remarks></remarks>
+            <param name="node">
+            The node to persist. If the node has name, then its content is persisted with the node's name as a key name. If
+            the node's name is empty, then this node is considered a "wrapper". All sub-nodes from the wrapper will be saved
+            under their keys, and all values in the wrapper node will be ignored. Wrapper allows storing multiple nodes in
+            one file without adding unnecessary brackets at the top level.
+            </param>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.SimpleTextSerializer.SaveToFile(System.String,UnityDev.Utils.Configs.ConfigNode,System.Boolean)">
+            <summary>Saves the node into file.</summary>
+            <remarks>The directory path will be created if missing. An existing file will be overwritten.</remarks>
+            <param name="filename">File name to store the content into.</param>
+            <param name="node">The node to store.</param>
+            <param name="throwOnError">
+            If set to <c>true</c>, then any exception during the node persistence will be rethrown.
+            </param>
+            <returns>
+            <c>False</c> if exception happen during persistence and <paramref name="throwOnError"/> is disabled.
+            </returns>
+        </member>
+        <member name="F:UnityDev.Utils.Configs.SimpleTextSerializer.NodeMultiLinePrefixDeclRe">
+            <summary>Parses a beginning of the multiline sub-node declaration.</summary>
+            <remarks>
+            It detects the staring of the block and returns the key (sub-node name) as <c>$2</c>.
+            </remarks>
+            <example>
+            <code><![CDATA[
+            MODULE
+            {
+              foo = bar
+            }
+            ]]></code>
+            </example>
+        </member>
+        <member name="F:UnityDev.Utils.Configs.SimpleTextSerializer.NodeSameLineDeclRe">
+            <summary>Parses a beginning sub-node declaration that starts on the same line.</summary>
+            <remarks>
+            It detects the staring of the block and returns the key (sub-node name) as <c>$2</c> and
+            everything after the opening bracket as <c>$3</c>.
+            </remarks>
+            <example>
+            <code><![CDATA[
+            MODULE { foo = bar }
+            foo {} bar {}
+            ]]></code>
+            </example>
+        </member>
+        <member name="F:UnityDev.Utils.Configs.SimpleTextSerializer.KeyValueLineDeclRe">
+            <summary>Parses a simple key/value pair.</summary>
+            <remarks>
+            The any bracket symbol work as a stop symbol! The key is returned as <c>$2</c> and the value is returned as
+            <c>$3</c>.
+            </remarks>
+            <example>
+            <code><![CDATA[
+            foo = bar
+            ]]></code>
+            </example>
+        </member>
+        <member name="F:UnityDev.Utils.Configs.SimpleTextSerializer.CommentDeclRe">
+            <summary>Parses a comment that takes the whole line.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.SimpleTextSerializer.SerializeNode(System.Text.StringBuilder,UnityDev.Utils.Configs.ConfigNode,System.Int32)">
+            <summary>Recursively collects and serializes the fields in the nodes.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.SimpleTextSerializer.MakeConfigNodeLine(System.Int32,System.String,System.String)">
+            <summary>Formats a config node key/value line.</summary>
+            <param name="indentation">The indentation in tabs. Each tab is 8 spaces.</param>
+            <param name="key">The key string.</param>
+            <param name="value">
+            The value string. It can contain multiple lines separated by a "\n" symbols.
+            </param>
+            <returns>A properly formatted line.</returns>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.SimpleTextSerializer.ReportParseError(System.String,System.Int32,System.String)">
+            <summary>reports a verbose error to the logs.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.SimpleTextSerializer.EscapeValue(System.String)">
+            <summary>Escapes special symbols so that they don't break the formatting.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.Configs.SimpleTextSerializer.EscapeChar(System.Char)">
+            <summary>Escapes a whitespace character.</summary>
+            <returns>The unicode encode (<c>\uXXXX</c>) character string, or the character itself.</returns>
+        </member>
+        <member name="T:UnityDev.Utils.Extensions.RectExtensions">
+            <summary>Helper extensions to handel Unity rectangles.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.Extensions.RectExtensions.Intersect(UnityEngine.Rect,UnityEngine.Rect)">
+            <summary>Returns the intersection of the specified rectangles.</summary>
+            <param name="rect1">The first rectangle to compare.</param>
+            <param name="rect2">The second rectangle to compare.</param>
+            <returns>The intersection rectangle.</returns>
+        </member>
+        <member name="T:UnityDev.Utils.FSUtils.ModPaths">
+            <summary>A helper class to deal with plugins file structure.</summary>
+        </member>
+        <member name="P:UnityDev.Utils.FSUtils.ModPaths.ApplicationRootPath">
+            <summary>Returns full path to the game's root folder.</summary>
+        </member>
+        <member name="P:UnityDev.Utils.FSUtils.ModPaths.PluginsRootPath">
+            <summary>Returns full path to the plugins root folder.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.FSUtils.ModPaths.MakeAbsPathForPlugin(System.Type,System.String[])">
+            <summary>Makes full absolute path from the provided relative path in the type's DLL location folder.</summary>
+            <remarks>
+            If joining of all the provided parts gives a full path then it's only normalized. In case of path is relative it's
+            resolved against plugin root folder.
+            </remarks>
+            <param name="type">Type to detect the root folder from.</param>
+            <param name="pathParts">Path parts for an absolute or relative path.</param>
+            <returns>
+            Absolute path. All relative casts (e.g. '..') will be resolved, and all directory separators will be translated to
+            the platform format (e.g. '/' will become '\' on Windows). 
+            </returns>
+        </member>
+        <member name="T:UnityDev.Utils.GUIUtils.GuiActionsList">
+             <summary>A helper to accumulate GUI actions.</summary>
+             <remarks>
+             Unity may issue multiple GUI passes during a frame, and it requires the number of UI elements not to change between
+             the passes. Unity expects the number of UI controls in every pass to be exactly the same as in the very first one:
+             <see href="http://docs.unity3d.com/ScriptReference/EventType.Layout.html">EventType.Layout</see>. When the UI
+             interactions affect the representation, all the changes must be postponed till the frame rendering is ended. This
+             helper can be used to store the actions that will be executed at the beginning of the next frame.
+             </remarks>
+             <example>
+             <code>
+             public class MyUI : MonoBehaviour {
+               private readonly GuiActionsList guiActions = new GuiActionsList();
+               private bool showLabel = false;
+            
+               void OnGUI() {
+                 if (guiActions.ExecutePendingGuiActions()) {
+                   // ...do other stuff that affects UI... 
+                 }
+            
+                 if (GUILayout.Button(new GUIContent("Test Button"))) {
+                   // If "showLabel" is changed right here then Unity GUI will complain saying the number
+                   // of UI controls has changed. So, postpone the change until current frame is ended.
+                   guiActions.Add(() => {
+                     showLabel = !showLabel;  // This will be done at the beginning of the next frame.
+                   });
+                 }
+                 
+                 if (showLabel) {
+                   GUILayout.Label("Test label");
+                 }
+               }
+             }
+             </code>
+             <p>
+             If you were using simple approach and updated <c>showLabel</c> right away Unity would likely thrown an error like this:
+             </p>
+             <p>
+             <c>[EXCEPTION] ArgumentException: Getting control 1's position in a group with only 1
+             controls when doing Repaint</c>
+             </p>
+             </example>
+        </member>
+        <member name="F:UnityDev.Utils.GUIUtils.GuiActionsList._guiActions">
+            <summary>A list of pending actions.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.GUIUtils.GuiActionsList.Add(System.Action)">
+            <summary>Adds an action to the pending list.</summary>
+            <param name="actionFn">An action callback.</param>
+        </member>
+        <member name="M:UnityDev.Utils.GUIUtils.GuiActionsList.ExecutePendingGuiActions">
+            <summary>Executes actions when it's safe to do the changes.</summary>
+            <remarks>
+            It's safe to call this method in every pass. It will detect when it's safe to apply the changes and apply the
+            changes only once per a frame.
+            </remarks>
+            <returns><c>true</c> if actions have been applied.</returns>
+        </member>
+        <member name="T:UnityDev.Utils.GUIUtils.GuiColorScope">
+            <summary>A utility class to render big disabled blocks of GUI.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.GUIUtils.GuiColorScope.#ctor(System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color},System.Nullable{UnityEngine.Color})">
+            <summary>Stores the old state and sets a new one.</summary>
+            <param name="color">The new color for <c>GUI.color</c>.</param>
+            <param name="contentColor">The new color for <c>GUI.contentColor</c>.</param>
+            <param name="backgroundColor">The new color for <c>GUI.backgroundColor</c>.</param>
+        </member>
+        <member name="M:UnityDev.Utils.GUIUtils.GuiColorScope.Dispose">
+            <summary>Restores the colors that were set before the scope started.</summary>
+        </member>
+        <member name="T:UnityDev.Utils.GUIUtils.GuiEnabledStateScope">
+            <summary>A utility class to render a big disabled block in GUI.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.GUIUtils.GuiEnabledStateScope.#ctor(System.Boolean)">
+            <summary>Stores the old state and sets a new one.</summary>
+            <param name="newState">The new state to set.</param>
+        </member>
+        <member name="M:UnityDev.Utils.GUIUtils.GuiEnabledStateScope.Dispose">
+            <summary>Restores the enabled state that was set before the scope started.</summary>
+        </member>
+        <member name="T:UnityDev.Utils.GUIUtils.GuiWindow">
+            <summary>A utility class to deal with the GUI windows.</summary>
+            <remarks>
+            The stock window cancels dragging when the window layout is changed. It makes it useless when dealing with windows
+            that can change their layout depending on the position. This method doesn't have this drawback. Moreover, it can
+            tell if the window is being dragged, so that the code could postpone the layout update until the dragging is over. 
+            </remarks>
+        </member>
+        <member name="F:UnityDev.Utils.GUIUtils.GuiWindow._dragPosition">
+            <summary>Latest mouse position to which the dragged window position has updated.</summary>
+            <remarks>When this field is <c>null</c>, it means no window is being dragged.</remarks>
+        </member>
+        <member name="M:UnityDev.Utils.GUIUtils.GuiWindow.DragWindow(UnityEngine.Rect@,UnityEngine.Rect)">
+            <summary>
+            Makes the window movable. It's an improved version of the stock <c>GUI.DragWindow()</c>
+            method.
+            </summary>
+            <remarks>
+            The main difference from the stock method is that the dragging state is not reset by the GUI layout methods. Also,
+            it reports the dragging state, so some updates to the dialog may be frozen to not interfere with the move
+            operation.
+            </remarks>
+            <param name="windowRect">
+            The window rectangle. It must be the same instance which is passed to the <c>GUILayout.Window</c> method.
+            </param>
+            <param name="dragArea">
+            The rectangle in the local windows's space that defines the dragging area. In case of it's out of bounds of the
+            window rectangle, it will be clipped.
+            </param>
+            <returns><c>true</c> if the window is being dragged.</returns>
+        </member>
+        <member name="M:UnityDev.Utils.GUIUtils.GuiWindow.GetMousePos">
+            <summary>Gets mouse position.</summary>
+            <remarks>Detects if both old and new input systems installed into the system and avoids collision.</remarks>
+        </member>
+        <member name="T:UnityDev.LogUtils.DbgFormatter">
+            <summary>A set of tools to format various game entities for debugging purposes.</summary>
+        </member>
+        <member name="M:UnityDev.LogUtils.DbgFormatter.Vector(UnityEngine.Vector3)">
+            <summary>Returns a string representation of a vector with more precision.</summary>
+            <param name="vec">Vector to dump.</param>
+            <returns>String representation.</returns>
+        </member>
+        <member name="M:UnityDev.LogUtils.DbgFormatter.Quaternion(UnityEngine.Quaternion)">
+            <summary>Returns a string representation of a quaternion with more precision.</summary>
+            <param name="rot">Quaternion to dump.</param>
+            <returns>String representation.</returns>
+        </member>
+        <member name="M:UnityDev.LogUtils.DbgFormatter.TransformPath(UnityEngine.Transform,UnityEngine.Transform)">
+            <summary>Returns a full string path for the transform.</summary>
+            <param name="obj">Object to make the path for.</param>
+            <param name="parent">Optional parent to use a root.</param>
+            <returns>Full string path to the root.</returns>
+        </member>
+        <member name="M:UnityDev.LogUtils.DbgFormatter.TransformPath(UnityEngine.GameObject,UnityEngine.Transform)">
+            <summary>Returns a full string path for the game object.</summary>
+            <param name="obj">Object to make the path for.</param>
+            <param name="parent">Optional parent to use a root.</param>
+            <returns>Full string path to the root.</returns>
+        </member>
+        <member name="M:UnityDev.LogUtils.DbgFormatter.C2S``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.String},System.String)">
+            <summary>Flattens collection items into a comma separated string.</summary>
+            <remarks>This method's name is a shorthand for "Collection-To-String". Given a collection (e.g. list, set, or
+            anything else implementing <c>IEnumerable</c>) this method transforms it into a human readable string.
+            </remarks>
+            <param name="collection">A collection to represent as a string.</param>
+            <param name="predicate">
+            A predicate to use to extract string representation of an item. If <c>null</c> then standard <c>ToString()</c> is
+            used.
+            </param>
+            <param name="separator">String to use to glue the parts.</param>
+            <returns>Human readable form of the collection.</returns>
+            <typeparam name="TSource">Collection's item type.</typeparam>
+        </member>
+        <member name="M:UnityDev.LogUtils.DbgFormatter.Nullable``1(System.Nullable{``0},System.String)">
+            <summary>Prints out a content if the nullable type.</summary>
+            <typeparam name="T">Type of the nullable value.</typeparam>
+            <param name="value">The value to print.</param>
+            <param name="nullStr">A string to present when the value is <c>null</c>.</param>
+            <returns>The content of a non-null value or <paramref name="nullStr"/>.</returns>
+        </member>
+        <member name="T:UnityDev.LogUtils.DebugEx">
+            <summary>An extended version of the logging capabilities in the game.</summary>
+            <remarks>
+            One of the benefit of this logging class is that it can better resolve the arguments of the certain types. E.g.
+            when logging out a value referring a <see cref="T:UnityEngine.Transform"/> type, the resulted record will represent a full
+            hierarchy path instead of just the object name. See <see cref="M:UnityDev.LogUtils.DebugEx.ObjectToString(System.Object)"/> for the full list of the
+            supported types.
+            </remarks>
+            <seealso cref="T:UnityDev.LogUtils.HostedDebugLog"/>
+        </member>
+        <member name="M:UnityDev.LogUtils.DebugEx.Info(System.String,System.Object[])">
+            <summary>
+            Logs a formatted INFO message giving a better context on the objects in the parameters.
+            </summary>
+            <remarks>
+            The arguments are not just transformed into the strings by using their <c>ToString</c> method. Instead, this
+            method tries to make a best guess of what the object is, and gives more context when possible. Read the full list
+            of the supported objects in the <see cref="M:UnityDev.LogUtils.DebugEx.ObjectToString(System.Object)"/> method docs.
+            </remarks>
+            <param name="format">The format string for the log message.</param>
+            <param name="args">The arguments for the format string.</param>
+            <seealso cref="M:UnityDev.LogUtils.DebugEx.ObjectToString(System.Object)"/>
+            <seealso cref="M:UnityDev.LogUtils.DebugEx.Log(UnityEngine.LogType,System.String,System.Object[])"/>
+        </member>
+        <member name="M:UnityDev.LogUtils.DebugEx.Fine(System.String,System.Object[])">
+            <summary>Logs a formatted INFO message when the <i>verbose</i> logging mode is enabled.</summary>
+            <inheritdoc cref="M:UnityDev.LogUtils.DebugEx.Info(System.String,System.Object[])"/>
+        </member>
+        <member name="M:UnityDev.LogUtils.DebugEx.Warning(System.String,System.Object[])">
+            <summary>Logs a formatted WARNING message with a host identifier.</summary>
+            <inheritdoc cref="M:UnityDev.LogUtils.DebugEx.Info(System.String,System.Object[])"/>
+        </member>
+        <member name="M:UnityDev.LogUtils.DebugEx.Error(System.String,System.Object[])">
+            <summary>Logs a formatted ERROR message with a host identifier.</summary>
+            <inheritdoc cref="M:UnityDev.LogUtils.DebugEx.Info(System.String,System.Object[])"/>
+        </member>
+        <member name="M:UnityDev.LogUtils.DebugEx.Log(UnityEngine.LogType,System.String,System.Object[])">
+            <summary>Generic method to emit a log record.</summary>
+            <remarks>
+            It also catches the improperly declared formatting strings, and reports the error instead of throwing.
+            </remarks>
+            <param name="type">The type of the log record.</param>
+            <param name="format">The format string for the log message.</param>
+            <param name="args">The arguments for the format string.</param>
+            <seealso cref="M:UnityDev.LogUtils.DebugEx.ObjectToString(System.Object)"/>
+        </member>
+        <member name="M:UnityDev.LogUtils.DebugEx.ObjectToString(System.Object)">
+            <summary>Helper method to make a user friendly object name for the logs.</summary>
+            <remarks>
+            This method is much more intelligent than a regular <c>ToString()</c>, it can detect some common types and give
+            more context on them while keeping the output short.
+            </remarks>
+            <param name="obj">The object to stringify. It can be <c>null</c>.</param>
+            <returns>A human friendly string or the original object.</returns>
+        </member>
+        <member name="T:UnityDev.LogUtils.HostedDebugLog">
+            <summary>Helper class to log a record which is bound to a specific object.</summary>
+            <remarks>
+            <p>
+            It may be useful when there are situations that relate to a specific instance of a common Unity object. With the
+            hosted logging, there will be no need to manually designate for which object the record is being logged.
+            </p>
+            <p>
+            Another benefit of this logging class is that it can better resolve the arguments of the certain types. E.g. when
+            logging out a value referring a <see cref="T:UnityEngine.Transform"/> type, the resulted record will represent a full hierarchy
+            path instead of just the object name. See <see cref="M:UnityDev.LogUtils.DebugEx.ObjectToString(System.Object)"/> for the full list of the
+            supported types.
+            </p>
+            </remarks>
+            <seealso cref="T:UnityDev.LogUtils.DebugEx"/>
+        </member>
+        <member name="M:UnityDev.LogUtils.HostedDebugLog.Info(UnityEngine.Transform,System.String,System.Object[])">
+            <summary>Logs a formatted INFO message with a host identifier.</summary>
+        </member>
+        <member name="M:UnityDev.LogUtils.HostedDebugLog.Fine(UnityEngine.Transform,System.String,System.Object[])">
+            <summary>
+            Logs a formatted INFO message with a host identifier when the <i>verbose</i> logging mode is enabled.
+            </summary>
+        </member>
+        <member name="M:UnityDev.LogUtils.HostedDebugLog.Warning(UnityEngine.Transform,System.String,System.Object[])">
+            <summary>Logs a formatted WARNING message with a host identifier.</summary>
+        </member>
+        <member name="M:UnityDev.LogUtils.HostedDebugLog.Error(UnityEngine.Transform,System.String,System.Object[])">
+            <summary>Logs a formatted ERROR message with a host identifier.</summary>
+        </member>
+        <member name="M:UnityDev.LogUtils.HostedDebugLog.Log(UnityEngine.LogType,System.Object,System.String,System.Object[])">
+            <summary>Generic method to emit a hosted log record.</summary>
+            <param name="type">The type of the log record.</param>
+            <param name="host">The host object which is bound to the log record. It can be <c>null</c>.</param>
+            <param name="format">The format string for the log message.</param>
+            <param name="args">The arguments for the format string.</param>
+            <seealso cref="M:UnityDev.LogUtils.DebugEx.ObjectToString(System.Object)"/>
+        </member>
+        <member name="T:UnityDev.LogUtils.LoggingSettings">
+            <summary>Logging settings.</summary>
+            <remarks>
+            The settings are not loaded pro-actively. The config is supposed to be loaded when it's first time needed.
+            </remarks>
+        </member>
+        <member name="P:UnityDev.LogUtils.LoggingSettings.Settings">
+            <summary>Settings group.</summary>
+        </member>
+        <member name="P:UnityDev.LogUtils.LoggingSettings.VerbosityLevel">
+            <summary>Level above 0 enables <see cref="M:UnityDev.LogUtils.DebugEx.Fine(System.String,System.Object[])"/> logs.</summary>
+        </member>
+        <member name="T:UnityDev.ModelUtils.Hierarchy">
+            <summary>Various tools to deal with game object hierarchy.</summary>
+        </member>
+        <member name="F:UnityDev.ModelUtils.Hierarchy.ReSplitEscapedPath">
+            <summary>Regex to split an escaped path.</summary>
+        </member>
+        <member name="M:UnityDev.ModelUtils.Hierarchy.MoveToParent(UnityEngine.Transform,UnityEngine.Transform,System.Nullable{UnityEngine.Vector3},System.Nullable{UnityEngine.Quaternion},System.Nullable{UnityEngine.Vector3})">
+            <summary>Changes transform's parent keeping local position, rotation and scale.</summary>
+            <remarks>
+            Normally, Unity preserves world position, rotation and scale when changing parent. It's convenient when managing
+            objects in a prefab but is not desired when constructing a new model.
+            </remarks>
+            <param name="child">Transform to change parent for.</param>
+            <param name="parent">Transform to change parent to.</param>
+            <param name="newPosition">Local position to set instead of the original one.</param>
+            <param name="newRotation">Local rotation to set instead of the original one.</param>
+            <param name="newScale">Local scale to set instead of the original one.</param>
+        </member>
+        <member name="M:UnityDev.ModelUtils.Hierarchy.PatternMatch(System.String,System.String)">
+            <summary>
+            Checks target string against a simple pattern which allows prefix, suffix, and contains match. The match is
+            case-sensitive.
+            </summary>
+            <param name="pattern">
+            Pattern to match for:
+            <list type="bullet">
+            <item>If pattern ends with <c>*</c> then it's a match by prefix.</item>
+            <item>If pattern starts with <c>*</c> then it's a match by suffix.</item>
+            <item>
+            If pattern starts and ends with <c>*</c> then pattern is searched anywhere in the target.
+            </item>
+            </list>
+            </param>
+            <param name="target">The target string to check.</param>
+            <returns><c>true</c> if pattern matches the target.</returns>
+        </member>
+        <member name="M:UnityDev.ModelUtils.Hierarchy.FindTransformInChildren(UnityEngine.Transform,System.String,UnityEngine.Transform)">
+            <summary>Finds a transform by name down the hierarchy.</summary>
+            <remarks>Implements breadth-first search approach to minimize depth of the found transform.</remarks>
+            <param name="parent">The transform to start from.</param>
+            <param name="name">The name of the transform.</param>
+            <param name="defValue">
+            An object to return if the name is not found. This situation will be treated as a danger, and
+            a warning log record will be made.
+            </param>
+            <returns>A transform or <c>null</c> if nothing is found.</returns>
+        </member>
+        <member name="M:UnityDev.ModelUtils.Hierarchy.FindTransformByPath(UnityEngine.Transform,System.String,UnityEngine.Transform)">
+            <summary>Finds a transform in the hierarchy by the provided path.</summary>
+            <remarks>
+            See the path format in <see cref="M:UnityDev.ModelUtils.Hierarchy.FindTransformByPath(UnityEngine.Transform,System.String[],UnityEngine.Transform)"/>.
+            </remarks>
+            <param name="parent">The transform to start looking from.</param>
+            <param name="path">
+            The path to the target. The name components must be escaped if they contain the special symbols.
+            </param>
+            <param name="defValue">
+            An object to return if the path is not found. This situation will be treated as a danger, and a warning log record
+            will be made.
+            </param>
+            <returns>A transform or <c>null</c> if nothing found.</returns>
+            <seealso cref="M:UnityDev.ModelUtils.Hierarchy.EscapeName(System.String)"/>
+        </member>
+        <member name="M:UnityDev.ModelUtils.Hierarchy.FindTransformByPath(UnityEngine.Transform,System.String[],UnityEngine.Transform)">
+            <summary>Finds a transform in the hierarchy by the provided path.</summary>
+            <remarks>
+            Every element of the path may specify an exact transform name or a partial match pattern:
+            <list type="bullet">
+            <item>
+            To find an element that contains symbol <c>/</c> (the path components separator), simply double it. E.g. "a//b"
+            will be looking for component, named "a/b" instead fo searching for child "b" in the parent "a".
+            </item>
+            <item>
+            <c>*</c> - any name matches. Such patterns can be nested to specify the desired level of nesting. E.g.
+            <c>*/*/a</c> will look for name <c>a</c> in the grandchildren.
+            </item>
+            <item>
+            <c>*</c> as a prefix - the name is matched by suffix. E.g. <c>*a</c> matches any name that ends with <c>a</c>.
+            </item>
+            <item>
+            <c>*</c> as a suffix - the name is matched by prefix. E.g. <c>a*</c> matches any name that starts with <c>a</c>.
+            </item>
+            <item>
+            <c>**</c> - any <i>path</i> matches. What will eventually be found depends on the pattern to the right of
+            <c>**</c>. E.g. <c>**/a/b</c> will go through all the nodes starting from the parent until path <c>a/b</c> is
+            found. If multiple paths have matched the pattern, then the shortest path will be returned. Be careful with this
+            pattern since in case of not matching anything it will walk thought the <i>whole</i> hierarchy, starting from
+            <paramref name="parent"/>.
+            </item>
+            </list>
+            <p>
+            All patterns except <c>**</c> may have a matching index. It can be used to resolve matches when there are multiple
+            objects found with the same name and at the <i>same level</i>. E.g. if there are two objects with name "a" at the
+            root level then the first one can be accessed by pattern <c>a:0</c>, and the second one by pattern <c>a:1</c>.
+            </p>
+            <p>
+            Path search is <i>slow</i> since it needs walking though the hierarchy nodes. In the worst case all the nodes will
+            be visited. Don't use this method in the performance demanding methods.
+            </p>
+            </remarks>
+            <param name="parent">The transform to start looking from.</param>
+            <param name="path">The path elements. All the special symbols must be unescaped.</param>
+            <param name="defValue">
+            An object to return if the path is not found. This situation will be treated as a danger, and a warning log record
+            will be made.
+            </param>
+            <returns>Transform or <c>null</c> if nothing found.</returns>
+            <example>
+            Given the following hierarchy:
+            <code><![CDATA[
+            // a
+            // + b
+            // | + c
+            // | | + c1
+            // | | + d
+            // | + c
+            // |   + d
+            // |     + e
+            // |       + e1
+            // + abc
+            ]]></code>
+            <para>Here are some matching examples:</para>
+            <code><![CDATA[
+            // a/b/c/d/e/e1 => a/b/c/d/e/e1
+            // a/b/c/c1 => a/b/c/c1
+            // a/b/*/d/e/e1 => a/b/c/d/e/e1
+            // a/b/*/*/e/e1 => a/b/c/d/e/e1
+            // a/b/* => a/b/c, branch a/b/c/c1/d (the first match)
+            // a/b/*:0 => a/b/c, branch a/b/c/c1/d
+            // a/b/*:1 => a/b/c, branch a/b/c/d/e/e1
+            // a/b/c:1/d => a/b/c/d, branch a/b/c/d/e/e1
+            // **/e1 => a/b/c/d/e/e1
+            // **/c1 => a/b/c/c1
+            // **/c/d => a/b/c/d, branch a/b/c/d
+            // **/*c => a/abc. The other matched branch (a/b/c) will be refused due to the length. 
+            // a/**/e1 => a/b/c/d/e/e1
+            // *bc => a/abc
+            // ab* => a/abc
+            // *b* => a/abc
+            ]]></code>
+            </example>
+            <seealso cref="M:UnityDev.ModelUtils.Hierarchy.UnescapeName(System.String)"/>
+        </member>
+        <member name="M:UnityDev.ModelUtils.Hierarchy.ListHierarchy(UnityEngine.Transform,System.String)">
+            <summary>
+            Returns the paths to all the transformations in the object. Each item is a full path to the transformation
+            starting from the <paramref name="parent"/>.
+            </summary>
+            <param name="parent">The object to start from.</param>
+            <param name="pathPrefix">The prefix to add to every path in the result.</param>
+            <returns>The paths to all the objects in the hierarchy separated by a LF symbol.</returns>
+        </member>
+        <member name="M:UnityDev.ModelUtils.Hierarchy.GetFullPath(UnityEngine.Transform,UnityEngine.Transform)">
+            <summary>Returns a full path to the object starting from the specified parent.</summary>
+            <param name="obj">The object to find path for.</param>
+            <param name="parent">
+            The object at which the path must stop. If <c>null</c> then the path is gathered to the root object.
+            </param>
+            <returns>A full path name components. The names are not escaped.</returns>
+            <seealso cref="M:UnityDev.ModelUtils.Hierarchy.FindTransformByPath(UnityEngine.Transform,System.String[],UnityEngine.Transform)"/>
+        </member>
+        <member name="M:UnityDev.ModelUtils.Hierarchy.SplitAndUnescapePath(System.String)">
+            <summary>Splits a path and unescapes the name elements.</summary>
+            <remarks>
+            The path elements must be separated by a <c>'/'</c> symbol. The name elements must be escaped in case of they
+            contain a separator symbol in the content. 
+            </remarks>
+            <param name="escapedPath">The escaped path to split.</param>
+            <returns>An array of unescaped names.</returns>
+            <seealso cref="M:UnityDev.ModelUtils.Hierarchy.UnescapeName(System.String)"/>
+        </member>
+        <member name="M:UnityDev.ModelUtils.Hierarchy.MakePath(System.String[])">
+            <summary>Escapes the element names and builds a path.</summary>
+            <param name="unescapedNames">The raw name elements of the path.</param>
+            <returns>An escaped path built of the provided elements.</returns>
+            <seealso cref="M:UnityDev.ModelUtils.Hierarchy.EscapeName(System.String)"/>
+        </member>
+        <member name="M:UnityDev.ModelUtils.Hierarchy.UnescapeName(System.String)">
+            <summary>Unescapes all the special symbols in the name.</summary>
+            <param name="escapedName">The name where all the special symbols are escaped.</param>
+            <returns>An unescaped name.</returns>
+        </member>
+        <member name="M:UnityDev.ModelUtils.Hierarchy.EscapeName(System.String)">
+            <summary>Escapes all the special symbols in the name.</summary>
+            <remarks>
+            For now the only special symbol is <c>/</c> (slash) because of it's used as a name separator in the hierarchy
+            paths. The escaped separator symbol is simply doubled. I.e. string <c>a/b</c> transforms into <c>a//b</c>.
+            </remarks>
+            <param name="unescapedName">The raw name with any symbols.</param>
+            <returns>A name where all the special symbols are properly escaped.</returns>
+        </member>
+        <member name="M:UnityDev.ModelUtils.Hierarchy.SafeDestroy(UnityEngine.Transform)">
+            <summary>Destroys the object in a way which is safe for physical callback methods.</summary>
+            <remarks>
+            The Unity <c>UnityEngine.Object.Destroy</c> method only marks object for deletion, but before the next fixed frame
+            cycle completed, the object still can be found in the hierarchy. And it may trigger physics before the final
+            cleanup. This method ensures that none of these side-effects happen and it <i>doesn't</i> use physics incompatible
+            <c>DestroyImmediate</c> method.
+            </remarks>
+            <param name="obj">The object to destroy. Can be <c>null</c>.</param>
+        </member>
+        <member name="M:UnityDev.ModelUtils.Hierarchy.SafeDestroy(UnityEngine.GameObject)">
+            <inheritdoc cref="M:UnityDev.ModelUtils.Hierarchy.SafeDestroy(UnityEngine.Transform)"/>
+        </member>
+        <member name="M:UnityDev.ModelUtils.Hierarchy.SafeDestroy(UnityEngine.Component)">
+            <inheritdoc cref="M:UnityDev.ModelUtils.Hierarchy.SafeDestroy(UnityEngine.Transform)"/>
+        </member>
+        <member name="M:UnityDev.ModelUtils.Hierarchy.FindTransformByPathInternal(UnityEngine.Transform,System.String[],System.Int32,System.Int32@,UnityEngine.Transform@)">
+            <summary>Searches through the nodes, implementing the BFS algorithm.</summary>
+        </member>
+    </members>
+</doc>
