@@ -11,6 +11,7 @@
         <AssemblyName>IFTTT_Automation</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
+        <LangVersion>9</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,6 +35,7 @@
     <ItemGroup>
       <Compile Include="ApplyTemplateTool.cs" />
       <Compile Include="Configurator.cs" />
+      <Compile Include="IFTTTRule.cs" />
       <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
@@ -67,6 +69,9 @@
       <Reference Include="Timberborn.ConstructibleSystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>U:\Timberborn_Data\Managed\Timberborn.ConstructibleSystem.dll</HintPath>
       </Reference>
+      <Reference Include="Timberborn.ConstructionMode, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>U:\Timberborn_Data\Managed\Timberborn.ConstructionMode.dll</HintPath>
+      </Reference>
       <Reference Include="Timberborn.CoreUI, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>U:\Timberborn_Data\Managed\Timberborn.CoreUI.dll</HintPath>
       </Reference>
@@ -75,6 +80,9 @@
       </Reference>
       <Reference Include="Timberborn.Localization, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>U:\Timberborn_Data\Managed\Timberborn.Localization.dll</HintPath>
+      </Reference>
+      <Reference Include="Timberborn.PlantingUI, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>U:\Timberborn_Data\Managed\Timberborn.PlantingUI.dll</HintPath>
       </Reference>
       <Reference Include="Timberborn.SingletonSystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>U:\Timberborn_Data\Managed\Timberborn.SingletonSystem.dll</HintPath>

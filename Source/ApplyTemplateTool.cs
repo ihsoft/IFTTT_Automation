@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Bindito.Core;
-using TimberApi.ToolGroupSystem;
 using TimberApi.ToolSystem;
 using Timberborn.AreaSelectionSystem;
+using Timberborn.BaseComponentSystem;
 using Timberborn.BlockSystem;
 using Timberborn.BuilderPrioritySystem;
 using Timberborn.ConstructibleSystem;
@@ -14,16 +13,15 @@ using Timberborn.Localization;
 using Timberborn.ToolSystem;
 using UnityDev.LogUtils;
 using UnityEngine;
-using ToolGroupSpecification = Timberborn.ToolSystem.ToolGroupSpecification;
 
 namespace IFTTT_Automation {
 
 class ApplyTemplateTool : Tool, IInputProcessor {
   readonly ToolSpecification _toolSpecification;
   readonly DependencyInjection _injected;
-     
-  BlockObjectSelectionDrawer _highlightSelectionDrawer;
-  BlockObjectSelectionDrawer _actionSelectionDrawer;
+
+  readonly BlockObjectSelectionDrawer _highlightSelectionDrawer;
+  readonly BlockObjectSelectionDrawer _actionSelectionDrawer;
   AreaBlockObjectPicker _areaBlockObjectPicker;
 
   bool _isInProgress;
@@ -36,16 +34,19 @@ class ApplyTemplateTool : Tool, IInputProcessor {
     public readonly CursorService CursorService;
     public readonly ILoc Loc;
     public readonly Colors Colors;
+    public readonly BaseInstantiator BaseInstantiator;
 
     public DependencyInjection(AreaBlockObjectPickerFactory areaBlockObjectPickerFactory, InputService inputService,
                                BlockObjectSelectionDrawerFactory blockObjectSelectionDrawerFactory,
-                               CursorService cursorService, ILoc loc, Colors colors) {
+                               CursorService cursorService, ILoc loc, Colors colors,
+                               BaseInstantiator baseInstantiator) {
       AreaBlockObjectPickerFactory = areaBlockObjectPickerFactory;
       InputService = inputService;
       BlockObjectSelectionDrawerFactory = blockObjectSelectionDrawerFactory;
       CursorService = cursorService;
       Loc = loc;
       Colors = colors;
+      BaseInstantiator = baseInstantiator;
     }
   }
   #endregion
@@ -53,15 +54,15 @@ class ApplyTemplateTool : Tool, IInputProcessor {
   #region Tool factory class
   internal class Factory : IToolFactory {
     readonly DependencyInjection _dependencyInjection;
-    
+
+    public Tool Create(ToolSpecification toolSpecification, ToolGroup toolGroup = null) {
+      return new ApplyTemplateTool(toolGroup, toolSpecification, _dependencyInjection);
+    }
+
     public string Id => "IFTTTAutomationTemplate";
 
     public Factory(DependencyInjection dependencyInjection) {
       _dependencyInjection = dependencyInjection;
-    }
-
-    public Tool Create(ToolSpecification toolSpecification, ToolGroup toolGroup) {
-      return new ApplyTemplateTool(toolGroup, toolSpecification, _dependencyInjection);
     }
   }
   #endregion
@@ -94,22 +95,22 @@ class ApplyTemplateTool : Tool, IInputProcessor {
   }
 
   public override void Enter() {
-    DebugEx.Warning("**** Enter");
     _injected.InputService.AddInputProcessor(this);
     _areaBlockObjectPicker = _injected.AreaBlockObjectPickerFactory.Create();
     _isInProgress = true;
   }
 
   public override void Exit() {
-    DebugEx.Warning("**** Exit");
     _highlightSelectionDrawer.StopDrawing();
     _actionSelectionDrawer.StopDrawing();
     _injected.InputService.RemoveInputProcessor(this);
+    //_areaBlockObjectPicker = null;
     _isInProgress = false;
   }
 
   public bool ProcessInput() {
-    return _areaBlockObjectPicker.PickBlockObjects<BuilderPrioritizable>(PreviewCallback, ActionCallback, ShowNoneCallback);
+    return _areaBlockObjectPicker.PickBlockObjects<BuilderPrioritizable>(
+        PreviewCallback, ActionCallback, ShowNoneCallback);
   }
 
   void PreviewCallback(IEnumerable<BlockObject> blockObjects, Vector3Int start, Vector3Int end, bool selectionStarted,
@@ -129,15 +130,17 @@ class ApplyTemplateTool : Tool, IInputProcessor {
     }
   }
 
-  void ActionCallback(IEnumerable<BlockObject> blockObjects, Vector3Int start, Vector3Int end, bool selectionStarted, bool selectingArea) {
-    foreach (BlockObject blockObject in blockObjects)
-    {
-      var component = blockObject.GetComponentFast<Constructible>();
-      if (component == null) {
-        DebugEx.Warning("*** unexpectably null");
+  void ActionCallback(IEnumerable<BlockObject> blockObjects, Vector3Int start, Vector3Int end, bool selectionStarted,
+                      bool selectingArea) {
+    var selectedObjects = blockObjects
+        .Select(o => o.GetComponentFast<Constructible>())
+        .Where(x => x != null && !x.IsFinished);
+    foreach (var selectedObject in selectedObjects) {
+      if (selectedObject.GameObjectFast.GetComponent<IFTTTAutomationTestRule>() != null) {
         continue;
       }
-      DebugEx.Warning("*** selected: {0}, status={1}", component, component.ConstructionState);
+      DebugEx.Warning("*** selected: {0}, status={1}", selectedObject, selectedObject.ConstructionState);
+      var rule = _injected.BaseInstantiator.AddComponent<IFTTTAutomationTestRule>(selectedObject.GameObjectFast);
     }
     ClearHighlights();
   }
