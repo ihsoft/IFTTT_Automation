@@ -1,16 +1,10 @@
-using System.Runtime.CompilerServices;
 using Bindito.Core;
-using JetBrains.Annotations;
+using IFTTT_Automation.Templates;
 using TimberApi.ConfiguratorSystem;
 using TimberApi.SceneSystem;
 using TimberApi.ToolGroupSystem;
-using TimberApi.ToolSystem;
 using Timberborn.ConstructionMode;
-using Timberborn.PlantingUI;
-using Timberborn.SingletonSystem;
-using Timberborn.ToolSystem;
-using UnityDev.LogUtils;
-using UnityEngine;
+
 using ToolGroupSpecification = TimberApi.ToolGroupSystem.ToolGroupSpecification;
 
 namespace IFTTT_Automation {
