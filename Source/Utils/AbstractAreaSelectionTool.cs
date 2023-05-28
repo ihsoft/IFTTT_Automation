@@ -13,6 +13,7 @@ using Timberborn.CoreUI;
 using Timberborn.InputSystem;
 using Timberborn.Localization;
 using Timberborn.ToolSystem;
+using UnityDev.LogUtils;
 using UnityEngine;
 
 namespace IFTTT_Automation.Utils {
@@ -102,20 +103,18 @@ public abstract class AbstractAreaSelectionTool : AbstractToolWithDependencies<A
   }
 
   #region Local methods
-  void PreviewCallback(IEnumerable<BlockObject> blockObjects, Vector3Int start, Vector3Int end, bool selectionStarted,
-                       bool selectingArea) {
+  void PreviewCallback(IEnumerable<BlockObject> blockObjects, Vector3Int start, Vector3Int end,
+                       bool selectionStarted, bool selectingArea) {
     var objects = blockObjects.Where(ObjectFilterExpression);
-    if (selectionStarted && !selectingArea) {
-      _actionSelectionDrawer.Draw(objects, start, end, selectingArea: false);
-    } else if (selectingArea) {
-      _actionSelectionDrawer.Draw(objects, start, end, selectingArea: true);
+    if (selectionStarted) {
+      _actionSelectionDrawer.Draw(objects, start, end, selectingArea);
     } else {
       _highlightSelectionDrawer.Draw(objects, start, end, selectingArea: false);
     }
   }
 
-  void ActionCallback(IEnumerable<BlockObject> blockObjects, Vector3Int start, Vector3Int end, bool selectionStarted,
-                      bool selectingArea) {
+  void ActionCallback(IEnumerable<BlockObject> blockObjects, Vector3Int start, Vector3Int end,
+                      bool selectionStarted, bool selectingArea) {
     blockObjects.Where(ObjectFilterExpression).ToList().ForEach(OnObjectAction);
     ClearHighlights();
   }

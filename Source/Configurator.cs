@@ -3,8 +3,11 @@ using IFTTT_Automation.Templates;
 using TimberApi.ConfiguratorSystem;
 using TimberApi.SceneSystem;
 using TimberApi.ToolGroupSystem;
+using Timberborn.BaseComponentSystem;
+using Timberborn.BlockSystem;
+using Timberborn.ConstructibleSystem;
 using Timberborn.ConstructionMode;
-
+using Timberborn.TemplateSystem;
 using ToolGroupSpecification = TimberApi.ToolGroupSystem.ToolGroupSpecification;
 
 namespace IFTTT_Automation {
@@ -14,7 +17,18 @@ namespace IFTTT_Automation {
 class Configurator : IConfigurator {
   public void Configure(IContainerDefinition containerDefinition) {
     containerDefinition.MultiBind<IToolGroupFactory>().To<RootToolGroupFactory>().AsSingleton();
+    //containerDefinition.Bind<IFTTTAutomationMonoBehavior>();
+    //containerDefinition.Bind<IFTTTAutomationTestRule>();
     ApplyTemplateTool.Configure(containerDefinition);
+    containerDefinition.MultiBind<TemplateModule>().ToProvider(ProvideTemplateModule).AsSingleton();
+  }
+
+  static TemplateModule ProvideTemplateModule() {
+    TemplateModule.Builder builder = new TemplateModule.Builder();
+    //builder.AddDecorator<Constructible, IFTTTAutomationTestRule>();
+    builder.AddDecorator<BlockObject, AutomationBehavior>();
+    builder.AddDecorator<BaseInstantiator, AutomationBehavior>();//FIXME
+    return builder.Build();
   }
 }
 

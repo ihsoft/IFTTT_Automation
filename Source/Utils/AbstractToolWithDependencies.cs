@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Bindito.Core;
+using TimberApi.ConfiguratorSystem;
+using TimberApi.SceneSystem;
 using Timberborn.ToolSystem;
 using UnityDev.LogUtils;
 
@@ -19,14 +21,25 @@ public abstract class AbstractToolWithDependencies<T> : Tool where T : class {
   }
 
   protected static void Configure(IContainerDefinition containerDefinition) {
-    if (ConfiguredTypes.Contains(typeof(T))) {
+    if (InjectionsRegistry.ConfiguredTypes.Contains(typeof(T))) {
       return;  // This dependency is already bound.
     }
     DebugEx.Fine("Register dependency for: {0}", typeof(T));
-    ConfiguredTypes.Add(typeof(T));
+    InjectionsRegistry.ConfiguredTypes.Add(typeof(T));
     containerDefinition.Bind<T>().AsSingleton();
   }
-  static readonly HashSet<Type> ConfiguredTypes = new();
+}
+
+// ReSharper disable once InconsistentNaming
+[Configurator(SceneEntrypoint.All)]
+class InjectionsRegistry : IConfigurator {
+  internal static readonly HashSet<Type> ConfiguredTypes = new();
+
+  public void Configure(IContainerDefinition containerDefinition) {
+    //FIXME
+    DebugEx.Warning("*** clear registered injections");
+    ConfiguredTypes.Clear();
+  }
 }
 
 }

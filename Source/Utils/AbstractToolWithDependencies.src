@@ -1,0 +1,50 @@
+using System;
+using System.Collections.Generic;
+using Bindito.Core;
+using IFTTT_Automation.Templates;
+using TimberApi.DependencyContainerSystem;
+using TimberApi.ToolSystem;
+using Timberborn.ToolSystem;
+using UnityDev.LogUtils;
+using UnityEngine.Windows.WebCam;
+
+namespace IFTTT_Automation.Utils {
+
+/// <summary>Template class that simplifies tool creation via injection.</summary>
+/// <remarks>
+/// <p>
+/// Instead of having multiple parameters with dependencies in ktor, there is just one dependency: the class that
+/// encapsulates all the dependencies needed. Given, the dependency class is bound as a singleton, it's a very cheap
+/// operation. Especially if the class is being instantiated multiple times in the game, e.g. if it's a component of the
+/// game object.
+/// </p>
+/// <p>
+/// To use the benefits, inherit your class from this template, providing the dependency class as a template parameter.
+/// Then, just call <see cref="Configure"/> on the child class, and add the bindings, specific to your class. The
+/// dependencies class wil lbe bound out of the box! And if you share the same class between multiple versions of your
+/// classes, it makes the process even more efficient.   
+/// </p>
+/// </remarks>
+/// <typeparam name="T">type of the dependencies object.</typeparam>
+public abstract class AbstractToolWithDependencies<T> : Tool where T : class {
+
+  /// <summary>Wrapper around all the side dependencies from this instance.</summary>
+  protected readonly T Injected;
+
+  protected AbstractToolWithDependencies(ToolGroup toolGroup, T injected) {
+    ToolGroup = toolGroup;
+    Injected = injected;
+  }
+
+  protected static void Configure(IContainerDefinition containerDefinition) {
+    if (ConfiguredTypes.Contains(typeof(T))) {
+      return;  // This dependency is already bound.
+    }
+    DebugEx.Fine("Register dependency for: {0}", typeof(T));
+    ConfiguredTypes.Add(typeof(T));
+    containerDefinition.Bind<T>().AsSingleton();
+  }
+  static readonly HashSet<Type> ConfiguredTypes = new();
+}
+
+}

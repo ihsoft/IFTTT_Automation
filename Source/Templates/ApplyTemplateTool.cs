@@ -1,10 +1,10 @@
 using Bindito.Core;
+using IFTTT_Automation.Actions;
+using IFTTT_Automation.Conditions;
 using IFTTT_Automation.Utils;
 using TimberApi.ToolSystem;
 using Timberborn.BlockSystem;
-using Timberborn.ConstructibleSystem;
 using Timberborn.ToolSystem;
-using UnityDev.LogUtils;
 
 namespace IFTTT_Automation.Templates {
 
@@ -13,17 +13,18 @@ class ApplyTemplateTool : AbstractAreaSelectionTool {
 
   #region Tool factory class
   internal class Factory : IToolFactory {
+    public string Id => "IFTTTAutomationTemplate";
+    
     readonly Injections _injections;
+
+    public Factory(Injections injections) {
+      _injections = injections;
+    }
 
     public Tool Create(ToolSpecification toolSpecification, ToolGroup toolGroup = null) {
       return new ApplyTemplateTool(toolGroup, toolSpecification, _injections);
     }
 
-    public string Id => "IFTTTAutomationTemplate";
-
-    public Factory(Injections injections) {
-      _injections = injections;
-    }
   }
   #endregion
 
@@ -45,15 +46,19 @@ class ApplyTemplateTool : AbstractAreaSelectionTool {
         .Build();
   }
 
+ 
   protected override bool ObjectFilterExpression(BlockObject obj) {
-    var component = obj.GetComponentFast<Constructible>();
-    return component != null && component.enabled && component.IsUnfinished;
+    var automationBehavior = obj.GetComponentFast<AutomationBehavior>();
+    var condition = new ObjectFinishedAutomationCondition(automationBehavior);
+    var action = new DetonateDynamiteAutomationAction(automationBehavior, 0);
+    return automationBehavior != null && automationBehavior.enabled && condition.IsValid() && action.IsValid();
   }
 
   protected override void OnObjectAction(BlockObject obj) {
-    var selectedObject = obj.GetComponentFast<Constructible>();
-    DebugEx.Warning("*** selected: {0}, status={1}", selectedObject, selectedObject.ConstructionState);
-    var rule = Injected.BaseInstantiator.AddComponent<IFTTTAutomationTestRule>(selectedObject.GameObjectFast);
+    var automationBehavior = obj.GetComponentFast<AutomationBehavior>();
+    var condition = new ObjectFinishedAutomationCondition(automationBehavior);
+    var action = new DetonateDynamiteAutomationAction(automationBehavior, 2);
+    automationBehavior.AddRule(condition, action);
   }
 }
 
