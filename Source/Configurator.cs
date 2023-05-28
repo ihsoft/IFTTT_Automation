@@ -17,8 +17,6 @@ namespace IFTTT_Automation {
 class Configurator : IConfigurator {
   public void Configure(IContainerDefinition containerDefinition) {
     containerDefinition.MultiBind<IToolGroupFactory>().To<RootToolGroupFactory>().AsSingleton();
-    //containerDefinition.Bind<IFTTTAutomationMonoBehavior>();
-    //containerDefinition.Bind<IFTTTAutomationTestRule>();
     ApplyTemplateTool.Configure(containerDefinition);
     containerDefinition.MultiBind<TemplateModule>().ToProvider(ProvideTemplateModule).AsSingleton();
   }

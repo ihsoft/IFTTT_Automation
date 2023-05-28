@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using TimberApi.AssetSystem.Exceptions;
 using Timberborn.AreaSelectionSystem;
 using Timberborn.BaseComponentSystem;
 using Timberborn.BlockSystem;
@@ -56,13 +57,26 @@ public abstract class AbstractAreaSelectionTool : AbstractToolWithDependencies<A
   #endregion
 
   #region API
+
   /// <summary>Filters the objects that the tool will handle.</summary>
-  protected abstract bool ObjectFilterExpression(BlockObject obj);
+  /// <param name="blockObject">The object to check the expression for.</param>
+  /// <param name="singleElement">Tells if it's a single element click vs area selection.</param>
+  protected abstract bool ObjectFilterExpression(BlockObject blockObject, bool singleElement);
 
   /// <summary>
   /// A callback that is called on every selected object that matches <see cref="ObjectFilterExpression"/>. 
   /// </summary>
-  protected abstract void OnObjectAction(BlockObject obj);
+  /// <param name="blockObject">The object to check the expression for.</param>
+  /// <param name="singleElement">Tells if it's a single element click vs area selection.</param>
+  protected abstract void OnObjectAction(BlockObject blockObject, bool singleElement);
+
+  /// <summary>A callback that is called when a new selection has just started.</summary>
+  /// <param name="blockObject">
+  /// Any block object that was focused at the moment of the selection start. It's not filtered by
+  /// <see cref="ObjectFilterExpression"/>.
+  /// </param>
+  /// <param name="position">The selection start position.</param>
+  protected abstract void OnSelectionStarted(BlockObject blockObject, Vector3Int position);
   #endregion
 
   #region Tool overrides
@@ -88,7 +102,7 @@ public abstract class AbstractAreaSelectionTool : AbstractToolWithDependencies<A
   /// <summary>Constructs a tool that handles all the selection logic.</summary>
   /// <param name="toolGroup"></param>
   /// <param name="injected">
-  /// The injectabales that are needed for this implementation. See <see cref="AbstractToolWithDependencies&lt;T&gt;"/>
+  /// The injectables that are needed for this implementation. See <see cref="AbstractToolWithDependencies&lt;T&gt;"/>
   /// for more details.
   /// </param>
   /// <param name="highlightColor"></param>
@@ -105,18 +119,27 @@ public abstract class AbstractAreaSelectionTool : AbstractToolWithDependencies<A
   #region Local methods
   void PreviewCallback(IEnumerable<BlockObject> blockObjects, Vector3Int start, Vector3Int end,
                        bool selectionStarted, bool selectingArea) {
-    var objects = blockObjects.Where(ObjectFilterExpression);
+    if (selectionStarted && !_selectionModeActive) {
+      _selectionModeActive = true;
+      OnSelectionStarted(blockObjects.FirstOrDefault(), start);
+    }
+    var objects = blockObjects.Where(x => ObjectFilterExpression(x, !selectingArea));
     if (selectionStarted) {
       _actionSelectionDrawer.Draw(objects, start, end, selectingArea);
     } else {
       _highlightSelectionDrawer.Draw(objects, start, end, selectingArea: false);
     }
   }
+  bool _selectionModeActive;
 
   void ActionCallback(IEnumerable<BlockObject> blockObjects, Vector3Int start, Vector3Int end,
                       bool selectionStarted, bool selectingArea) {
-    blockObjects.Where(ObjectFilterExpression).ToList().ForEach(OnObjectAction);
+    blockObjects
+        .Where(x => ObjectFilterExpression(x, !selectingArea))
+        .ToList()
+        .ForEach(x => OnObjectAction(x, !selectingArea));
     ClearHighlights();
+    _selectionModeActive = false;
   }
 
   void ShowNoneCallback() {
