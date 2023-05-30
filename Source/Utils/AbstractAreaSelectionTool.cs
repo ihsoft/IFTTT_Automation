@@ -7,10 +7,8 @@ using System.Linq;
 using Bindito.Core;
 using TimberApi.ToolSystem;
 using Timberborn.AreaSelectionSystem;
-using Timberborn.BaseComponentSystem;
 using Timberborn.BlockSystem;
 using Timberborn.BuilderPrioritySystem;
-using Timberborn.CoreUI;
 using Timberborn.InputSystem;
 using Timberborn.Localization;
 using Timberborn.ToolSystem;
@@ -26,10 +24,9 @@ public abstract class AbstractAreaSelectionTool : CustomToolRegistry.CustomTool,
   #endregion
 
   #region Injections
-  protected AreaBlockObjectPickerFactory AreaBlockObjectPickerFactory;
-  protected InputService InputService;
-  protected BlockObjectSelectionDrawerFactory BlockObjectSelectionDrawerFactory;
-  protected CursorService CursorService;
+  AreaBlockObjectPickerFactory _areaBlockObjectPickerFactory;
+  InputService _inputService;
+  BlockObjectSelectionDrawerFactory _blockObjectSelectionDrawerFactory;
   protected ILoc Loc;
   #endregion
 
@@ -72,15 +69,15 @@ public abstract class AbstractAreaSelectionTool : CustomToolRegistry.CustomTool,
   #region Tool overrides
   /// <inheritdoc/>
   public override void Enter() {
-    InputService.AddInputProcessor(this);
-    _areaBlockObjectPicker = AreaBlockObjectPickerFactory.Create();
+    _inputService.AddInputProcessor(this);
+    _areaBlockObjectPicker = _areaBlockObjectPickerFactory.Create();
   }
 
   /// <inheritdoc/>
   public override void Exit() {
     _highlightSelectionDrawer.StopDrawing();
     _actionSelectionDrawer.StopDrawing();
-    InputService.RemoveInputProcessor(this);
+    _inputService.RemoveInputProcessor(this);
   }
   #endregion
 
@@ -96,20 +93,18 @@ public abstract class AbstractAreaSelectionTool : CustomToolRegistry.CustomTool,
   /// <inheritdoc/>
   public override void InitializeTool(ToolGroup toolGroup, ToolSpecification toolSpecification) {
     base.InitializeTool(toolGroup, toolSpecification);
-    _highlightSelectionDrawer = BlockObjectSelectionDrawerFactory.Create(HighlightColor, TileColor, SideColor);
-    _actionSelectionDrawer = BlockObjectSelectionDrawerFactory.Create(ActionColor, TileColor, SideColor);
+    _highlightSelectionDrawer = _blockObjectSelectionDrawerFactory.Create(HighlightColor, TileColor, SideColor);
+    _actionSelectionDrawer = _blockObjectSelectionDrawerFactory.Create(ActionColor, TileColor, SideColor);
   }
   #endregion
 
   #region Local methods
   [Inject]
   public void InjectDependencies(AreaBlockObjectPickerFactory areaBlockObjectPickerFactory, InputService inputService,
-                                 BlockObjectSelectionDrawerFactory blockObjectSelectionDrawerFactory,
-                                 CursorService cursorService, ILoc loc) {
-    AreaBlockObjectPickerFactory = areaBlockObjectPickerFactory;
-    InputService = inputService;
-    BlockObjectSelectionDrawerFactory = blockObjectSelectionDrawerFactory;
-    CursorService = cursorService;
+                                 BlockObjectSelectionDrawerFactory blockObjectSelectionDrawerFactory, ILoc loc) {
+    _areaBlockObjectPickerFactory = areaBlockObjectPickerFactory;
+    _inputService = inputService;
+    _blockObjectSelectionDrawerFactory = blockObjectSelectionDrawerFactory;
     Loc = loc;
   }
 
