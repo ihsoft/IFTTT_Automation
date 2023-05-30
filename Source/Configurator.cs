@@ -1,11 +1,11 @@
 using Bindito.Core;
 using IFTTT_Automation.Templates;
+using IFTTT_Automation.Utils;
 using TimberApi.ConfiguratorSystem;
 using TimberApi.SceneSystem;
 using TimberApi.ToolGroupSystem;
 using Timberborn.BaseComponentSystem;
 using Timberborn.BlockSystem;
-using Timberborn.ConstructibleSystem;
 using Timberborn.ConstructionMode;
 using Timberborn.TemplateSystem;
 using ToolGroupSpecification = TimberApi.ToolGroupSystem.ToolGroupSpecification;
@@ -17,7 +17,7 @@ namespace IFTTT_Automation {
 class Configurator : IConfigurator {
   public void Configure(IContainerDefinition containerDefinition) {
     containerDefinition.MultiBind<IToolGroupFactory>().To<RootToolGroupFactory>().AsSingleton();
-    ApplyTemplateTool.Configure(containerDefinition);
+    CustomToolRegistry.BindTool<ApplyTemplateTool>(containerDefinition, "IFTTTAutomationTemplate");
     containerDefinition.MultiBind<TemplateModule>().ToProvider(ProvideTemplateModule).AsSingleton();
   }
 

@@ -3,9 +3,9 @@
 // License: Public Domain
 
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using TimberApi.AssetSystem.Exceptions;
+using Bindito.Core;
+using TimberApi.ToolSystem;
 using Timberborn.AreaSelectionSystem;
 using Timberborn.BaseComponentSystem;
 using Timberborn.BlockSystem;
@@ -14,50 +14,40 @@ using Timberborn.CoreUI;
 using Timberborn.InputSystem;
 using Timberborn.Localization;
 using Timberborn.ToolSystem;
-using UnityDev.LogUtils;
 using UnityEngine;
 
 namespace IFTTT_Automation.Utils {
 
-public abstract class AbstractAreaSelectionTool : AbstractToolWithDependencies<AbstractAreaSelectionTool.Injections>,
-                                                  IInputProcessor {
-  #region Dependency injection class
-  /// <summary>Common injections that may be needed by a regular area tool.</summary>
-  /// <remarks>The descendants can extend this class with more injectable definitions and pass it down.</remarks>
-  [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
-  [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
-  public class Injections {
-    public readonly AreaBlockObjectPickerFactory AreaBlockObjectPickerFactory;
-    public readonly InputService InputService;
-    public readonly BlockObjectSelectionDrawerFactory BlockObjectSelectionDrawerFactory;
-    public readonly CursorService CursorService;
-    public readonly ILoc Loc;
-    public readonly Colors Colors;
-    public readonly BaseInstantiator BaseInstantiator;
-
-    protected internal Injections(
-        AreaBlockObjectPickerFactory areaBlockObjectPickerFactory, InputService inputService,
-        BlockObjectSelectionDrawerFactory blockObjectSelectionDrawerFactory, CursorService cursorService, ILoc loc,
-        Colors colors, BaseInstantiator baseInstantiator) {
-      AreaBlockObjectPickerFactory = areaBlockObjectPickerFactory;
-      InputService = inputService;
-      BlockObjectSelectionDrawerFactory = blockObjectSelectionDrawerFactory;
-      CursorService = cursorService;
-      Loc = loc;
-      Colors = colors;
-      BaseInstantiator = baseInstantiator;
-    }
-  }
-  #endregion
-
+public abstract class AbstractAreaSelectionTool : CustomToolRegistry.CustomTool, IInputProcessor {
   #region Internal fields
-  readonly BlockObjectSelectionDrawer _highlightSelectionDrawer;
-  readonly BlockObjectSelectionDrawer _actionSelectionDrawer;
+  BlockObjectSelectionDrawer _highlightSelectionDrawer;
+  BlockObjectSelectionDrawer _actionSelectionDrawer;
   AreaBlockObjectPicker _areaBlockObjectPicker;
   #endregion
 
-  #region API
+  #region Injections
+  protected AreaBlockObjectPickerFactory AreaBlockObjectPickerFactory;
+  protected InputService InputService;
+  protected BlockObjectSelectionDrawerFactory BlockObjectSelectionDrawerFactory;
+  protected CursorService CursorService;
+  protected ILoc Loc;
+  #endregion
 
+  #region Tool setup
+  /// <summary>Color of the matching object when hovering over in non-selecting mode.</summary>
+  protected Color HighlightColor = Color.blue;
+
+  /// <summary>Color of the matching object in the selection range.</summary>
+  protected Color ActionColor = Color.red;
+
+  /// <summary>Color of the ground tile in the selection range.</summary>
+  protected Color TileColor = Color.blue;
+
+  /// <summary>Color of the border of the selection range.</summary>
+  protected Color SideColor = Color.blue;
+  #endregion
+
+  #region API
   /// <summary>Filters the objects that the tool will handle.</summary>
   /// <param name="blockObject">The object to check the expression for.</param>
   /// <param name="singleElement">Tells if it's a single element click vs area selection.</param>
@@ -80,43 +70,49 @@ public abstract class AbstractAreaSelectionTool : AbstractToolWithDependencies<A
   #endregion
 
   #region Tool overrides
+  /// <inheritdoc/>
   public override void Enter() {
-    Injected.InputService.AddInputProcessor(this);
-    _areaBlockObjectPicker = Injected.AreaBlockObjectPickerFactory.Create();
+    InputService.AddInputProcessor(this);
+    _areaBlockObjectPicker = AreaBlockObjectPickerFactory.Create();
   }
 
+  /// <inheritdoc/>
   public override void Exit() {
     _highlightSelectionDrawer.StopDrawing();
     _actionSelectionDrawer.StopDrawing();
-    Injected.InputService.RemoveInputProcessor(this);
+    InputService.RemoveInputProcessor(this);
   }
   #endregion
 
   #region IInputProcessor implementation
+  /// <inheritdoc/>
   public bool ProcessInput() {
     return _areaBlockObjectPicker.PickBlockObjects<BuilderPrioritizable>(
         PreviewCallback, ActionCallback, ShowNoneCallback);
   }
   #endregion
 
-  /// <summary>Constructs a tool that handles all the selection logic.</summary>
-  /// <param name="toolGroup"></param>
-  /// <param name="injected">
-  /// The injectables that are needed for this implementation. See <see cref="AbstractToolWithDependencies&lt;T&gt;"/>
-  /// for more details.
-  /// </param>
-  /// <param name="highlightColor"></param>
-  /// <param name="actionColor"></param>
-  /// <param name="tileColor"></param>
-  /// <param name="sideColor"></param>
-  /// FIXME: make docs
-  protected AbstractAreaSelectionTool(ToolGroup toolGroup, Injections injected, Color highlightColor, Color actionColor,
-                                      Color tileColor, Color sideColor) : base(toolGroup, injected) {
-    _highlightSelectionDrawer = injected.BlockObjectSelectionDrawerFactory.Create(highlightColor, tileColor, sideColor);
-    _actionSelectionDrawer = injected.BlockObjectSelectionDrawerFactory.Create(actionColor, tileColor, sideColor);
+  #region CustomTool overrides
+  /// <inheritdoc/>
+  public override void InitializeTool(ToolGroup toolGroup, ToolSpecification toolSpecification) {
+    base.InitializeTool(toolGroup, toolSpecification);
+    _highlightSelectionDrawer = BlockObjectSelectionDrawerFactory.Create(HighlightColor, TileColor, SideColor);
+    _actionSelectionDrawer = BlockObjectSelectionDrawerFactory.Create(ActionColor, TileColor, SideColor);
   }
+  #endregion
 
   #region Local methods
+  [Inject]
+  public void InjectDependencies(AreaBlockObjectPickerFactory areaBlockObjectPickerFactory, InputService inputService,
+                                 BlockObjectSelectionDrawerFactory blockObjectSelectionDrawerFactory,
+                                 CursorService cursorService, ILoc loc) {
+    AreaBlockObjectPickerFactory = areaBlockObjectPickerFactory;
+    InputService = inputService;
+    BlockObjectSelectionDrawerFactory = blockObjectSelectionDrawerFactory;
+    CursorService = cursorService;
+    Loc = loc;
+  }
+
   void PreviewCallback(IEnumerable<BlockObject> blockObjects, Vector3Int start, Vector3Int end,
                        bool selectionStarted, bool selectingArea) {
     if (selectionStarted && !_selectionModeActive) {
