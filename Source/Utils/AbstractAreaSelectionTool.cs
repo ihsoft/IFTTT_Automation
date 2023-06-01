@@ -16,7 +16,7 @@ using UnityEngine;
 
 namespace IFTTT_Automation.Utils {
 
-public abstract class AbstractAreaSelectionTool : CustomToolRegistry.CustomTool, IInputProcessor {
+public abstract class AbstractAreaSelectionTool : CustomToolSystem.CustomTool, IInputProcessor {
   #region Internal fields
   BlockObjectSelectionDrawer _highlightSelectionDrawer;
   BlockObjectSelectionDrawer _actionSelectionDrawer;

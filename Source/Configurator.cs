@@ -13,10 +13,10 @@ namespace IFTTT_Automation {
 [Configurator(SceneEntrypoint.InGame)]
 class Configurator : IConfigurator {
   public void Configure(IContainerDefinition containerDefinition) {
-    CustomToolRegistry.BindGroupWithConstructionModeEnabler(containerDefinition, "AutomationToolGroup");
-    CustomToolRegistry.BindTool<PauseTool>(containerDefinition);
-    CustomToolRegistry.BindTool<ResumeTool>(containerDefinition);
-    CustomToolRegistry.BindTool<ApplyTemplateTool>(containerDefinition, "IFTTTAutomationTemplate");
+    CustomToolSystem.BindGroupWithConstructionModeEnabler(containerDefinition, "AutomationToolGroup");
+    CustomToolSystem.BindTool<PauseTool>(containerDefinition);
+    CustomToolSystem.BindTool<ResumeTool>(containerDefinition);
+    CustomToolSystem.BindTool<ApplyTemplateTool>(containerDefinition, "IFTTTAutomationTemplate");
     containerDefinition.MultiBind<TemplateModule>().ToProvider(ProvideTemplateModule).AsSingleton();
   }
 

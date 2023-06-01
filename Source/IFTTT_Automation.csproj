@@ -44,7 +44,7 @@
       <Compile Include="Templates\ApplyTemplateTool.cs" />
       <Compile Include="Templates\PauseTool.cs" />
       <Compile Include="Utils\AbstractAreaSelectionTool.cs" />
-      <Compile Include="Utils\CustomToolRegistry.cs" />
+      <Compile Include="Utils\CustomToolSystem.cs" />
       <Compile Include="Utils\ReflectedAction.cs" />
     </ItemGroup>
     <ItemGroup>

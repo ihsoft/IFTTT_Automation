@@ -8,12 +8,26 @@ using TimberApi.ToolGroupSystem;
 using TimberApi.ToolSystem;
 using Timberborn.ConstructionMode;
 using Timberborn.ToolSystem;
-using UnityDev.LogUtils;
 using ToolGroupSpecification = TimberApi.ToolGroupSystem.ToolGroupSpecification;
 
 namespace IFTTT_Automation.Utils {
 
-public static class CustomToolRegistry {
+/// <summary>System that manages bindings to support TimberAPI tools and groups specifications.</summary>
+/// <remarks>Use this system too keep code short and clear when no fancy setups are needed.</remarks>
+/// <example>
+/// Define a tool/group specification as explained in the TimberAPI docs. Then, bind the specification(s):
+/// <code>
+/// [Configurator(SceneEntrypoint.InGame)]
+/// class Configurator : IConfigurator {
+///   public void Configure(IContainerDefinition containerDefinition) {
+///     CustomToolSystem.BindGroupWithConstructionModeEnabler(containerDefinition, "MyGroup");
+///     CustomToolSystem.BindTool&lt;MyTool1>(containerDefinition);
+///     CustomToolSystem.BindTool&lt;MyTool1>(containerDefinition, "CustomTypeName");
+///   }
+/// }
+/// </code>
+/// </example>
+public static class CustomToolSystem {
 
   /// <summary>Base class for all custom tool groups.</summary>
   public class CustomToolGroup : ToolGroup, IToolGroup {
@@ -55,31 +69,57 @@ public static class CustomToolRegistry {
   }
 
   #region API
-  public static void BindGroupTrivial(IContainerDefinition containerDefinition, string typeName) {
-    containerDefinition.MultiBind<IToolGroupFactory>().ToInstance(new ToolGroupFactory<CustomToolGroup>(typeName));
+  /// <summary>Registers a simple tool group that just contains other tools.</summary>
+  /// <param name="containerDefinition">The configurator interface.</param>
+  /// <param name="groupTypeName">The tool group type as specified in the TimberAPI specification.</param>
+  /// <seealso cref="CustomToolGroup"/>
+  public static void BindGroupTrivial(IContainerDefinition containerDefinition, string groupTypeName) {
+    containerDefinition.MultiBind<IToolGroupFactory>().ToInstance(new ToolGroupFactory<CustomToolGroup>(groupTypeName));
   }
 
-  public static void BindGroupWithConstructionModeEnabler(IContainerDefinition containerDefinition, string typeName) {
+  /// <summary>Registers a tool group that enables constructions mode when opened.</summary>
+  /// <param name="containerDefinition">The configurator interface.</param>
+  /// <param name="groupTypeName">The tool group type as specified in the TimberAPI specification.</param>
+  /// <seealso cref="CustomToolGroupWithConstructionModeEnabler"/>
+  public static void BindGroupWithConstructionModeEnabler(IContainerDefinition containerDefinition,
+                                                          string groupTypeName) {
     containerDefinition.MultiBind<IToolGroupFactory>()
-        .ToInstance(new ToolGroupFactory<CustomToolGroupWithConstructionModeEnabler>(typeName));
+        .ToInstance(new ToolGroupFactory<CustomToolGroupWithConstructionModeEnabler>(groupTypeName));
   }
 
-  public static void BindToolGroup<TToolGroup>(IContainerDefinition containerDefinition, string typeName = null)
+  /// <summary>Registers an arbitrary class as a tool group.</summary>
+  /// <remarks>
+  /// <p>Call this method from the configurator to define the tool groups of your mod. Each tool class can be bound only
+  /// once, or an exception will be thrown.</p>
+  /// <p>The registered class will be created via Bindito. Implement a method, attributed with <c>[Inject]</c>, to have
+  /// extra injections provided.</p>
+  /// </remarks>
+  /// <param name="containerDefinition">The configurator interface.</param>
+  /// <param name="groupTypeName">
+  /// The tool group type as specified in the TimberAPI specification. Can be omitted, in which case the class full name
+  /// will be used. The same name cannot be bound to different classes.
+  /// </param>
+  /// <typeparam name="TToolGroup">the class that implements the tool group.</typeparam>
+  /// <seealso cref="CustomToolGroup"/>
+  /// <seealso cref="CustomToolGroupWithConstructionModeEnabler"/>
+  public static void BindToolGroup<TToolGroup>(IContainerDefinition containerDefinition, string groupTypeName = null)
       where TToolGroup : CustomToolGroup {
     containerDefinition.Bind<TToolGroup>().AsSingleton();
     containerDefinition.MultiBind<IToolGroupFactory>()
-        .ToInstance(new ToolGroupFactory<TToolGroup>(typeName ?? typeof(TToolGroup).FullName));
+        .ToInstance(new ToolGroupFactory<TToolGroup>(groupTypeName ?? typeof(TToolGroup).FullName));
   }
 
   /// <summary>Registers a customer tool.</summary>
   /// <remarks>
-  /// Call this method from the configurator to define the tools of your mod. Each tool class can be bound only once, or
-  /// an exception will be thrown.
+  /// <p>Call this method from the configurator to define the tools of your mod. Each tool class can be bound only once,
+  /// or an exception will be thrown.</p>
+  /// <p>The registered class will be created via Bindito. Implement a method, attributed with <c>[Inject]</c>, to have
+  /// extra injections provided.</p>
   /// </remarks>
   /// <param name="containerDefinition">The configurator interface.</param>
   /// <param name="typeName">
-  /// The tool type as specified in the TimberAPI specification. Can be omitted, in which case the tool's full class
-  /// name will be used. The same name cannot be bound to different classes.
+  /// The tool type as specified in the TimberAPI specification. Can be omitted, in which case the class full name will
+  /// be used. The same name cannot be bound to different classes.
   /// </param>
   /// <typeparam name="TTool">the class that implements the tool.</typeparam>
   public static void BindTool<TTool>(IContainerDefinition containerDefinition, string typeName = null)
