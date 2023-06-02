@@ -1,0 +1,9 @@
+{
+  "Id": "Automation.ResumeTool",
+  "GroupId": "AutomationToolGroupId",
+  "Type": "IFTTT_Automation.Templates.ResumeTool",
+  "Order": 11,
+  "Icon": "DraggableUtils/UI_Buttons/pause_button",
+  "NameLocKey": "IgorZ.Automation.ResumeTool.Title",
+  "DescriptionLocKey": "IgorZ.Automation.ResumeTool.Description"
+}

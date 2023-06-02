@@ -43,6 +43,7 @@
       <Compile Include="Properties\AssemblyInfo.cs" />
       <Compile Include="Templates\ApplyTemplateTool.cs" />
       <Compile Include="Templates\PauseTool.cs" />
+      <Compile Include="Templates\ResumeTool.cs" />
       <Compile Include="Utils\AbstractAreaSelectionTool.cs" />
       <Compile Include="Utils\CustomToolSystem.cs" />
       <Compile Include="Utils\ReflectedAction.cs" />
@@ -77,6 +78,9 @@
       </Reference>
       <Reference Include="Timberborn.BuilderPrioritySystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>U:\Timberborn_Data\Managed\Timberborn.BuilderPrioritySystem.dll</HintPath>
+      </Reference>
+      <Reference Include="Timberborn.BuildingsBlocking, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>U:\Timberborn_Data\Managed\Timberborn.BuildingsBlocking.dll</HintPath>
       </Reference>
       <Reference Include="Timberborn.Common, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>U:\Timberborn_Data\Managed\Timberborn.Common.dll</HintPath>
@@ -113,6 +117,12 @@
       </Reference>
       <Reference Include="Timberborn.PlantingUI, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>U:\Timberborn_Data\Managed\Timberborn.PlantingUI.dll</HintPath>
+      </Reference>
+      <Reference Include="Timberborn.PrefabSystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>U:\Timberborn_Data\Managed\Timberborn.PrefabSystem.dll</HintPath>
+      </Reference>
+      <Reference Include="Timberborn.SelectionToolSystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>U:\Timberborn_Data\Managed\Timberborn.SelectionToolSystem.dll</HintPath>
       </Reference>
       <Reference Include="Timberborn.SingletonSystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>U:\Timberborn_Data\Managed\Timberborn.SingletonSystem.dll</HintPath>

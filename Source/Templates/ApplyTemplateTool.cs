@@ -3,12 +3,12 @@ using IFTTT_Automation.Conditions;
 using IFTTT_Automation.Utils;
 using Timberborn.BlockSystem;
 using Timberborn.ToolSystem;
-using UnityEngine;
 
 namespace IFTTT_Automation.Templates {
 
 class ApplyTemplateTool : AbstractAreaSelectionTool {
   #region Tool overrides
+  /// <inheritdoc/>
   public override ToolDescription Description() {
     return new ToolDescription.Builder()
         .AddPrioritizedSection("Just section")
@@ -19,7 +19,7 @@ class ApplyTemplateTool : AbstractAreaSelectionTool {
 
   #region AbstractAreaSelectionTool overries
   /// <inheritdoc/>
-  protected override bool ObjectFilterExpression(BlockObject blockObject, bool singleElement) {
+  protected override bool ObjectFilterExpression(BlockObject blockObject) {
     var automationBehavior = blockObject.GetComponentFast<AutomationBehavior>();
     var condition = new ObjectFinishedAutomationCondition(automationBehavior);
     var action = new DetonateDynamiteAutomationAction(automationBehavior, 0);
@@ -27,15 +27,11 @@ class ApplyTemplateTool : AbstractAreaSelectionTool {
   }
 
   /// <inheritdoc/>
-  protected override void OnObjectAction(BlockObject blockObject, bool singleElement) {
+  protected override void OnObjectAction(BlockObject blockObject) {
     var automationBehavior = blockObject.GetComponentFast<AutomationBehavior>();
     var condition = new ObjectFinishedAutomationCondition(automationBehavior);
     var action = new DetonateDynamiteAutomationAction(automationBehavior, 2);
     automationBehavior.AddRule(condition, action);
-  }
-
-  /// <inheritdoc/>
-  protected override void OnSelectionStarted(BlockObject blockObject, Vector3Int position) {
   }
   #endregion
 }

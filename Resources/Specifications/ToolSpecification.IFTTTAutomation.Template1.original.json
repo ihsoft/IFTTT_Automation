@@ -1,0 +1,9 @@
+{
+  "Id": "Automation.Tmpl.3LevelsDynamite",
+  "GroupId": "AutomationToolGroupId",
+  "Type": "IFTTTAutomationTemplate",
+  "Order": 1000,
+  "Icon": "DraggableUtils/UI_Buttons/pause_button",
+  "NameLocKey": "IgorZ.Automation.Tmpl.3LevelsDynamite.Title",
+  "DescriptionLocKey": "IgorZ.Automation.Tmpl.3LevelsDynamite.Description"
+}

@@ -1,0 +1,12 @@
+ID,Text
+IgorZ.Automation.ToolGroup.DisplayName,Setup automation
+
+IgorZ.IFTTTAutomation.tmpl.TwoLevelsDynamiteTmplTool.DisplayName,Template: Explode two blocks down
+IgorZ.IFTTTAutomation.tmpl.TwoLevelsDynamiteTmplTool.Description,Apply template that the terrain two levels down with dynamite
+
+IgorZ.Automation.PauseTool.Title,Pause buildings
+IgorZ.Automation.PauseTool.Description,Use this tool to pause buildings and construction sites.
+IgorZ.Automation.PauseTool.Hint,"Click an item to pause it or hold the button to select a bigger area. Hold SHIFT to select items of one type only."
+IgorZ.Automation.ResumeTool.Title,Resume buildings
+IgorZ.Automation.ResumeTool.Description,Use this tool to resume buildings and construction sites.
+IgorZ.Automation.ResumeTool.Hint,"Click an item to resume it or hold the button to select a bigger area."
