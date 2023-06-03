@@ -47,6 +47,7 @@
       <Compile Include="Utils\AbstractAreaSelectionTool.cs" />
       <Compile Include="Utils\CustomToolSystem.cs" />
       <Compile Include="Utils\ReflectedAction.cs" />
+      <Compile Include="Utils\ToolWithDescription.cs" />
     </ItemGroup>
     <ItemGroup>
       <Reference Include="BepInEx, Version=5.4.21.0, Culture=neutral, PublicKeyToken=null">
@@ -96,6 +97,9 @@
       </Reference>
       <Reference Include="Timberborn.CoreUI, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>U:\Timberborn_Data\Managed\Timberborn.CoreUI.dll</HintPath>
+      </Reference>
+      <Reference Include="Timberborn.EntityPanelSystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>U:\Timberborn_Data\Managed\Timberborn.EntityPanelSystem.dll</HintPath>
       </Reference>
       <Reference Include="Timberborn.EntitySystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>U:\Timberborn_Data\Managed\Timberborn.EntitySystem.dll</HintPath>

@@ -3,6 +3,7 @@
 // License: Public Domain
 
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Bindito.Core;
 using TimberApi.ToolSystem;
@@ -10,13 +11,12 @@ using Timberborn.AreaSelectionSystem;
 using Timberborn.BlockSystem;
 using Timberborn.BuilderPrioritySystem;
 using Timberborn.InputSystem;
-using Timberborn.Localization;
 using Timberborn.ToolSystem;
 using UnityEngine;
 
 namespace IFTTT_Automation.Utils {
 
-public abstract class AbstractAreaSelectionTool : CustomToolSystem.CustomTool, IInputProcessor {
+public abstract class AbstractAreaSelectionTool : ToolWithDescription, IInputProcessor {
   #region Internal fields
   BlockObjectSelectionDrawer _highlightSelectionDrawer;
   BlockObjectSelectionDrawer _actionSelectionDrawer;
@@ -24,8 +24,7 @@ public abstract class AbstractAreaSelectionTool : CustomToolSystem.CustomTool, I
   #endregion
 
   #region Injections
-  protected InputService InputService;
-  protected ILoc Loc;
+  protected InputService InputService { get; private set; }
   AreaBlockObjectPickerFactory _areaBlockObjectPickerFactory;
   BlockObjectSelectionDrawerFactory _blockObjectSelectionDrawerFactory;
   #endregion
@@ -56,6 +55,9 @@ public abstract class AbstractAreaSelectionTool : CustomToolSystem.CustomTool, I
       }
       OnSelectionModeChange(value);
       _selectionModeActive = value;
+      if (!value) {
+        SelectedObjects = null;
+      }
     }
   }
   bool _selectionModeActive;
@@ -135,17 +137,19 @@ public abstract class AbstractAreaSelectionTool : CustomToolSystem.CustomTool, I
   #region Local methods
   [Inject]
   public void InjectDependencies(AreaBlockObjectPickerFactory areaBlockObjectPickerFactory, InputService inputService,
-                                 BlockObjectSelectionDrawerFactory blockObjectSelectionDrawerFactory, ILoc loc) {
+                                 BlockObjectSelectionDrawerFactory blockObjectSelectionDrawerFactory) {
     _areaBlockObjectPickerFactory = areaBlockObjectPickerFactory;
     InputService = inputService;
     _blockObjectSelectionDrawerFactory = blockObjectSelectionDrawerFactory;
-    Loc = loc;
   }
 
   void PreviewCallback(IEnumerable<BlockObject> blockObjects, Vector3Int start, Vector3Int end,
                        bool selectionStarted, bool selectingArea) {
     CursorOnUI = false;
     var objects = blockObjects.ToList();
+    if (selectionStarted) {
+      SelectedObjects = objects.AsReadOnly();
+    }
     HighlightedBlockObject = !selectingArea ? objects.FirstOrDefault() : objects.LastOrDefault();
     SelectionModeActive = selectionStarted;
     var targetObjects = objects.Where(ObjectFilterExpression);
@@ -155,6 +159,8 @@ public abstract class AbstractAreaSelectionTool : CustomToolSystem.CustomTool, I
       _highlightSelectionDrawer.Draw(targetObjects, start, end, selectingArea: false);
     }
   }
+
+  protected ReadOnlyCollection<BlockObject> SelectedObjects { get; private set; }
 
   void ActionCallback(IEnumerable<BlockObject> blockObjects, Vector3Int start, Vector3Int end,
                       bool selectionStarted, bool selectingArea) {

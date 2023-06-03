@@ -7,6 +7,7 @@ using TimberApi.DependencyContainerSystem;
 using TimberApi.ToolGroupSystem;
 using TimberApi.ToolSystem;
 using Timberborn.ConstructionMode;
+using Timberborn.Localization;
 using Timberborn.ToolSystem;
 using ToolGroupSpecification = TimberApi.ToolGroupSystem.ToolGroupSpecification;
 
@@ -57,7 +58,8 @@ public static class CustomToolSystem {
 
   /// <summary>Base class for all custom tools.</summary>
   public abstract class CustomTool : Tool {
-    protected ToolSpecification ToolSpecification;
+    protected ToolSpecification ToolSpecification { get; private set; }
+    protected ILoc Loc  { get; private set; }
 
     /// <summary>Initializes the tool. Do all logic here instead of the constructor.</summary>
     /// <param name="toolGroup">The group this tool is a child of.</param>
@@ -65,6 +67,11 @@ public static class CustomToolSystem {
     public virtual void InitializeTool(ToolGroup toolGroup, ToolSpecification toolSpecification) {
       ToolGroup = toolGroup;
       ToolSpecification = toolSpecification;
+    }
+
+    [Inject]
+    public void InjectDependencies(ILoc loc) {
+      Loc = loc;
     }
   }
 
