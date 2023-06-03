@@ -5,7 +5,7 @@ using Timberborn.BuildingsBlocking;
 using Timberborn.ToolSystem;
 using UnityEngine;
 
-namespace IFTTT_Automation.Templates {
+namespace IFTTT_Automation.Tools {
 
 // ReSharper disable once ClassNeverInstantiated.Global
 sealed class ResumeTool : AbstractAreaSelectionTool {

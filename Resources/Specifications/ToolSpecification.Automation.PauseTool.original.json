@@ -1,7 +1,7 @@
 {
   "Id": "Automation.PauseTool",
   "GroupId": "AutomationToolGroupId",
-  "Type": "IFTTT_Automation.Templates.PauseTool",
+  "Type": "IFTTT_Automation.Tools.PauseTool",
   "Order": 10,
   "Icon": "DraggableUtils/UI_Buttons/pause_button",
   "NameLocKey": "IgorZ.Automation.PauseTool.Title",

@@ -12,7 +12,7 @@ using Timberborn.ToolSystem;
 using UnityDev.LogUtils;
 using UnityEngine;
 
-namespace IFTTT_Automation.Templates {
+namespace IFTTT_Automation.Tools {
 
 // ReSharper disable once ClassNeverInstantiated.Global
 sealed class PauseTool : AbstractAreaSelectionTool {

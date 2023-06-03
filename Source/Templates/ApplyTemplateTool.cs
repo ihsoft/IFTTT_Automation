@@ -4,7 +4,7 @@ using IFTTT_Automation.Utils;
 using Timberborn.BlockSystem;
 using Timberborn.ToolSystem;
 
-namespace IFTTT_Automation.Templates {
+namespace IFTTT_Automation.Tools {
 
 class ApplyTemplateTool : AbstractAreaSelectionTool {
   #region Tool overrides

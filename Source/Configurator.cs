@@ -1,5 +1,5 @@
 using Bindito.Core;
-using IFTTT_Automation.Templates;
+using IFTTT_Automation.Tools;
 using IFTTT_Automation.Utils;
 using TimberApi.ConfiguratorSystem;
 using TimberApi.SceneSystem;
