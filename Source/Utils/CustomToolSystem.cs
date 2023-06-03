@@ -14,7 +14,7 @@ using ToolGroupSpecification = TimberApi.ToolGroupSystem.ToolGroupSpecification;
 namespace IFTTT_Automation.Utils {
 
 /// <summary>System that manages bindings to support TimberAPI tools and groups specifications.</summary>
-/// <remarks>Use this system too keep code short and clear when no fancy setups are needed.</remarks>
+/// <remarks>Use this system to keep code short and clear when no fancy setups are needed.</remarks>
 /// <example>
 /// Define a tool/group specification as explained in the TimberAPI docs. Then, bind the specification(s):
 /// <code>
@@ -23,7 +23,7 @@ namespace IFTTT_Automation.Utils {
 ///   public void Configure(IContainerDefinition containerDefinition) {
 ///     CustomToolSystem.BindGroupWithConstructionModeEnabler(containerDefinition, "MyGroup");
 ///     CustomToolSystem.BindTool&lt;MyTool1>(containerDefinition);
-///     CustomToolSystem.BindTool&lt;MyTool1>(containerDefinition, "CustomTypeName");
+///     CustomToolSystem.BindTool&lt;MyTool2>(containerDefinition, "CustomTypeName");
 ///   }
 /// }
 /// </code>
