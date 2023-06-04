@@ -44,9 +44,10 @@
       <Compile Include="Templates\ApplyTemplateTool.cs" />
       <Compile Include="Tools\PauseTool.cs" />
       <Compile Include="Tools\ResumeTool.cs" />
+      <Compile Include="UnityDevCandidates\ReflectedAction.cs" />
       <Compile Include="Utils\AbstractAreaSelectionTool.cs" />
+      <Compile Include="Utils\AbstractLockingTool.cs" />
       <Compile Include="Utils\CustomToolSystem.cs" />
-      <Compile Include="Utils\ReflectedAction.cs" />
       <Compile Include="Utils\ToolWithDescription.cs" />
     </ItemGroup>
     <ItemGroup>

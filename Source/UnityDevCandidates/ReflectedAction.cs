@@ -1,7 +1,11 @@
+// UnityDev Utils
+// Author: igor.zavoychinskiy@gmail.com
+// License: Public Domain
+
 using System.Reflection;
 using UnityDev.LogUtils;
 
-namespace IFTTT_Automation.Utils {
+namespace IFTTT_Automation.UnityDevCandidates {
 
 public class ReflectedAction<T, TArg0> {
   readonly MethodInfo _methodInfo;
