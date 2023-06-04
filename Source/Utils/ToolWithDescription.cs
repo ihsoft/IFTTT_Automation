@@ -1,17 +1,26 @@
+// Timberborn Utils
+// Author: igor.zavoychinskiy@gmail.com
+// License: Public Domain
+
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using Timberborn.CoreUI;
+using Timberborn.Localization;
 using Timberborn.ToolSystem;
 using UnityEngine.UIElements;
 
 namespace IFTTT_Automation.Utils {
 
-/// <summary>Abstract tool hat has description.</summary>
+/// <summary>Abstract tool that has description.</summary>
 /// <remarks>
 /// With no tweaking this class simply uses values from the TimberAPI specification. If more advanced logic is needed,
-/// then teh descendants can add more sections. Dynamic descriptions are also supported.
+/// then the descendants can add more sections. Dynamic descriptions are also supported.
 /// </remarks>
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 [SuppressMessage("ReSharper", "FieldCanBeMadeReadOnly.Global")]
 public abstract class ToolWithDescription : CustomToolSystem.CustomTool {
+  ToolDescription _cachedDescription;
+
   #region API
   /// <summary>
   /// The localization key of the text to present as the tool caption. If <c>null</c>,
@@ -40,29 +49,38 @@ public abstract class ToolWithDescription : CustomToolSystem.CustomTool {
   /// </summary>
   protected VisualElement[] DescriptionVisualSections = null;
 
+  /// <summary>Extra loc ID strings to add to the description as "bullets".</summary>
+  /// <seealso cref="SpecialStrings.RowStarter"/>
+  protected string[] DescriptionBullets = null;
+
   /// <summary>Forces the cached description to refresh. Call it when the description components have changed.</summary>
   protected void SetDescriptionDirty() {
     _cachedDescription = null;
   }
   #endregion
 
-  ToolDescription _cachedDescription;
-      
   #region Tool overrides
   /// <inheritdoc/>
   public override ToolDescription Description() {
     if (_cachedDescription != null) {
       return _cachedDescription;
     }
-    var description = new ToolDescription.Builder(Loc.T(DescriptionTitleLoc ?? ToolSpecification.NameLocKey))
-        .AddSection(Loc.T(DescriptionMainSectionLoc ?? ToolSpecification.DescriptionLocKey));
+    var description = new ToolDescription.Builder(Loc.T(DescriptionTitleLoc ?? ToolSpecification.NameLocKey));
+    var descriptionText = new StringBuilder(Loc.T(DescriptionMainSectionLoc ?? ToolSpecification.DescriptionLocKey));
+    if (DescriptionBullets != null) {
+      foreach (var descriptionBullet in DescriptionBullets) {
+        descriptionText.Append("\n" + SpecialStrings.RowStarter + Loc.T(descriptionBullet));
+      }
+    }
+    // FIXME(IgorZ): Remove ColorizeText when Timberborn-Modding-Central#73 is fixed.
+    description.AddSection(TextColors.ColorizeText(descriptionText.ToString()));
     if (DescriptionVisualSections != null) {
       foreach (var visualSection in DescriptionVisualSections) {
         description.AddSection(visualSection);
       }
     }
     if (DescriptionHintSectionLoc != null) {
-      description.AddPrioritizedSection(Loc.T(DescriptionHintSectionLoc));
+      description.AddPrioritizedSection(TextColors.ColorizeText(Loc.T(DescriptionHintSectionLoc)));
     }
     if (DescriptionExternalSections != null) {
       foreach (var externalSection in DescriptionExternalSections) {
