@@ -18,8 +18,7 @@ sealed class PauseTool : AbstractLockingTool {
   #region CustomTool overrides
   /// <inheritdoc/>
   protected override void Initialize() {
-    HighlightColor = ActionColor = Color.red;
-    TileColor = SideColor = Color.white;
+    SetColorSchema(Color.red, Color.red, Color.white, Color.white);
     DescriptionHintSectionLoc = ToolHintLoc;
     base.Initialize();
   }

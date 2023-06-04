@@ -18,8 +18,7 @@ sealed class ResumeTool : AbstractLockingTool {
   #region CustomTool overrides
   /// <inheritdoc/>
   protected override void Initialize() {
-    HighlightColor = ActionColor = Color.green;
-    TileColor = SideColor = Color.white;
+    SetColorSchema(Color.green, Color.green, Color.white, Color.white);
     DescriptionHintSectionLoc = ToolHintLoc;
     base.Initialize();
   }

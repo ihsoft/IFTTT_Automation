@@ -19,26 +19,17 @@ public abstract class AbstractAreaSelectionTool : ToolWithDescription, IInputPro
   BlockObjectSelectionDrawer _highlightSelectionDrawer;
   BlockObjectSelectionDrawer _actionSelectionDrawer;
   AreaBlockObjectPicker _areaBlockObjectPicker;
+
+  Color _highlightColor = Color.blue;
+  Color _actionColor = Color.red;
+  Color _tileColor = Color.blue;
+  Color _sideColor = Color.blue;
   #endregion
 
   #region Injections
   protected InputService InputService { get; private set; }
   AreaBlockObjectPickerFactory _areaBlockObjectPickerFactory;
   BlockObjectSelectionDrawerFactory _blockObjectSelectionDrawerFactory;
-  #endregion
-
-  #region Tool setup
-  /// <summary>Color of the matching object when hovering over in non-selecting mode.</summary>
-  protected Color HighlightColor = Color.blue;
-
-  /// <summary>Color of the matching object in the selection range.</summary>
-  protected Color ActionColor = Color.red;
-
-  /// <summary>Color of the ground tile in the selection range.</summary>
-  protected Color TileColor = Color.blue;
-
-  /// <summary>Color of the border of the selection range.</summary>
-  protected Color SideColor = Color.blue;
   #endregion
 
   #region Inhertable properties
@@ -102,6 +93,23 @@ public abstract class AbstractAreaSelectionTool : ToolWithDescription, IInputPro
   /// <seealso cref="SelectionModeActive"/>
   protected virtual void OnSelectionModeChange(bool newMode) {
   }
+
+  /// <summary>Sets colors for the tool selection action.</summary>
+  /// <remarks>
+  /// It can be called at any moment to change the colors when needed. However, if the colors are constant, then this
+  /// method should be called by a descendant from <see cref="Initialize"/> before handing over to the base. 
+  /// </remarks>
+  /// <param name="highlightColor">Color of the matching object when hovering over in non-selecting mode.</param>
+  /// <param name="actionColor">Color of the matching objects in the range selection mode.</param>
+  /// <param name="tileColor">Color of the selected ground tile in the range selection mode.</param>
+  /// <param name="sideColor">Color of the selection boundary border in the range selection mode.</param>
+  protected void SetColorSchema(Color highlightColor, Color actionColor, Color tileColor, Color sideColor) {
+    _highlightColor = highlightColor;
+    _actionColor = actionColor;
+    _tileColor = tileColor;
+    _sideColor = sideColor;
+    CreateDrawers();
+  }
   #endregion
 
   #region Tool overrides
@@ -130,8 +138,7 @@ public abstract class AbstractAreaSelectionTool : ToolWithDescription, IInputPro
   #region CustomTool overrides
   /// <inheritdoc/>
   protected override void Initialize() {
-    _highlightSelectionDrawer = _blockObjectSelectionDrawerFactory.Create(HighlightColor, TileColor, SideColor);
-    _actionSelectionDrawer = _blockObjectSelectionDrawerFactory.Create(ActionColor, TileColor, SideColor);
+    CreateDrawers();
   }
   #endregion
 
@@ -177,6 +184,11 @@ public abstract class AbstractAreaSelectionTool : ToolWithDescription, IInputPro
     _highlightSelectionDrawer.StopDrawing();
     _actionSelectionDrawer.StopDrawing();
     SelectionModeActive = false;
+  }
+
+  void CreateDrawers() {
+    _highlightSelectionDrawer = _blockObjectSelectionDrawerFactory.Create(_highlightColor, _tileColor, _sideColor);
+    _actionSelectionDrawer = _blockObjectSelectionDrawerFactory.Create(_actionColor, _tileColor, _sideColor);
   }
   #endregion
 }
