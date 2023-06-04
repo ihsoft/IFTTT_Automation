@@ -6,12 +6,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Bindito.Core;
-using TimberApi.ToolSystem;
 using Timberborn.AreaSelectionSystem;
 using Timberborn.BlockSystem;
 using Timberborn.BuilderPrioritySystem;
 using Timberborn.InputSystem;
-using Timberborn.ToolSystem;
 using UnityEngine;
 
 namespace IFTTT_Automation.Utils {
@@ -128,8 +126,7 @@ public abstract class AbstractAreaSelectionTool : ToolWithDescription, IInputPro
 
   #region CustomTool overrides
   /// <inheritdoc/>
-  public override void InitializeTool(ToolGroup toolGroup, ToolSpecification toolSpecification) {
-    base.InitializeTool(toolGroup, toolSpecification);
+  protected override void Initialize() {
     _highlightSelectionDrawer = _blockObjectSelectionDrawerFactory.Create(HighlightColor, TileColor, SideColor);
     _actionSelectionDrawer = _blockObjectSelectionDrawerFactory.Create(ActionColor, TileColor, SideColor);
   }

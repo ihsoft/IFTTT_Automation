@@ -44,11 +44,14 @@ public static class CustomToolSystem {
     ToolGroupSpecification _specification;
 
     /// <summary>Initializes the tool group. Do all logic here instead of the constructor.</summary>
-    /// <param name="specification">The specification of this tool group from TimberAPI.</param>
-    public virtual void InitializeGroup(ToolGroupSpecification specification) {
+    protected virtual void Initialize() {
+    }
+
+    internal void InitializeGroup(ToolGroupSpecification specification) {
       Icon = specification.Icon;
       DisplayNameLocKey = specification.NameLocKey;
       _specification = specification;
+      Initialize();
     }
   }
 
@@ -58,21 +61,27 @@ public static class CustomToolSystem {
 
   /// <summary>Base class for all custom tools.</summary>
   public abstract class CustomTool : Tool {
+    #region API
     protected ToolSpecification ToolSpecification { get; private set; }
     protected ILoc Loc  { get; private set; }
 
     /// <summary>Initializes the tool. Do all logic here instead of the constructor.</summary>
-    /// <param name="toolGroup">The group this tool is a child of.</param>
-    /// <param name="toolSpecification">The specification of this tool from TimberAPI.</param>
-    public virtual void InitializeTool(ToolGroup toolGroup, ToolSpecification toolSpecification) {
-      ToolGroup = toolGroup;
-      ToolSpecification = toolSpecification;
+    protected virtual void Initialize() {
     }
+    #endregion
 
+    #region Implementation
     [Inject]
     public void InjectDependencies(ILoc loc) {
       Loc = loc;
     }
+
+    internal void InitializeTool(ToolGroup toolGroup, ToolSpecification toolSpecification) {
+      ToolGroup = toolGroup;
+      ToolSpecification = toolSpecification;
+      Initialize();
+    }
+    #endregion
   }
 
   #region API
