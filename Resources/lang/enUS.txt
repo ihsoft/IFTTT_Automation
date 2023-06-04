@@ -12,7 +12,8 @@ IgorZ.Automation.ResumeTool.Title,Resume buildings
 IgorZ.Automation.ResumeTool.Description,Use this tool to resume buildings and construction sites.
 IgorZ.Automation.ResumeTool.Hint,"Click an item to resume it or hold the button to select a bigger area."
 
-IgorZ.Automation.Common.LockSelectTool.SelectingObject,"Selected: {0}"
-IgorZ.Automation.Common.LockSelectTool.SelectingNObjects,"Selected: {0} (x{1})"
-IgorZ.Automation.Common.LockSelectTool.StartSelectingPrompt,"Point to an entity and click to start selecting"
-IgorZ.Automation.Common.LockSelectTool.StartObjectSelectingPrompt,"Click to start selecting: {0}"
+TimberDev_Utils.Tools.LockSelectTool.SelectingObject,"Selecting: {0}"
+TimberDev_Utils.Tools.LockSelectTool.SelectingNObjects,"Selecting: {0} (x{1})"
+TimberDev_Utils.Tools.LockSelectTool.StartSelectingPrompt,"Point to an entity and click to start selecting"
+TimberDev_Utils.Tools.LockSelectTool.StartObjectSelectingPrompt,"Click to start selecting: {0}"
+TimberDev_Utils.Tools.LockSelectTool.DescriptionHint,"Hold <i>SHIFT</i> to select items of one type only."
