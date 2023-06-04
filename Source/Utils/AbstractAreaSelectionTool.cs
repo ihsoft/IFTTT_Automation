@@ -82,13 +82,16 @@ public abstract class AbstractAreaSelectionTool : ToolWithDescription, IInputPro
   #endregion
 
   #region API
-  /// <summary>Filters the objects that the tool will handle.</summary>
+  /// <summary>Tells if object should be accepted to the selection.</summary>
+  /// <remarks>The accepted objects will be passed into the action callback.</remarks>
   /// <param name="blockObject">The object to check the expression for.</param>
+  /// <seealso cref="OnObjectAction"/>
   protected abstract bool ObjectFilterExpression(BlockObject blockObject);
 
   /// <summary>A callback that is called on every selected object when the action is committed.</summary>
-  /// <remarks>Only objects that matches the <see cref="ObjectFilterExpression"/> will be passed.</remarks>
+  /// <remarks>Only objects that match the <see cref="ObjectFilterExpression"/> will be passed.</remarks>
   /// <param name="blockObject">The object to apply action to.</param>
+  /// <seealso cref="ObjectFilterExpression"/>
   protected abstract void OnObjectAction(BlockObject blockObject);
 
   /// <summary>A callback that is called when a new block object is about to be highlighted.</summary>
