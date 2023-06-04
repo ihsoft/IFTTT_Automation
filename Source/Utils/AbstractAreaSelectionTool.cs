@@ -77,9 +77,6 @@ public abstract class AbstractAreaSelectionTool : ToolWithDescription, IInputPro
   }
   BlockObject _highlightedBlockObject;
 
-  /// <summary>Indicates if the cursor is hovering over UI element(s).</summary>
-  /// <value><c>true</c> if the cursor is over a UI element.</value>
-  protected bool CursorOnUI { get; private set; }
   #endregion
 
   #region API
@@ -145,7 +142,6 @@ public abstract class AbstractAreaSelectionTool : ToolWithDescription, IInputPro
 
   void PreviewCallback(IEnumerable<BlockObject> blockObjects, Vector3Int start, Vector3Int end,
                        bool selectionStarted, bool selectingArea) {
-    CursorOnUI = false;
     var objects = blockObjects.ToList();
     if (selectionStarted) {
       SelectedObjects = objects.AsReadOnly();
@@ -173,14 +169,12 @@ public abstract class AbstractAreaSelectionTool : ToolWithDescription, IInputPro
 
   void ShowNoneCallback() {
     CancelSelectionMode();
-    CursorOnUI = true;
   }
 
   void CancelSelectionMode() {
     _highlightSelectionDrawer.StopDrawing();
     _actionSelectionDrawer.StopDrawing();
     SelectionModeActive = false;
-    CursorOnUI = false;
   }
   #endregion
 }
