@@ -77,6 +77,10 @@ public abstract class AbstractAreaSelectionTool : ToolWithDescription, IInputPro
   }
   BlockObject _highlightedBlockObject;
 
+  /// <summary>All currently selected objects.</summary>
+  /// <remarks>It's <c>null</c> if selection mode is not active.</remarks>
+  /// <seealso cref="SelectionModeActive"/>
+  protected ReadOnlyCollection<BlockObject> SelectedObjects { get; private set; }
   #endregion
 
   #region API
@@ -155,8 +159,6 @@ public abstract class AbstractAreaSelectionTool : ToolWithDescription, IInputPro
       _highlightSelectionDrawer.Draw(targetObjects, start, end, selectingArea: false);
     }
   }
-
-  protected ReadOnlyCollection<BlockObject> SelectedObjects { get; private set; }
 
   void ActionCallback(IEnumerable<BlockObject> blockObjects, Vector3Int start, Vector3Int end,
                       bool selectionStarted, bool selectingArea) {
