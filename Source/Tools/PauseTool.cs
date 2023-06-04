@@ -11,7 +11,7 @@ namespace IFTTT_Automation.Tools {
 
 // ReSharper disable once ClassNeverInstantiated.Global
 sealed class PauseTool : AbstractLockingTool {
-  #region Local fields and properties
+  #region Localization keys
   const string ToolHintLoc = "IgorZ.Automation.PauseTool.Hint";
   #endregion
   

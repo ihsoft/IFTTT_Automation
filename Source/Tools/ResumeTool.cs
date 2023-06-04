@@ -1,18 +1,18 @@
+// Timberborn Mod: Automation
+// Author: igor.zavoychinskiy@gmail.com
+// License: Public Domain
+
 using IFTTT_Automation.Utils;
 using Timberborn.BlockSystem;
 using Timberborn.BuildingsBlocking;
-using Timberborn.ToolSystem;
 using UnityEngine;
 
 namespace IFTTT_Automation.Tools {
 
 // ReSharper disable once ClassNeverInstantiated.Global
 sealed class ResumeTool : AbstractLockingTool {
-  #region Local fields and properties
+  #region Localization keys
   const string ToolHintLoc = "IgorZ.Automation.ResumeTool.Hint";
-  #endregion
-
-  #region Tool overrides
   #endregion
 
   #region CustomTool overrides
