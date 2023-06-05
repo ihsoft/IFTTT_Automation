@@ -143,6 +143,10 @@ public abstract class AbstractAreaSelectionTool : ToolWithDescription, IInputPro
   #endregion
 
   #region Local methods
+  protected AbstractAreaSelectionTool() {
+    DescriptionHintSectionLoc = "SelectionTool.ClickOrHoldTip";
+  }
+
   [Inject]
   public void InjectDependencies(AreaBlockObjectPickerFactory areaBlockObjectPickerFactory, InputService inputService,
                                  BlockObjectSelectionDrawerFactory blockObjectSelectionDrawerFactory) {
