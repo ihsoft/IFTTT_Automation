@@ -3,7 +3,7 @@
   "Type": "AutomationToolGroup",
   "Layout": "Blue",
   "Order": 10000,
-  "Icon": "DraggableUtils/UI_Buttons/group_button",
+  "Icon": "igorz.automation/ui_buttons/automation-group",
   "NameLocKey": "IgorZ.Automation.ToolGroup.DisplayName",
   "FallbackGroup": false,
   "GroupInformation": {

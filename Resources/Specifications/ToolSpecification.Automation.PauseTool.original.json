@@ -3,7 +3,7 @@
   "GroupId": "AutomationToolGroupId",
   "Type": "IFTTT_Automation.Tools.PauseTool",
   "Order": 10,
-  "Icon": "DraggableUtils/UI_Buttons/pause_button",
+  "Icon": "igorz.automation/ui_buttons/player-pause",
   "NameLocKey": "IgorZ.Automation.PauseTool.Title",
   "DescriptionLocKey": "IgorZ.Automation.PauseTool.Description"
 }

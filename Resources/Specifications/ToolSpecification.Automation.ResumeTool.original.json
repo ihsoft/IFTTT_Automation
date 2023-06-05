@@ -3,7 +3,7 @@
   "GroupId": "AutomationToolGroupId",
   "Type": "IFTTT_Automation.Tools.ResumeTool",
   "Order": 11,
-  "Icon": "DraggableUtils/UI_Buttons/pause_button",
+  "Icon": "igorz.automation/ui_buttons/player-play",
   "NameLocKey": "IgorZ.Automation.ResumeTool.Title",
   "DescriptionLocKey": "IgorZ.Automation.ResumeTool.Description"
 }
