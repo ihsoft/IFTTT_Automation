@@ -3,7 +3,7 @@
   "GroupId": "AutomationToolGroupId",
   "Type": "IFTTTAutomationTemplate",
   "Order": 1000,
-  "NameLocKey": "IgorZ.Automation.Tmpl.3LevelsDynamite.Title",
-  "DescriptionLocKey": "IgorZ.Automation.Tmpl.3LevelsDynamite.Description"
   "Icon": "igorz.automation/ui_buttons/automation-dynamite",
+  "NameLocKey": "IgorZ.Automation.tmpl.3LevelsDynamite.DisplayName",
+  "DescriptionLocKey": "IgorZ.Automation.tmpl.3LevelsDynamite.Description"
 }

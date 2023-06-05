@@ -6,21 +6,10 @@ using IFTTT_Automation.Actions;
 using IFTTT_Automation.Conditions;
 using IFTTT_Automation.Utils;
 using Timberborn.BlockSystem;
-using Timberborn.ToolSystem;
 
 namespace IFTTT_Automation.Templates {
 
 class ApplyTemplateTool : AbstractAreaSelectionTool {
-  #region Tool overrides
-  /// <inheritdoc/>
-  public override ToolDescription Description() {
-    return new ToolDescription.Builder()
-        .AddPrioritizedSection("Just section")
-        .AddPrioritizedSection("It's in progress")
-        .Build();
-  }
-  #endregion
-
   #region AbstractAreaSelectionTool overries
   /// <inheritdoc/>
   protected override bool ObjectFilterExpression(BlockObject blockObject) {
