@@ -4,6 +4,9 @@ IgorZ.Automation.ToolGroup.DisplayName,Setup automation
 IgorZ.Automation.tmpl.3LevelsDynamite.DisplayName,"Template: Explode terrain 3 blocks down"
 IgorZ.Automation.tmpl.3LevelsDynamite.Description,"Apply this template on a non-finished dynamite. When it gets built, it will automatically explode and a new dynamite will be placed at the same location."
 
+IgorZ.Automation.CancelTool.Title,"Cancel automation"
+IgorZ.Automation.CancelTool.Description,"Use this tool to cleanup any automation on the buildings or construction sites."
+
 IgorZ.Automation.PauseTool.Title,"Pause buildings"
 IgorZ.Automation.PauseTool.Description,"Use this tool to pause buildings and construction sites."
 IgorZ.Automation.PauseTool.Hint,"Click an item to pause it or hold the button to select a bigger area."

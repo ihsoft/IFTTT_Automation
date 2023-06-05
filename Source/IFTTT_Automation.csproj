@@ -42,6 +42,7 @@
       <Compile Include="AutomationBehavior.cs" />
       <Compile Include="Properties\AssemblyInfo.cs" />
       <Compile Include="Templates\ApplyTemplateTool.cs" />
+      <Compile Include="Tools\CancelTool.cs" />
       <Compile Include="Tools\PauseTool.cs" />
       <Compile Include="Tools\ResumeTool.cs" />
       <Compile Include="UnityDevCandidates\ReflectedAction.cs" />

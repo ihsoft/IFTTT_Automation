@@ -21,6 +21,8 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializab
     public AutomationActionBase action;
   }
 
+  public bool HasRules => _rules.Count > 0;
+
   readonly List<Rule> _rules = new();
 
   [Inject]
@@ -38,6 +40,10 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializab
     _rules.Add(new Rule { condition = condition, action = action});
     HostedDebugLog.Fine(TransformFast, "Adding rule: {0}, {1}", condition, action);
     return true;
+  }
+
+  public void ClearRules() {
+    _rules.Clear();
   }
 
   public bool HasRule(AutomationConditionBase condition, AutomationActionBase action) {

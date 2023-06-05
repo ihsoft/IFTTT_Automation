@@ -17,6 +17,7 @@ class Configurator : IConfigurator {
     CustomToolSystem.BindGroupWithConstructionModeEnabler(containerDefinition, "AutomationToolGroup");
     CustomToolSystem.BindTool<PauseTool>(containerDefinition);
     CustomToolSystem.BindTool<ResumeTool>(containerDefinition);
+    CustomToolSystem.BindTool<CancelTool>(containerDefinition);
     CustomToolSystem.BindTool<ApplyTemplateTool>(containerDefinition, "IFTTTAutomationTemplate");
     containerDefinition.MultiBind<TemplateModule>().ToProvider(ProvideTemplateModule).AsSingleton();
   }
