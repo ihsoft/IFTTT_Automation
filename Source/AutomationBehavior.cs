@@ -1,15 +1,17 @@
-using System;
+// Timberborn Mod: Automation
+// Author: igor.zavoychinskiy@gmail.com
+// License: Public Domain
+
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using Bindito.Core;
 using IFTTT_Automation.Actions;
 using IFTTT_Automation.Conditions;
 using Timberborn.BaseComponentSystem;
 using Timberborn.EntitySystem;
-using Timberborn.GameSaveRuntimeSystem;
 using Timberborn.Persistence;
 using UnityDev.LogUtils;
-
 
 namespace IFTTT_Automation {
 
@@ -51,11 +53,11 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializab
   }
 
   public void TriggerAction(AutomationConditionBase condition) {
-    DebugEx.Warning("*** Handle triggered condition: {0}", condition);
+    DebugEx.Fine("Handle triggered condition: {0}", condition);
     foreach (var rule in _rules) {
       if (rule.condition.Equals(condition)) {
         var action = rule.action;
-        DebugEx.Warning("*** Triggering action: {0}", action);
+        DebugEx.Fine("Triggering action: {0}", action);
         action.Execute(rule.condition);
       }
       //FIXME: maybe deleting condition if it fires once

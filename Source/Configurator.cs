@@ -26,7 +26,7 @@ class Configurator : IConfigurator {
     TemplateModule.Builder builder = new TemplateModule.Builder();
     //builder.AddDecorator<Constructible, IFTTTAutomationTestRule>();
     builder.AddDecorator<BlockObject, AutomationBehavior>();
-    builder.AddDecorator<BaseInstantiator, AutomationBehavior>();//FIXME
+    //builder.AddDecorator<BaseInstantiator, AutomationBehavior>();//FIXME
     return builder.Build();
   }
 }
