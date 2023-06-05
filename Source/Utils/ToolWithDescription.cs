@@ -9,7 +9,7 @@ using Timberborn.Localization;
 using Timberborn.ToolSystem;
 using UnityEngine.UIElements;
 
-namespace IFTTT_Automation.Utils {
+namespace Automation.Utils {
 
 /// <summary>Abstract tool that has description.</summary>
 /// <remarks>

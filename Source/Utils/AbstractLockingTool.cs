@@ -12,7 +12,7 @@ using Timberborn.EntitySystem;
 using Timberborn.PrefabSystem;
 using UnityDev.LogUtils;
 
-namespace IFTTT_Automation.Utils {
+namespace Automation.Utils {
 
 /// <summary>Tool that can select objects by user criteria.</summary>
 /// <remarks>

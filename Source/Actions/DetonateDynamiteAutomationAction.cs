@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using IFTTT_Automation.Conditions;
-using IFTTT_Automation.UnityDevCandidates;
-using IFTTT_Automation.Utils;
+using Automation.Conditions;
+using Automation.UnityDevCandidates;
+using Automation.Utils;
 using TimberApi.DependencyContainerSystem;
 using Timberborn.BaseComponentSystem;
 using Timberborn.BlockObjectTools;
@@ -14,7 +14,7 @@ using Timberborn.ToolSystem;
 using UnityDev.LogUtils;
 using UnityEngine;
 
-namespace IFTTT_Automation.Actions {
+namespace Automation.Actions {
 
 public sealed class DetonateDynamiteAutomationAction : AutomationActionBase {
   const int DetonateDelayTicks = 3; // 1 tick = 300ms

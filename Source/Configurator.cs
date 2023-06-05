@@ -1,14 +1,14 @@
+using Automation.Templates;
+using Automation.Tools;
+using Automation.Utils;
 using Bindito.Core;
-using IFTTT_Automation.Templates;
-using IFTTT_Automation.Tools;
-using IFTTT_Automation.Utils;
 using TimberApi.ConfiguratorSystem;
 using TimberApi.SceneSystem;
 using Timberborn.BaseComponentSystem;
 using Timberborn.BlockSystem;
 using Timberborn.TemplateSystem;
 
-namespace IFTTT_Automation {
+namespace Automation {
 
 // ReSharper disable once InconsistentNaming
 [Configurator(SceneEntrypoint.InGame)]

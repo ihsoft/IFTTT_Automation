@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("IFTTT Automation")]
+[assembly: AssemblyTitle("Automation Mod")]
 [assembly: AssemblyDescription("Plugin for Timberborn game")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("IHSoft")]
-[assembly: AssemblyProduct("IFTTT_Automation")]
+[assembly: AssemblyProduct("Automation")]
 [assembly: AssemblyCopyright("Public domain")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

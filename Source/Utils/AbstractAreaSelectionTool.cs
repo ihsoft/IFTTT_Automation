@@ -12,7 +12,7 @@ using Timberborn.BuilderPrioritySystem;
 using Timberborn.InputSystem;
 using UnityEngine;
 
-namespace IFTTT_Automation.Utils {
+namespace Automation.Utils {
 
 public abstract class AbstractAreaSelectionTool : ToolWithDescription, IInputProcessor {
   #region Internal fields

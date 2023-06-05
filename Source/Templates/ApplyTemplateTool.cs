@@ -2,12 +2,12 @@
 // Author: igor.zavoychinskiy@gmail.com
 // License: Public Domain
 
-using IFTTT_Automation.Actions;
-using IFTTT_Automation.Conditions;
-using IFTTT_Automation.Utils;
+using Automation.Actions;
+using Automation.Conditions;
+using Automation.Utils;
 using Timberborn.BlockSystem;
 
-namespace IFTTT_Automation.Templates {
+namespace Automation.Templates {
 
 class ApplyTemplateTool : AbstractAreaSelectionTool {
   #region AbstractAreaSelectionTool overries

@@ -1,7 +1,7 @@
 using Timberborn.BaseComponentSystem;
 using Timberborn.ConstructibleSystem;
 
-namespace IFTTT_Automation.Conditions {
+namespace Automation.Conditions {
 
 public class ObjectFinishedAutomationConditionBehavior : BaseComponent, IFinishedStateListener {
   ObjectFinishedAutomationCondition _condition;

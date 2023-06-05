@@ -1,7 +1,7 @@
 {
   "Id": "Automation.CancelTool",
   "GroupId": "AutomationToolGroupId",
-  "Type": "IFTTT_Automation.Tools.CancelTool",
+  "Type": "Automation.Tools.CancelTool",
   "Order": 200,
   "Icon": "igorz.automation/ui_buttons/cancel",
   "NameLocKey": "IgorZ.Automation.CancelTool.Title",

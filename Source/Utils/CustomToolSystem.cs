@@ -11,7 +11,7 @@ using Timberborn.Localization;
 using Timberborn.ToolSystem;
 using ToolGroupSpecification = TimberApi.ToolGroupSystem.ToolGroupSpecification;
 
-namespace IFTTT_Automation.Utils {
+namespace Automation.Utils {
 
 /// <summary>System that manages bindings to support TimberAPI tools and groups specifications.</summary>
 /// <remarks>Use this system to keep code short and clear when no fancy setups are needed.</remarks>

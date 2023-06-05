@@ -2,12 +2,12 @@
 // Author: igor.zavoychinskiy@gmail.com
 // License: Public Domain
 
-using IFTTT_Automation.Utils;
+using Automation.Utils;
 using Timberborn.BlockSystem;
 using Timberborn.BuildingsBlocking;
 using UnityEngine;
 
-namespace IFTTT_Automation.Tools {
+namespace Automation.Tools {
 
 // ReSharper disable once ClassNeverInstantiated.Global
 sealed class ResumeTool : AbstractLockingTool {

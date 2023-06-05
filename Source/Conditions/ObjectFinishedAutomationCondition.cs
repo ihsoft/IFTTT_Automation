@@ -1,7 +1,7 @@
 using Timberborn.BaseComponentSystem;
 using Timberborn.BlockSystem;
 
-namespace IFTTT_Automation.Conditions {
+namespace Automation.Conditions {
 
 public sealed class ObjectFinishedAutomationCondition : AutomationConditionBase {
   public ObjectFinishedAutomationCondition(AutomationBehavior source) : base(

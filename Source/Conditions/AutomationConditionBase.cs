@@ -1,7 +1,7 @@
 using System;
 using Timberborn.BaseComponentSystem;
 
-namespace IFTTT_Automation.Conditions {
+namespace Automation.Conditions {
 
 public abstract class AutomationConditionBase : IEquatable<AutomationConditionBase> {
   public readonly string ConditionTypeId;

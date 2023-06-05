@@ -5,7 +5,7 @@
 using System.Reflection;
 using UnityDev.LogUtils;
 
-namespace IFTTT_Automation.UnityDevCandidates {
+namespace Automation.UnityDevCandidates {
 
 public class ReflectedAction<T, TArg0> {
   readonly MethodInfo _methodInfo;

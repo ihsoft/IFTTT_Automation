@@ -3,17 +3,16 @@
 // License: Public Domain
 
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
+using Automation.Actions;
+using Automation.Conditions;
 using Bindito.Core;
-using IFTTT_Automation.Actions;
-using IFTTT_Automation.Conditions;
 using Timberborn.BaseComponentSystem;
 using Timberborn.EntitySystem;
 using Timberborn.Persistence;
 using UnityDev.LogUtils;
 
-namespace IFTTT_Automation {
+namespace Automation {
 
 public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializableEntity {
   BaseInstantiator _baseInstantiator;

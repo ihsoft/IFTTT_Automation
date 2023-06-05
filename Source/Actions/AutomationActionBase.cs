@@ -1,8 +1,8 @@
 using System;
-using IFTTT_Automation.Conditions;
+using Automation.Conditions;
 using Timberborn.BaseComponentSystem;
 
-namespace IFTTT_Automation.Actions {
+namespace Automation.Actions {
 
 public abstract class AutomationActionBase : IEquatable<AutomationActionBase> {
   public readonly string ActionTypeId;
