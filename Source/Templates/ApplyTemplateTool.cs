@@ -24,6 +24,7 @@ class ApplyTemplateTool : AbstractAreaSelectionTool {
     var automationBehavior = blockObject.GetComponentFast<AutomationBehavior>();
     var condition = new ObjectFinishedAutomationCondition(automationBehavior);
     var action = new DetonateDynamiteAutomationAction(automationBehavior, 2);
+    automationBehavior.ClearRules();
     automationBehavior.AddRule(condition, action);
   }
   #endregion
