@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Bindito.Core;
 using Timberborn.AreaSelectionSystem;
+using Timberborn.AssetSystem;
 using Timberborn.BlockSystem;
 using Timberborn.BuilderPrioritySystem;
 using Timberborn.InputSystem;
@@ -20,11 +21,16 @@ public abstract class AbstractAreaSelectionTool : ToolWithDescription, IInputPro
   BlockObjectSelectionDrawer _highlightSelectionDrawer;
   BlockObjectSelectionDrawer _actionSelectionDrawer;
   AreaBlockObjectPicker _areaBlockObjectPicker;
+  CursorService _cursorService;
+  IResourceAssetLoader _resourceAssetLoader;
 
   Color _highlightColor = Color.blue;
   Color _actionColor = Color.red;
   Color _tileColor = Color.blue;
   Color _sideColor = Color.blue;
+
+  string _cursorName;
+  Texture2D _unityCursor;
   #endregion
 
   #region Injections
@@ -111,6 +117,21 @@ public abstract class AbstractAreaSelectionTool : ToolWithDescription, IInputPro
     _sideColor = sideColor;
     CreateDrawers();
   }
+
+  /// <summary>Specifies standard game's cursor to set when the tool is active.</summary>
+  /// <seealso cref="SetUnityCursor"/>
+  protected void SetGameCursor(string cursorName) {
+    _cursorName = cursorName;
+    _unityCursor = null;
+  }
+
+  /// <summary>Specifies texture to use as a cursor when the tool is active.</summary>
+  /// <remarks>The texture must have type `Cursor`, be read/write accessible and don't have mipmaps.</remarks>
+  /// <seealso cref="SetGameCursor"/>
+  protected void SetUnityCursor(string texturePath) {
+    _cursorName = null;
+    _unityCursor = _resourceAssetLoader.Load<Texture2D>(texturePath);
+  }
   #endregion
 
   #region Tool overrides
@@ -118,6 +139,11 @@ public abstract class AbstractAreaSelectionTool : ToolWithDescription, IInputPro
   public override void Enter() {
     InputService.AddInputProcessor(this);
     _areaBlockObjectPicker = _areaBlockObjectPickerFactory.Create();
+    if (_cursorName != null) {
+      _cursorService.SetCursor(_cursorName);
+    } else if (_unityCursor != null) {
+      Cursor.SetCursor(_unityCursor, Vector2.zero, CursorMode.Auto);
+    }
   }
 
   /// <inheritdoc/>
@@ -125,6 +151,11 @@ public abstract class AbstractAreaSelectionTool : ToolWithDescription, IInputPro
     _highlightSelectionDrawer.StopDrawing();
     _actionSelectionDrawer.StopDrawing();
     InputService.RemoveInputProcessor(this);
+    if (_cursorName != null) {
+      _cursorService.ResetCursor();
+    } else if (_unityCursor != null) {
+      Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+    }
   }
   #endregion
 
@@ -150,10 +181,13 @@ public abstract class AbstractAreaSelectionTool : ToolWithDescription, IInputPro
 
   [Inject]
   public void InjectDependencies(AreaBlockObjectPickerFactory areaBlockObjectPickerFactory, InputService inputService,
-                                 BlockObjectSelectionDrawerFactory blockObjectSelectionDrawerFactory) {
+                                 BlockObjectSelectionDrawerFactory blockObjectSelectionDrawerFactory,
+                                 CursorService cursorService, IResourceAssetLoader resourceAssetLoader) {
     _areaBlockObjectPickerFactory = areaBlockObjectPickerFactory;
     InputService = inputService;
     _blockObjectSelectionDrawerFactory = blockObjectSelectionDrawerFactory;
+    _cursorService = cursorService;
+    _resourceAssetLoader = resourceAssetLoader;
   }
 
   void PreviewCallback(IEnumerable<BlockObject> blockObjects, Vector3Int start, Vector3Int end,
