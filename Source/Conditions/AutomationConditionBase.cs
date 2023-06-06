@@ -1,5 +1,12 @@
+// Timberborn Utils
+// Author: igor.zavoychinskiy@gmail.com
+// License: Public Domain
+
 using System;
 using Timberborn.BaseComponentSystem;
+using Timberborn.BlockSystem;
+using Timberborn.PrefabSystem;
+using UnityEngine;
 
 namespace Automation.Conditions {
 
@@ -29,7 +36,9 @@ public abstract class AutomationConditionBase : IEquatable<AutomationConditionBa
   }
 
   public override string ToString() {
-    return $"[Condition{{type={ConditionTypeId};source={Source}}}]";
+    var prefabName = Source.GetComponentFast<Prefab>()?.Name ?? "NOPREFAB";
+    var coords = Source.GetComponentFast<BlockObject>().Coordinates;
+    return $"[Condition{{type={ConditionTypeId};source={prefabName}@{coords}}}]";
   }
 }
 

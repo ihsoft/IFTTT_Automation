@@ -1,3 +1,7 @@
+// Timberborn Utils
+// Author: igor.zavoychinskiy@gmail.com
+// License: Public Domain
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;

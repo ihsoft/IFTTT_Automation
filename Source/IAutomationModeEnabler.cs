@@ -1,3 +1,7 @@
+// Timberborn Utils
+// Author: igor.zavoychinskiy@gmail.com
+// License: Public Domain
+
 namespace Automation {
 
 /// <summary>
