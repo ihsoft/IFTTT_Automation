@@ -10,6 +10,7 @@ using Timberborn.AreaSelectionSystem;
 using Timberborn.BlockSystem;
 using Timberborn.BuilderPrioritySystem;
 using Timberborn.InputSystem;
+using Timberborn.SelectionToolSystem;
 using UnityEngine;
 
 namespace Automation.Utils {
@@ -144,7 +145,7 @@ public abstract class AbstractAreaSelectionTool : ToolWithDescription, IInputPro
 
   #region Local methods
   protected AbstractAreaSelectionTool() {
-    DescriptionHintSectionLoc = "SelectionTool.ClickOrHoldTip";
+    DescriptionHintSectionLoc = SelectionToolSystemLocKeys.ClickOrHoldTipKey;
   }
 
   [Inject]

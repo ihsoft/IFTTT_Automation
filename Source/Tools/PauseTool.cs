@@ -11,15 +11,10 @@ namespace Automation.Tools {
 
 // ReSharper disable once ClassNeverInstantiated.Global
 sealed class PauseTool : AbstractLockingTool {
-  #region Localization keys
-  const string ToolHintLoc = "IgorZ.Automation.PauseTool.Hint";
-  #endregion
-  
   #region CustomTool overrides
   /// <inheritdoc/>
   protected override void Initialize() {
     SetColorSchema(Color.red, Color.red, Color.white, Color.white);
-    DescriptionHintSectionLoc = ToolHintLoc;
     base.Initialize();
   }
   #endregion

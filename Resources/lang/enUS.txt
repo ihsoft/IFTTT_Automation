@@ -9,11 +9,9 @@ IgorZ.Automation.CancelTool.Description,"Use this tool to cleanup any automation
 
 IgorZ.Automation.PauseTool.Title,"Pause buildings"
 IgorZ.Automation.PauseTool.Description,"Use this tool to pause buildings and construction sites."
-IgorZ.Automation.PauseTool.Hint,"Click an item to pause it or hold the button to select a bigger area."
 
 IgorZ.Automation.ResumeTool.Title,"Resume buildings"
 IgorZ.Automation.ResumeTool.Description,"Use this tool to resume buildings and construction sites."
-IgorZ.Automation.ResumeTool.Hint,"Click an item to resume it or hold the button to select a bigger area."
 
 TimberDev_Utils.Tools.LockSelectTool.SelectingObject,"Selecting: {0}"
 TimberDev_Utils.Tools.LockSelectTool.SelectingNObjects,"Selecting: {0} (x{1})"
