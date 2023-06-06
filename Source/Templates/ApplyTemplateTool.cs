@@ -6,10 +6,12 @@ using Automation.Actions;
 using Automation.Conditions;
 using Automation.Utils;
 using Timberborn.BlockSystem;
+using UnityEngine;
 
 namespace Automation.Templates {
 
-class ApplyTemplateTool : AbstractAreaSelectionTool {
+// ReSharper disable once ClassNeverInstantiated.Global
+class ApplyTemplateTool : AbstractAreaSelectionTool, IAutomationModeEnabler {
   #region AbstractAreaSelectionTool overries
   /// <inheritdoc/>
   protected override bool ObjectFilterExpression(BlockObject blockObject) {
@@ -27,6 +29,17 @@ class ApplyTemplateTool : AbstractAreaSelectionTool {
     automationBehavior.ClearRules();
     automationBehavior.AddRule(condition, action);
   }
+
+  /// <inheritdoc/>
+  protected override void Initialize() {
+    //FIXME: et color from system or make it globally adjustable 
+    //SetColorSchema(Color.cyan, Color.cyan, Color.cyan, Color.cyan);
+    SetColorSchema(ToolColor, ToolColor, Color.white, Color.white);
+    base.Initialize();
+  }
+
+  static readonly Color ToolColor = new(0, 1, 1, 0.7f);
+
   #endregion
 }
 

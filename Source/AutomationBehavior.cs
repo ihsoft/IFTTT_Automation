@@ -16,6 +16,7 @@ namespace Automation {
 
 public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializableEntity {
   BaseInstantiator _baseInstantiator;
+  AutomationService _automationService;
 
   class Rule {
     public AutomationConditionBase condition;
@@ -27,8 +28,9 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializab
   readonly List<Rule> _rules = new();
 
   [Inject]
-  public void InjectDependencies(BaseInstantiator baseInstantiator) {
+  public void InjectDependencies(BaseInstantiator baseInstantiator, AutomationService automationService) {
     _baseInstantiator = baseInstantiator;
+    _automationService = automationService;
   }
 
   public bool AddRule(AutomationConditionBase condition, AutomationActionBase action) {
@@ -40,11 +42,13 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializab
     action.SetupComponents(_baseInstantiator);
     _rules.Add(new Rule { condition = condition, action = action});
     HostedDebugLog.Fine(TransformFast, "Adding rule: {0}, {1}", condition, action);
+    UpdateRegistration();
     return true;
   }
 
   public void ClearRules() {
     _rules.Clear();
+    UpdateRegistration();
   }
 
   public bool HasRule(AutomationConditionBase condition, AutomationActionBase action) {
@@ -75,6 +79,16 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializab
   public void InitializeEntity() {
     //DebugEx.Warning("*** initializer called");
   }
+
+  #region Implementation
+  void UpdateRegistration() {
+    if (HasRules) {
+      _automationService.RegisterBehavior(this);
+    } else {
+      _automationService.UnregisterBehavior(this);
+    }
+  }
+  #endregion
 }
 
 }

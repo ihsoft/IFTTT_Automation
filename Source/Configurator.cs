@@ -20,6 +20,7 @@ class Configurator : IConfigurator {
     CustomToolSystem.BindTool<CancelTool>(containerDefinition);
     CustomToolSystem.BindTool<ApplyTemplateTool>(containerDefinition, "IFTTTAutomationTemplate");
     containerDefinition.MultiBind<TemplateModule>().ToProvider(ProvideTemplateModule).AsSingleton();
+    containerDefinition.Bind<AutomationService>().AsSingleton();
   }
 
   static TemplateModule ProvideTemplateModule() {
