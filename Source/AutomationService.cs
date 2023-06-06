@@ -20,9 +20,6 @@ public class AutomationService : IPostLoadableSingleton {
   #endregion
 
   #region API
-  /// <summary>All active behaviors that have at least one condition.</summary>
-  public IReadOnlyCollection<AutomationBehavior> RegisteredBehaviors => _registeredBehaviors;
-
   /// <summary>Highlights all registered behaviours on the map.</summary>
   public void HighlightAutomationObjects(Color? useColor = null) {
     _highlightingEnabled = true;
