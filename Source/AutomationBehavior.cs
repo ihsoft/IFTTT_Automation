@@ -25,6 +25,8 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializab
 
   public bool HasRules => _rules.Count > 0;
 
+  public IReadOnlyCollection<Rule> Rules => _rules.AsReadOnly();
+
   readonly List<Rule> _rules = new();
 
   [Inject]

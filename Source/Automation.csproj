@@ -48,6 +48,8 @@
       <Compile Include="Tools\CancelTool.cs" />
       <Compile Include="Tools\PauseTool.cs" />
       <Compile Include="Tools\ResumeTool.cs" />
+      <Compile Include="UI\AutomationFragment.cs" />
+      <Compile Include="UI\Configurator.cs" />
       <Compile Include="UnityDevCandidates\ReflectedAction.cs" />
       <Compile Include="Utils\AbstractAreaSelectionTool.cs" />
       <Compile Include="Utils\AbstractLockingTool.cs" />
