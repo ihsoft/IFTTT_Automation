@@ -13,6 +13,9 @@ IgorZ.Automation.PauseTool.Description,"Use this tool to pause buildings and con
 IgorZ.Automation.ResumeTool.Title,"Resume buildings"
 IgorZ.Automation.ResumeTool.Description,"Use this tool to resume buildings and construction sites."
 
+IgorZ.Automation.DummyTitle,"Generic title"
+IgorZ.Automation.DummyDescirption,"Generic descirption"
+
 TimberDev_Utils.Tools.LockSelectTool.SelectingObject,"Selecting: {0}"
 TimberDev_Utils.Tools.LockSelectTool.SelectingNObjects,"Selecting: {0} (x{1})"
 TimberDev_Utils.Tools.LockSelectTool.StartSelectingPrompt,"Point to an entity and click to start selecting"
