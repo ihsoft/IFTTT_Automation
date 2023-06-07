@@ -31,7 +31,6 @@ public abstract class AutomationConditionBase : IEquatable<AutomationConditionBa
     // Listener.InvalidateCondition(this);
   }
 
-
   public virtual bool Equals(AutomationConditionBase other) {
     return other != null
         && ConditionTypeId == other.ConditionTypeId
@@ -42,6 +41,20 @@ public abstract class AutomationConditionBase : IEquatable<AutomationConditionBa
     var prefabName = Source.GetComponentFast<Prefab>()?.Name ?? "NOPREFAB";
     var coords = Source.GetComponentFast<BlockObject>().Coordinates;
     return $"[Condition{{type={ConditionTypeId};source={prefabName}@{coords}}}]";
+  }
+}
+
+public abstract class AutomationConditionBase<T> : AutomationConditionBase where T : AutomationConditionBehaviorBase {
+  protected AutomationConditionBase(string conditionTypeId, AutomationBehavior source) : base(conditionTypeId, source) {
+  }
+
+  public override void SetupComponents(BaseInstantiator baseInstantiator) {
+    var behavior = Source.GetComponentFast<T>() ?? baseInstantiator.AddComponent<T>(Source.GameObjectFast);
+    behavior.AddCondition(this);
+  }
+
+  public override void ClearComponents() {
+    Source.GetComponentFast<T>().DeleteCondition(this);
   }
 }
 
