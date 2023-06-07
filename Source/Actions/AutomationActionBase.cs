@@ -5,6 +5,7 @@
 using System;
 using Automation.Conditions;
 using Timberborn.BlockSystem;
+using Timberborn.Localization;
 using Timberborn.PrefabSystem;
 
 namespace Automation.Actions {
@@ -18,8 +19,13 @@ public abstract class AutomationActionBase : IEquatable<AutomationActionBase> {
     Target = target;
   }
 
+  /// <summary>Returns a localized string to present as description of the condition.</summary>
+  /// <remarks>The string must fully describe what the condition checks, but be as short as possible.</remarks>
+  public abstract string GetUiDescription(ILoc loc);
+
+  /// <summary>Verifies that the action can be used in its current setup.</summary>
   public abstract bool IsValid();
-  
+
   // FIXME: in overrides
   // Listener.InvalidateAction(this);
   public abstract void Execute(AutomationConditionBase triggerCondition);

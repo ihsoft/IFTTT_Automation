@@ -7,13 +7,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Automation.Conditions;
 using Automation.UnityDevCandidates;
-using Automation.Utils;
 using TimberApi.DependencyContainerSystem;
-using Timberborn.BaseComponentSystem;
 using Timberborn.BlockObjectTools;
 using Timberborn.BlockSystem;
 using Timberborn.Coordinates;
 using Timberborn.Explosions;
+using Timberborn.Localization;
 using Timberborn.ToolSystem;
 using UnityDev.LogUtils;
 using UnityEngine;
@@ -34,6 +33,15 @@ public sealed class DetonateDynamiteAutomationAction : AutomationActionBase {
   /// <inheritdoc/>
   public override bool IsValid() {
     return Target != null && Target.GetComponentFast<Dynamite>() != null;
+  }
+
+  /// <inheritdoc/>
+  public override string GetUiDescription(ILoc loc) {
+    var res = "<SolidHighlight>detonate dynamite</SolidHighlight>";
+    if (RepeatCount > 0) {
+      res += string.Format(" and add another <GreenHighlight>{0} times</GreenHighlight>", RepeatCount);
+    }
+    return res;
   }
 
   /// <inheritdoc/>
