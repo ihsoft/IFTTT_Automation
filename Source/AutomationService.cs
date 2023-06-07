@@ -3,7 +3,6 @@
 // License: Public Domain
 
 using System.Collections.Generic;
-using Bindito.Core;
 using Timberborn.SelectionSystem;
 using Timberborn.SingletonSystem;
 using Timberborn.ToolSystem;
@@ -15,9 +14,14 @@ public class AutomationService : IPostLoadableSingleton {
   #region Internal fields
   readonly HashSet<AutomationBehavior> _registeredBehaviors = new();
   readonly Color _highlightColor = Color.cyan * 0.5f;
-  Highlighter _highlighter;
+  readonly Highlighter _highlighter;
   bool _highlightingEnabled;
   #endregion
+
+  public AutomationService(EventBus eventBus, Highlighter highlighter) {
+    eventBus.Register(this);
+    _highlighter = highlighter;
+  }
 
   #region API
   /// <summary>Highlights all registered behaviours on the map.</summary>
@@ -50,12 +54,6 @@ public class AutomationService : IPostLoadableSingleton {
   #endregion
 
   #region Implementation
-  [Inject]
-  public void InjectDependencies(EventBus eventBus, Highlighter highlighter) {
-    eventBus.Register(this);
-    _highlighter = highlighter;
-  }
-
   [OnEvent]
   public void OnToolEntered(ToolEnteredEvent toolEnteredEvent) {
     if (toolEnteredEvent.Tool is not IAutomationModeEnabler) {
