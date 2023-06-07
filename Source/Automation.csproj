@@ -38,6 +38,10 @@
       <Compile Include="AutomationService.cs" />
       <Compile Include="Conditions\AutomationConditionBase.cs" />
       <Compile Include="Conditions\AutomationConditionBehaviorBase.cs" />
+      <Compile Include="Conditions\DroughtConditionBase.cs" />
+      <Compile Include="Conditions\DroughtEndedCondition.cs" />
+      <Compile Include="Conditions\DroughtStartedCondition.cs" />
+      <Compile Include="Conditions\DroughtTrackerBehavior.cs" />
       <Compile Include="Conditions\ObjectFinishedCondition.cs" />
       <Compile Include="Conditions\ObjectFinishedConditionBehavior.cs" />
       <Compile Include="Configurator.cs" />
@@ -152,6 +156,9 @@
       </Reference>
       <Reference Include="Timberborn.ToolSystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\Dependencies\Timberborn\Timberborn.ToolSystem.dll</HintPath>
+      </Reference>
+      <Reference Include="Timberborn.WeatherSystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Dependencies\Timberborn\Timberborn.WeatherSystem.dll</HintPath>
       </Reference>
       <Reference Include="Timberborn.WorldSerialization, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\Dependencies\Timberborn\Timberborn.WorldSerialization.dll</HintPath>
