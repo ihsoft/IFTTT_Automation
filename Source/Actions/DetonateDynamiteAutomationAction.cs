@@ -49,10 +49,6 @@ public sealed class DetonateDynamiteAutomationAction : AutomationActionBase {
     component.blockObject = blockObject;
     component.repeatCount = RepeatCount - 1;
   }
-
-  /// <inheritdoc/>
-  public override void SetupComponents(BaseInstantiator baseInstantiator) {
-  }
   #endregion
 
   #region MonoBehavior object to handle action repeat
@@ -96,7 +92,7 @@ public sealed class DetonateDynamiteAutomationAction : AutomationActionBase {
 
       var automationObj = newDynamite.GetComponentFast<AutomationBehavior>();
       automationObj.AddRule(
-          new ObjectFinishedAutomationCondition(automationObj),
+          new ObjectFinishedCondition(automationObj),
           new DetonateDynamiteAutomationAction(automationObj, repeatCount));
       Destroy(gameObject);
     }

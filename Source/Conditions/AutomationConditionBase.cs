@@ -6,7 +6,6 @@ using System;
 using Timberborn.BaseComponentSystem;
 using Timberborn.BlockSystem;
 using Timberborn.PrefabSystem;
-using UnityEngine;
 
 namespace Automation.Conditions {
 
@@ -19,8 +18,12 @@ public abstract class AutomationConditionBase : IEquatable<AutomationConditionBa
     Source = source;
   }
 
-  public abstract bool IsValid();
   public abstract void SetupComponents(BaseInstantiator baseInstantiator);
+  public abstract void ClearComponents();
+
+  public virtual bool IsValid() {
+    return Source.GetComponentFast<BlockObject>().Finished;
+  }
 
   public virtual void Trigger() {
     Source.TriggerAction(this);

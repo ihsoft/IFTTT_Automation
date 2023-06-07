@@ -16,7 +16,7 @@ class ApplyTemplateTool : AbstractAreaSelectionTool, IAutomationModeEnabler {
   /// <inheritdoc/>
   protected override bool ObjectFilterExpression(BlockObject blockObject) {
     var automationBehavior = blockObject.GetComponentFast<AutomationBehavior>();
-    var condition = new ObjectFinishedAutomationCondition(automationBehavior);
+    var condition = new ObjectFinishedCondition(automationBehavior);
     var action = new DetonateDynamiteAutomationAction(automationBehavior, 0);
     return automationBehavior != null && automationBehavior.enabled && condition.IsValid() && action.IsValid();
   }
@@ -24,7 +24,7 @@ class ApplyTemplateTool : AbstractAreaSelectionTool, IAutomationModeEnabler {
   /// <inheritdoc/>
   protected override void OnObjectAction(BlockObject blockObject) {
     var automationBehavior = blockObject.GetComponentFast<AutomationBehavior>();
-    var condition = new ObjectFinishedAutomationCondition(automationBehavior);
+    var condition = new ObjectFinishedCondition(automationBehavior);
     var action = new DetonateDynamiteAutomationAction(automationBehavior, 2);
     automationBehavior.ClearRules();
     automationBehavior.AddRule(condition, action);

@@ -4,7 +4,6 @@
 
 using System;
 using Automation.Conditions;
-using Timberborn.BaseComponentSystem;
 using Timberborn.BlockSystem;
 using Timberborn.PrefabSystem;
 
@@ -24,8 +23,6 @@ public abstract class AutomationActionBase : IEquatable<AutomationActionBase> {
   // FIXME: in overrides
   // Listener.InvalidateAction(this);
   public abstract void Execute(AutomationConditionBase triggerCondition);
-
-  public abstract void SetupComponents(BaseInstantiator baseInstantiator);
 
   public virtual bool Equals(AutomationActionBase other) {
     return other != null && ActionTypeId == other.ActionTypeId && Target == other.Target;

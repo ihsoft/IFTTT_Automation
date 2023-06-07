@@ -18,9 +18,9 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializab
   BaseInstantiator _baseInstantiator;
   AutomationService _automationService;
 
-  class Rule {
-    public AutomationConditionBase condition;
-    public AutomationActionBase action;
+  public class Rule {
+    public AutomationConditionBase Condition;
+    public AutomationActionBase Action;
   }
 
   public bool HasRules => _rules.Count > 0;
@@ -39,29 +39,31 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializab
       return false;
     }
     condition.SetupComponents(_baseInstantiator);
-    action.SetupComponents(_baseInstantiator);
-    _rules.Add(new Rule { condition = condition, action = action});
+    _rules.Add(new Rule { Condition = condition, Action = action});
     HostedDebugLog.Fine(TransformFast, "Adding rule: {0}, {1}", condition, action);
     UpdateRegistration();
     return true;
   }
 
   public void ClearRules() {
+    foreach (var rule in _rules) {
+      rule.Condition.ClearComponents();
+    }
     _rules.Clear();
     UpdateRegistration();
   }
 
   public bool HasRule(AutomationConditionBase condition, AutomationActionBase action) {
-    return _rules.Any(r => r.condition.Equals(condition) && r.action.Equals(action));
+    return _rules.Any(r => r.Condition.Equals(condition) && r.Action.Equals(action));
   }
 
   public void TriggerAction(AutomationConditionBase condition) {
     DebugEx.Fine("Handle triggered condition: {0}", condition);
     foreach (var rule in _rules) {
-      if (rule.condition.Equals(condition)) {
-        var action = rule.action;
+      if (rule.Condition.Equals(condition)) {
+        var action = rule.Action;
         DebugEx.Fine("Triggering action: {0}", action);
-        action.Execute(rule.condition);
+        action.Execute(rule.Condition);
       }
       //FIXME: maybe deleting condition if it fires once
     }

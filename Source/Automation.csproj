@@ -37,8 +37,9 @@
       <Compile Include="Actions\DetonateDynamiteAutomationAction.cs" />
       <Compile Include="AutomationService.cs" />
       <Compile Include="Conditions\AutomationConditionBase.cs" />
-      <Compile Include="Conditions\ObjectFinishedAutomationCondition.cs" />
-      <Compile Include="Conditions\ObjectFinishedAutomationConditionBehavior.cs" />
+      <Compile Include="Conditions\AutomationConditionBehaviorBase.cs" />
+      <Compile Include="Conditions\ObjectFinishedCondition.cs" />
+      <Compile Include="Conditions\ObjectFinishedConditionBehavior.cs" />
       <Compile Include="Configurator.cs" />
       <Compile Include="AutomationBehavior.cs" />
       <Compile Include="IAutomationModeEnabler.cs" />
