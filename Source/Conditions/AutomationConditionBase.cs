@@ -20,9 +20,19 @@ public abstract class AutomationConditionBase : IEquatable<AutomationConditionBa
   public readonly string ConditionTypeId;
   public AutomationBehavior Source;
 
-  public AutomationConditionBase() {
+  /// <summary>Default constructor is required for serialization.</summary>
+  protected AutomationConditionBase() {
     ConditionTypeId = GetType().FullName;
   }
+
+  /// <summary>Copy constructor is required for cloning.</summary>
+  /// <seealso cref="Clone"/>
+  protected AutomationConditionBase(AutomationConditionBase src) {
+    ConditionTypeId = src.ConditionTypeId;
+  }
+
+  /// <summary>Returns a copy of the condition that is not bound to any game object.</summary>
+  public abstract AutomationConditionBase Clone();
 
   /// <summary>Returns a localized string to present as description of the condition.</summary>
   /// <remarks>The string must fully describe what the condition checks, but be as short as possible.</remarks>
@@ -70,6 +80,14 @@ public abstract class AutomationConditionBase : IEquatable<AutomationConditionBa
 /// <remarks>It encapsulates te basic logic on dealing with the behavior components.</remarks>
 /// <typeparam name="T">type of the behavior component</typeparam>
 public abstract class AutomationConditionBase<T> : AutomationConditionBase where T : AutomationConditionBehaviorBase {
+  /// <inheritdoc/>
+  protected AutomationConditionBase() {
+  }
+
+  /// <inheritdoc/>
+  protected AutomationConditionBase(AutomationConditionBase src) : base(src) {
+  }
+
   /// <inheritdoc/>
   public override void SetupComponents(BaseInstantiator baseInstantiator) {
     var behavior = Source.GetComponentFast<T>() ?? baseInstantiator.AddComponent<T>(Source.GameObjectFast);

@@ -14,9 +14,19 @@ public abstract class AutomationActionBase : IEquatable<AutomationActionBase> {
   public readonly string ActionTypeId;
   public AutomationBehavior Target;
 
+  /// <summary>Default constructor is required for serialization.</summary>
   protected AutomationActionBase() {
     ActionTypeId = GetType().FullName;
   }
+
+  /// <summary>Copy constructor is required for cloning.</summary>
+  /// <seealso cref="Clone"/>
+  protected AutomationActionBase(AutomationActionBase src) {
+    ActionTypeId = src.ActionTypeId;
+  }
+
+  /// <summary>Returns a copy of the action that is not bound to any game object.</summary>
+  public abstract AutomationActionBase Clone();
 
   /// <summary>Returns a localized string to present as description of the condition.</summary>
   /// <remarks>The string must fully describe what the condition checks, but be as short as possible.</remarks>

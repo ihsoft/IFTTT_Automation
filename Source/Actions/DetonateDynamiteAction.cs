@@ -27,6 +27,20 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
 
   #region AutomationActionBase overrides
   /// <inheritdoc/>
+  public DetonateDynamiteAction() {
+  }
+
+  /// <inheritdoc/>
+  public DetonateDynamiteAction(DetonateDynamiteAction src) : base(src) {
+    RepeatCount = src.RepeatCount;
+  }
+
+  /// <inheritdoc/>
+  public override AutomationActionBase Clone() {
+    return new DetonateDynamiteAction(this);
+  }
+
+  /// <inheritdoc/>
   public override bool IsValid() {
     return Target != null && Target.GetComponentFast<Dynamite>() != null;
   }

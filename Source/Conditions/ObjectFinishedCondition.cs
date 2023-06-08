@@ -9,6 +9,19 @@ namespace Automation.Conditions {
 
 public sealed class ObjectFinishedCondition : AutomationConditionBase<ObjectFinishedConditionBehavior> {
   /// <inheritdoc/>
+  public ObjectFinishedCondition() {
+  }
+
+  /// <inheritdoc/>
+  ObjectFinishedCondition(ObjectFinishedCondition src) : base(src) {
+  }
+
+  /// <inheritdoc/>
+  public override AutomationConditionBase Clone() {
+    return new ObjectFinishedCondition(this);
+  }
+
+  /// <inheritdoc/>
   public override bool IsValid() {
     return !Source.GetComponentFast<BlockObject>().Finished;
   }

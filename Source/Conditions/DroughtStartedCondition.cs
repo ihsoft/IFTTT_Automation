@@ -6,7 +6,20 @@ using Timberborn.Localization;
 
 namespace Automation.Conditions {
 
-public class DroughtStartedCondition : DroughtConditionBase {
+public sealed class DroughtStartedCondition : DroughtConditionBase {
+  /// <inheritdoc/>
+  public DroughtStartedCondition() {
+  }
+
+  /// <inheritdoc/>
+  public DroughtStartedCondition(DroughtStartedCondition src) : base(src) {
+  }
+
+  /// <inheritdoc/>
+  public override AutomationConditionBase Clone() {
+    return new DroughtStartedCondition(this);
+  }
+
   /// <inheritdoc/>
   public override string GetUiDescription(ILoc loc) {
     return "<SolidHighlight>drought started</SolidHighlight>";
