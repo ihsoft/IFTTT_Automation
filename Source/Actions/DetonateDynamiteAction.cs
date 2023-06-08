@@ -19,13 +19,13 @@ using UnityEngine;
 
 namespace Automation.Actions {
 
-public sealed class DetonateDynamiteAutomationAction : AutomationActionBase {
+public sealed class DetonateDynamiteAction : AutomationActionBase {
   const int DetonateDelayTicks = 3; // 1 tick = 300ms
 
   public readonly int RepeatCount;
 
-  public DetonateDynamiteAutomationAction(AutomationBehavior target, int repeatCount) : base(
-      nameof(DetonateDynamiteAutomationAction), target) {
+  public DetonateDynamiteAction(AutomationBehavior target, int repeatCount) : base(
+      nameof(DetonateDynamiteAction), target) {
     RepeatCount = repeatCount;
   }
 
@@ -101,7 +101,7 @@ public sealed class DetonateDynamiteAutomationAction : AutomationActionBase {
       var automationObj = newDynamite.GetComponentFast<AutomationBehavior>();
       automationObj.AddRule(
           new ObjectFinishedCondition(automationObj),
-          new DetonateDynamiteAutomationAction(automationObj, repeatCount));
+          new DetonateDynamiteAction(automationObj, repeatCount));
       Destroy(gameObject);
     }
   }
