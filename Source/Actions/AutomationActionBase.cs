@@ -35,9 +35,12 @@ public abstract class AutomationActionBase : IEquatable<AutomationActionBase> {
   }
 
   public override string ToString() {
-    var prefabName = Target.GetComponentFast<Prefab>()?.Name ?? "NOPREFAB";
+    if (Target == null) {
+      return $"[Action:type={ActionTypeId};target=NULL]";
+    }
+    var prefabName = Target.GetComponentFast<Prefab>()?.Name ?? "UNKNOWN";
     var coords = Target.GetComponentFast<BlockObject>().Coordinates;
-    return $"[Condition{{type={ActionTypeId};target={prefabName}@{coords}}}]";
+    return $"[Action:type={ActionTypeId};target={prefabName}@{coords}]";
   }
 }
 

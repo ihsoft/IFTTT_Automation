@@ -58,9 +58,12 @@ public abstract class AutomationConditionBase : IEquatable<AutomationConditionBa
 
   /// <inheritdoc/>
   public override string ToString() {
-    var prefabName = Source.GetComponentFast<Prefab>()?.Name ?? "NOPREFAB";
+    if (Source == null) {
+      return $"[Condition:type={ConditionTypeId};source=NULL]";
+    }
+    var prefabName = Source.GetComponentFast<Prefab>()?.Name ?? "UNKNOWN";
     var coords = Source.GetComponentFast<BlockObject>().Coordinates;
-    return $"[Condition{{type={ConditionTypeId};source={prefabName}@{coords}}}]";
+    return $"[Condition:type={ConditionTypeId};source={prefabName}@{coords}]";
   }
 }
 
