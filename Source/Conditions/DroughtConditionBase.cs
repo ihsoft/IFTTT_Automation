@@ -5,9 +5,6 @@
 namespace Automation.Conditions {
 
 public abstract class DroughtConditionBase : AutomationConditionBase<DroughtTrackerBehavior> {
-  protected DroughtConditionBase(string conditionTypeId, AutomationBehavior source) : base(conditionTypeId, source) {
-  }
-
   /// <inheritdoc/>
   public override bool IsValid() {
     return true;

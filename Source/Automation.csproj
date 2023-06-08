@@ -34,7 +34,7 @@
     </PropertyGroup>
     <ItemGroup>
       <Compile Include="Actions\AutomationActionBase.cs" />
-      <Compile Include="Actions\DetonateDynamiteAutomationAction.cs" />
+      <Compile Include="Actions\DetonateDynamiteAction.cs" />
       <Compile Include="AutomationService.cs" />
       <Compile Include="Conditions\AutomationConditionBase.cs" />
       <Compile Include="Conditions\AutomationConditionBehaviorBase.cs" />

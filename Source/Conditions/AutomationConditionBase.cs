@@ -18,11 +18,10 @@ namespace Automation.Conditions {
 /// <seealso cref="AutomationConditionBehaviorBase"/>
 public abstract class AutomationConditionBase : IEquatable<AutomationConditionBase> {
   public readonly string ConditionTypeId;
-  public readonly AutomationBehavior Source;
+  public AutomationBehavior Source;
 
-  protected AutomationConditionBase(string conditionTypeId, AutomationBehavior source) {
-    ConditionTypeId = conditionTypeId;
-    Source = source;
+  public AutomationConditionBase() {
+    ConditionTypeId = GetType().FullName;
   }
 
   /// <summary>Returns a localized string to present as description of the condition.</summary>
@@ -71,9 +70,6 @@ public abstract class AutomationConditionBase : IEquatable<AutomationConditionBa
 /// <remarks>It encapsulates te basic logic on dealing with the behavior components.</remarks>
 /// <typeparam name="T">type of the behavior component</typeparam>
 public abstract class AutomationConditionBase<T> : AutomationConditionBase where T : AutomationConditionBehaviorBase {
-  protected AutomationConditionBase(string conditionTypeId, AutomationBehavior source) : base(conditionTypeId, source) {
-  }
-
   /// <inheritdoc/>
   public override void SetupComponents(BaseInstantiator baseInstantiator) {
     var behavior = Source.GetComponentFast<T>() ?? baseInstantiator.AddComponent<T>(Source.GameObjectFast);

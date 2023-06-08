@@ -22,12 +22,8 @@ namespace Automation.Actions {
 public sealed class DetonateDynamiteAction : AutomationActionBase {
   const int DetonateDelayTicks = 3; // 1 tick = 300ms
 
-  public readonly int RepeatCount;
 
-  public DetonateDynamiteAction(AutomationBehavior target, int repeatCount) : base(
-      nameof(DetonateDynamiteAction), target) {
-    RepeatCount = repeatCount;
-  }
+  public int RepeatCount;
 
   #region AutomationActionBase overrides
   /// <inheritdoc/>
@@ -100,8 +96,8 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
 
       var automationObj = newDynamite.GetComponentFast<AutomationBehavior>();
       automationObj.AddRule(
-          new ObjectFinishedCondition(automationObj),
-          new DetonateDynamiteAction(automationObj, repeatCount));
+          new ObjectFinishedCondition { Source = automationObj },
+          new DetonateDynamiteAction() { Target = automationObj, RepeatCount = repeatCount });
       Destroy(gameObject);
     }
   }

@@ -16,16 +16,16 @@ class ApplyTemplateTool : AbstractAreaSelectionTool, IAutomationModeEnabler {
   /// <inheritdoc/>
   protected override bool ObjectFilterExpression(BlockObject blockObject) {
     var automationBehavior = blockObject.GetComponentFast<AutomationBehavior>();
-    var condition = new ObjectFinishedCondition(automationBehavior);
-    var action = new DetonateDynamiteAction(automationBehavior, 0);
+    var condition = new ObjectFinishedCondition { Source = automationBehavior };
+    var action = new DetonateDynamiteAction { Target = automationBehavior };
     return automationBehavior != null && automationBehavior.enabled && condition.IsValid() && action.IsValid();
   }
 
   /// <inheritdoc/>
   protected override void OnObjectAction(BlockObject blockObject) {
     var automationBehavior = blockObject.GetComponentFast<AutomationBehavior>();
-    var condition = new ObjectFinishedCondition(automationBehavior);
-    var action = new DetonateDynamiteAction(automationBehavior, 2);
+    var condition = new ObjectFinishedCondition { Source = automationBehavior };
+    var action = new DetonateDynamiteAction { Target = automationBehavior, RepeatCount = 2 };
     automationBehavior.ClearRules();
     automationBehavior.AddRule(condition, action);
   }

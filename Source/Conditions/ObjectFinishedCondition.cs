@@ -8,10 +8,6 @@ using Timberborn.Localization;
 namespace Automation.Conditions {
 
 public sealed class ObjectFinishedCondition : AutomationConditionBase<ObjectFinishedConditionBehavior> {
-  public ObjectFinishedCondition(AutomationBehavior source) : base(
-      nameof(ObjectFinishedCondition), source) {
-  }
-
   /// <inheritdoc/>
   public override bool IsValid() {
     return !Source.GetComponentFast<BlockObject>().Finished;

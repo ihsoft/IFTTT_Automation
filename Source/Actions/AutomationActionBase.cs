@@ -12,11 +12,10 @@ namespace Automation.Actions {
 
 public abstract class AutomationActionBase : IEquatable<AutomationActionBase> {
   public readonly string ActionTypeId;
-  public readonly AutomationBehavior Target;
+  public AutomationBehavior Target;
 
-  protected AutomationActionBase(string actionTypeId, AutomationBehavior target) {
-    ActionTypeId = actionTypeId;
-    Target = target;
+  protected AutomationActionBase() {
+    ActionTypeId = GetType().FullName;
   }
 
   /// <summary>Returns a localized string to present as description of the condition.</summary>
