@@ -1,9 +1,0 @@
-{
-  "Id": "Automation.Tmpl.3LevelsDynamite",
-  "GroupId": "AutomationToolGroupId",
-  "Type": "Automation.Templates.ApplyTemplateTool",
-  "Order": 100,
-  "Icon": "igorz.automation/ui_buttons/automation-dynamite",
-  "NameLocKey": "IgorZ.Automation.tmpl.3LevelsDynamite.DisplayName",
-  "DescriptionLocKey": "IgorZ.Automation.tmpl.3LevelsDynamite.Description"
-}

@@ -1,8 +1,18 @@
 ID,Text
-IgorZ.Automation.ToolGroup.DisplayName,Setup automation
+IgorZ.Automation.ToolGroup.Main.DisplayName,"Setup automation"
+IgorZ.Automation.ToolGroup.Terrain.DisplayName,"Terrain changing"
+IgorZ.Automation.ToolGroup.Water.DisplayName,"Water conditions"
+IgorZ.Automation.ToolGroup.Power.DisplayName,"Power conditions"
 
-IgorZ.Automation.tmpl.3LevelsDynamite.DisplayName,"Template: Explode terrain 3 blocks down"
-IgorZ.Automation.tmpl.3LevelsDynamite.Description,"Apply this template on a non-finished dynamite. When it gets built, it will automatically explode and a new dynamite will be placed at the same location."
+IgorZ.Automation.Tool.tmpl.2LevelsDynamite.DisplayName,"Template: Explode terrain 2 blocks down"
+IgorZ.Automation.Tool.tmpl.3LevelsDynamite.DisplayName,"Template: Explode terrain 3 blocks down"
+IgorZ.Automation.Tool.tmpl.4LevelsDynamite.DisplayName,"Template: Explode terrain 4 blocks down"
+IgorZ.Automation.Tool.tmpl.5LevelsDynamite.DisplayName,"Template: Explode terrain 5 blocks down"
+IgorZ.Automation.Tool.tmpl.6LevelsDynamite.DisplayName,"Template: Explode terrain 6 blocks down"
+IgorZ.Automation.Tool.tmpl.XLevelsDynamite.Description,"Apply this template on a non-finished dynamite. When it gets built, it will automatically explode and a new dynamite will be placed at the same location."
+
+IgorZ.Automation.Tool.tmpl.DroughtPause.DisplayName,"Template: Pause during drought"
+IgorZ.Automation.Tool.tmpl.DroughtPause.Description,"Apply this template on buildings that should stay paused during droughts."
 
 IgorZ.Automation.CancelTool.Title,"Cancel automation"
 IgorZ.Automation.CancelTool.Description,"Use this tool to cleanup any automation on the buildings or construction sites."

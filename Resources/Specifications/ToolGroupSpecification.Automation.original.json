@@ -4,7 +4,7 @@
   "Layout": "Blue",
   "Order": 10000,
   "Icon": "igorz.automation/ui_buttons/automation-group",
-  "NameLocKey": "IgorZ.Automation.ToolGroup.DisplayName",
+  "NameLocKey": "IgorZ.Automation.ToolGroup.Main.DisplayName",
   "FallbackGroup": false,
   "GroupInformation": {
     "BottomBarSection": 0
