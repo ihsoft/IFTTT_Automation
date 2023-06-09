@@ -10,11 +10,11 @@
     "Rules": [
       {
         "Condition": { "TypeId": "Automation.Conditions.DroughtStartedCondition" },
-        "Action": { "TypeId": "Automation.Actions.DetonateDynamiteAction", "Repeat": 0 }
+        "Action": { "TypeId": "Automation.Actions.PauseAction" }
       },
       {
         "Condition": { "TypeId": "Automation.Conditions.DroughtEndedCondition" },
-        "Action": { "TypeId": "Automation.Actions.DetonateDynamiteAction", "Repeat": 0 }
+        "Action": { "TypeId": "Automation.Actions.ResumeAction" }
       }
     ]
   }

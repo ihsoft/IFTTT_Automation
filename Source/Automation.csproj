@@ -35,6 +35,8 @@
     <ItemGroup>
       <Compile Include="Actions\AutomationActionBase.cs" />
       <Compile Include="Actions\DetonateDynamiteAction.cs" />
+      <Compile Include="Actions\PauseAction.cs" />
+      <Compile Include="Actions\UnpauseAction.cs" />
       <Compile Include="AutomationRule.cs" />
       <Compile Include="AutomationService.cs" />
       <Compile Include="Conditions\AutomationConditionBase.cs" />
