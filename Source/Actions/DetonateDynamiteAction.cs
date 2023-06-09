@@ -13,6 +13,7 @@ using Timberborn.BlockSystem;
 using Timberborn.Coordinates;
 using Timberborn.Explosions;
 using Timberborn.Localization;
+using Timberborn.Persistence;
 using Timberborn.ToolSystem;
 using UnityDev.LogUtils;
 using UnityEngine;
@@ -20,8 +21,9 @@ using UnityEngine;
 namespace Automation.Actions {
 
 public sealed class DetonateDynamiteAction : AutomationActionBase {
-  const int DetonateDelayTicks = 3; // 1 tick = 300ms
+  static readonly PropertyKey<int> RepeatPropertyKey = new("Repeat");
 
+  const int DetonateDelayTicks = 3; // 1 tick = 300ms
 
   public int RepeatCount;
 
@@ -43,6 +45,17 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
   /// <inheritdoc/>
   public override bool IsValid() {
     return Target != null && Target.GetComponentFast<Dynamite>() != null;
+  }
+
+  /// <summary>Loads action state and declaration.</summary>
+  protected internal override void LoadFrom(IObjectLoader objectLoader) {
+    base.LoadFrom(objectLoader);
+    RepeatCount = objectLoader.Get(RepeatPropertyKey);
+  }
+
+  /// <summary>Saves action state and declaration.</summary>
+  protected internal override void SaveTo(IObjectSaver objectSaver) {
+    objectSaver.Set(RepeatPropertyKey, RepeatCount);
   }
 
   /// <inheritdoc/>
@@ -111,7 +124,7 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
       var automationObj = newDynamite.GetComponentFast<AutomationBehavior>();
       automationObj.AddRule(
           new ObjectFinishedCondition { Source = automationObj },
-          new DetonateDynamiteAction() { Target = automationObj, RepeatCount = repeatCount });
+          new DetonateDynamiteAction { Target = automationObj, RepeatCount = repeatCount });
       Destroy(gameObject);
     }
   }

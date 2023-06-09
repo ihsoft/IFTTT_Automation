@@ -18,16 +18,11 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializab
   BaseInstantiator _baseInstantiator;
   AutomationService _automationService;
 
-  public class Rule {
-    public AutomationConditionBase Condition;
-    public AutomationActionBase Action;
-  }
-
   public bool HasRules => _rules.Count > 0;
 
-  public IReadOnlyCollection<Rule> Rules => _rules.AsReadOnly();
+  public IReadOnlyCollection<AutomationRule> Rules => _rules.AsReadOnly();
 
-  readonly List<Rule> _rules = new();
+  readonly List<AutomationRule> _rules = new();
 
   [Inject]
   public void InjectDependencies(BaseInstantiator baseInstantiator, AutomationService automationService) {
@@ -41,7 +36,7 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializab
       return false;
     }
     condition.SetupComponents(_baseInstantiator);
-    _rules.Add(new Rule { Condition = condition, Action = action});
+    _rules.Add(new AutomationRule { Condition = condition, Action = action});
     HostedDebugLog.Fine(TransformFast, "Adding rule: {0}, {1}", condition, action);
     UpdateRegistration();
     return true;
