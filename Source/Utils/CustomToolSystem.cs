@@ -142,7 +142,7 @@ public static class CustomToolSystem {
   /// <seealso cref="CustomToolGroupWithConstructionModeEnabler"/>
   public static void BindToolGroup<TToolGroup>(IContainerDefinition containerDefinition, string groupTypeName = null)
       where TToolGroup : CustomToolGroup {
-    containerDefinition.Bind<TToolGroup>().AsSingleton();
+    containerDefinition.Bind<TToolGroup>().AsTransient();
     containerDefinition.MultiBind<IToolGroupFactory>()
         .ToInstance(new ToolGroupFactory<TToolGroup>(groupTypeName ?? typeof(TToolGroup).FullName));
   }
@@ -162,7 +162,7 @@ public static class CustomToolSystem {
   /// <typeparam name="TTool">the class that implements the tool.</typeparam>
   public static void BindTool<TTool>(IContainerDefinition containerDefinition, string typeName = null)
       where TTool : CustomTool {
-    containerDefinition.Bind<TTool>().AsSingleton();
+    containerDefinition.Bind<TTool>().AsTransient();
     containerDefinition.MultiBind<IToolFactory>().ToInstance(new ToolFactory<TTool>(typeName ?? typeof(TTool).FullName));
   }
 
@@ -182,7 +182,7 @@ public static class CustomToolSystem {
   /// <typeparam name="TInfo">tha class that implements holds the tool information</typeparam>
   public static void BindTool<TTool, TInfo>(IContainerDefinition containerDefinition, string typeName = null)
       where TTool : CustomTool where TInfo : ToolInformation, new() {
-    containerDefinition.Bind<TTool>().AsSingleton();
+    containerDefinition.Bind<TTool>().AsTransient();
     containerDefinition.MultiBind<IToolFactory>()
         .ToInstance(new ToolFactory<TTool, TInfo>(typeName ?? typeof(TTool).FullName));
   }
