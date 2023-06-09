@@ -27,10 +27,8 @@ sealed class Configurator : IConfigurator {
   }
 
   static TemplateModule ProvideTemplateModule() {
-    TemplateModule.Builder builder = new TemplateModule.Builder();
-    //builder.AddDecorator<Constructible, IFTTTAutomationTestRule>();
+    var builder = new TemplateModule.Builder();
     builder.AddDecorator<BlockObject, AutomationBehavior>();
-    //builder.AddDecorator<BaseInstantiator, AutomationBehavior>();//FIXME
     return builder.Build();
   }
 }
