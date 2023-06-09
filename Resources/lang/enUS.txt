@@ -13,15 +13,15 @@ IgorZ.Automation.Tool.tmpl.XLevelsDynamite.Description,"Apply this template on a
 
 IgorZ.Automation.Tool.tmpl.DroughtPause.DisplayName,"Template: Pause during drought"
 IgorZ.Automation.Tool.tmpl.DroughtPause.Description,"Apply this template on buildings that should stay paused during droughts."
+IgorZ.Automation.Tool.tmpl.TemperatePause.DisplayName,"Template: Pause during temperate weather"
+IgorZ.Automation.Tool.tmpl.TemperatePause.Description,"Apply this template on buildings that should stay paused during temperate weather."
 
 IgorZ.Automation.CancelTool.Title,"Cancel automation"
 IgorZ.Automation.CancelTool.Description,"Use this tool to cleanup any automation on the buildings or construction sites."
-
 IgorZ.Automation.PauseTool.Title,"Pause buildings"
 IgorZ.Automation.PauseTool.Description,"Use this tool to pause buildings and construction sites."
-
-IgorZ.Automation.ResumeTool.Title,"Resume buildings"
-IgorZ.Automation.ResumeTool.Description,"Use this tool to resume buildings and construction sites."
+IgorZ.Automation.ResumeTool.Title,"Unpause buildings"
+IgorZ.Automation.ResumeTool.Description,"Use this tool to unpause buildings and construction sites."
 
 IgorZ.Automation.DummyTitle,"Generic title"
 IgorZ.Automation.DummyDescirption,"Generic descirption"

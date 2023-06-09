@@ -14,7 +14,7 @@
       },
       {
         "Condition": { "TypeId": "Automation.Conditions.DroughtEndedCondition" },
-        "Action": { "TypeId": "Automation.Actions.ResumeAction" }
+        "Action": { "TypeId": "Automation.Actions.UnpauseAction" }
       }
     ]
   }
