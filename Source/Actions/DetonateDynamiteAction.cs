@@ -4,6 +4,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Automation.Conditions;
 using Automation.UnityDevCandidates;
@@ -20,11 +21,19 @@ using UnityEngine;
 
 namespace Automation.Actions {
 
+/// <summary>Action that triggers the dynamite and then (optionally) places new one at the same spot.</summary>
+/// <remarks>Use it to drill down deep holes in terrain.</remarks>
+[SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 public sealed class DetonateDynamiteAction : AutomationActionBase {
   static readonly PropertyKey<int> RepeatPropertyKey = new("Repeat");
-
   const int DetonateDelayTicks = 3; // 1 tick = 300ms
 
+  /// <summary>
+  /// Number of times to place a new dynamite. Any value less or equal to zero results in no extra actions on trigger.
+  /// </summary>
+  /// <remarks>
+  /// A too big value is not a problem. When the bottom of the map is reached, the dynamite simply won't get placed.
+  /// </remarks>
   public int RepeatCount;
 
   #region AutomationActionBase overrides
@@ -44,7 +53,7 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
 
   /// <inheritdoc/>
   public override bool IsValid() {
-    return Target != null && Target.GetComponentFast<Dynamite>() != null;
+    return Target.GetComponentFast<Dynamite>() != null;
   }
 
   /// <summary>Loads action state and declaration.</summary>
@@ -110,6 +119,10 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
       yield return null;
 
       var coordinates = blockObject.Coordinates;
+      if (coordinates.z <= 1) {
+        DebugEx.Fine("Reached the bottom of the map. Abort placing dynamite.");
+        yield break;
+      }
       yield return new WaitUntil(() => blockObject == null);
 
       coordinates.z = coordinates.z - 1;
