@@ -82,7 +82,7 @@ public abstract class AutomationConditionBase : IEquatable<AutomationConditionBa
 
   /// <summary>Loads condition state and declaration.</summary>
   protected internal virtual void LoadFrom(IObjectLoader objectLoader) {
-    var savedId = objectLoader.Get(ConditionTypeIdPropertyKey);
+    var savedId = objectLoader.GetValueOrNull(ConditionTypeIdPropertyKey);
     if (savedId != ConditionTypeId) {
       DebugEx.Warning("Cannot load type '{0}' from saved state of '{1}'", GetType(), savedId);
       throw new InvalidOperationException("Cannot load condition state");

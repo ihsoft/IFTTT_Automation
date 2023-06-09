@@ -42,7 +42,7 @@ public abstract class AutomationActionBase : IEquatable<AutomationActionBase> {
 
   /// <summary>Loads action state and declaration.</summary>
   protected internal virtual void LoadFrom(IObjectLoader objectLoader) {
-    var savedId = objectLoader.Get(TypeIdPropertyKey);
+    var savedId = objectLoader.GetValueOrNull(TypeIdPropertyKey);
     if (savedId != ActionTypeId) {
       DebugEx.Warning("Cannot load type '{0}' from saved state of '{1}'", GetType(), savedId);
       throw new InvalidOperationException("Cannot load condition state");
