@@ -2,32 +2,58 @@
 // Author: igor.zavoychinskiy@gmail.com
 // License: Public Domain
 
-using Automation.Actions;
-using Automation.Conditions;
+using System.Collections.ObjectModel;
 using Automation.Utils;
 using Timberborn.BlockSystem;
+using Timberborn.Persistence;
 using UnityEngine;
 
 namespace Automation.Templates {
 
 // ReSharper disable once ClassNeverInstantiated.Global
-class ApplyTemplateTool : AbstractAreaSelectionTool, IAutomationModeEnabler {
+sealed class ApplyTemplateTool : AbstractAreaSelectionTool, IAutomationModeEnabler {
+  #region Tool information
+  static readonly ListKey<AutomationRule> RulesListKey = new("Rules");
+  public sealed class ToolInfo : CustomToolSystem.ToolInformation {
+    public ReadOnlyCollection<AutomationRule> Rules { get; private set; }
+
+    /// <inheritdoc/>
+    public override void Load(IObjectLoader objectLoader) {
+      Rules = objectLoader.Get(RulesListKey, AutomationRule.Serializer).AsReadOnly();
+    }
+  }
+  #endregion
+
   #region AbstractAreaSelectionTool overries
   /// <inheritdoc/>
   protected override bool ObjectFilterExpression(BlockObject blockObject) {
     var automationBehavior = blockObject.GetComponentFast<AutomationBehavior>();
-    var condition = new ObjectFinishedCondition { Source = automationBehavior };
-    var action = new DetonateDynamiteAction { Target = automationBehavior };
-    return automationBehavior != null && automationBehavior.enabled && condition.IsValid() && action.IsValid();
+    if (automationBehavior == null || !automationBehavior.enabled) {
+      return false;
+    }
+    var info = (ToolInfo) ToolInformation;
+    foreach (var rule in info.Rules) {
+      var copy = rule.Clone();
+      copy.Condition.Source = automationBehavior;
+      copy.Action.Target = automationBehavior;
+      if (!copy.IsValid) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /// <inheritdoc/>
   protected override void OnObjectAction(BlockObject blockObject) {
     var automationBehavior = blockObject.GetComponentFast<AutomationBehavior>();
-    var condition = new ObjectFinishedCondition { Source = automationBehavior };
-    var action = new DetonateDynamiteAction { Target = automationBehavior, RepeatCount = 2 };
     automationBehavior.ClearRules();
-    automationBehavior.AddRule(condition, action);
+    var info = (ToolInfo) ToolInformation;
+    foreach (var rule in info.Rules) {
+      var copy = rule.Clone();
+      copy.Condition.Source = automationBehavior;
+      copy.Action.Target = automationBehavior;
+      automationBehavior.AddRule(copy.Condition, copy.Action);
+    }
   }
 
   /// <inheritdoc/>
