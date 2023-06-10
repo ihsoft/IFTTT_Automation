@@ -5,6 +5,7 @@
 using System;
 using System.Linq;
 using Timberborn.Persistence;
+using UnityDev.LogUtils;
 
 namespace Automation.Utils {
 
@@ -16,15 +17,27 @@ namespace Automation.Utils {
 /// type, make the upcast from the loaded instance.
 /// </p>
 /// <p>
-/// Even though the <typeparamref name="T"/> type can be abstract, the actual, type that was serialized, must have a
-/// public default constructor in order to be loaded. Or else an exception will be thrown on the state loading.
+/// Even though the <typeparamref name="T"/> type can be abstract, the actual type that was serialized, must not be
+/// abstract and has to have a public default constructor in order to be loaded.
 /// </p>
 /// </remarks>
 /// <typeparam name="T">the type of the base class. It can be abstract.</typeparam>
 /// <seealso cref="DynamicClassSerializer{T}"/>
-public sealed class DynamicClassSerializer<T> : IObjectSerializer<T> where T : IGameSerializable {
+public sealed class DynamicClassSerializer<T> : IObjectSerializer<T> where T : class, IGameSerializable {
   /// <summary>Property name that identifies the actual tape in the saved state.</summary>
   public static readonly PropertyKey<string> TypeIdPropertyKey = new("TypeId");
+
+  readonly bool _failFast;
+
+  /// <summary>Creates the serializer.</summary>
+  /// <param name="failFast">
+  /// Indicates if the type loading errors must result into an exception. If set to <c>false</c>, then the errors will
+  /// be logged, but instead of failing, a <c>null</c> value will be returned. This let's the clients to handle the
+  /// broken states.
+  /// </param>
+  public DynamicClassSerializer(bool failFast = true) {
+    _failFast = failFast;
+  }
 
   /// <inheritdoc/>
   public void Serialize(T value, IObjectSaver objectSaver) {
@@ -38,14 +51,20 @@ public sealed class DynamicClassSerializer<T> : IObjectSerializer<T> where T : I
     var objectType = AppDomain.CurrentDomain.GetAssemblies()
         .Select(assembly => assembly.GetType(savedTypeId))
         .FirstOrDefault(t => t != null);
+    string err = null;
     if (objectType == null) {
-      throw new InvalidOperationException($"Cannot find type for typeId: {savedTypeId}");
+      err = $"Cannot find type for typeId: {savedTypeId}";
+    } else if (objectType.GetConstructor(Type.EmptyTypes) == null) {
+      err = $"No default constructor in: {objectType}";
+    } else if (!typeof(T).IsAssignableFrom(objectType)) {
+      err = $"Incompatible types: saved={objectType}, serializer={typeof(T)}";
     }
-    if (objectType.GetConstructor(Type.EmptyTypes) == null) {
-      throw new InvalidOperationException($"No default constructor in : {objectType}");
-    }
-    if (!typeof(T).IsAssignableFrom(objectType)) {
-      throw new InvalidOperationException($"Incompatible types: saved={objectType}, serializer={typeof(T)}");
+    if (err != null) {
+      if (_failFast) {
+        throw new InvalidOperationException(err);
+      }
+      DebugEx.Error(err);
+      return null;
     }
     var instance = (T) Activator.CreateInstance(objectType);
     instance.LoadFrom(objectLoader);
