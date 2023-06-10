@@ -57,13 +57,13 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
   }
 
   /// <summary>Loads action state and declaration.</summary>
-  protected internal override void LoadFrom(IObjectLoader objectLoader) {
+  public override void LoadFrom(IObjectLoader objectLoader) {
     base.LoadFrom(objectLoader);
     RepeatCount = objectLoader.Get(RepeatPropertyKey);
   }
 
   /// <summary>Saves action state and declaration.</summary>
-  protected internal override void SaveTo(IObjectSaver objectSaver) {
+  public override void SaveTo(IObjectSaver objectSaver) {
     objectSaver.Set(RepeatPropertyKey, RepeatCount);
   }
 

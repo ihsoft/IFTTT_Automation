@@ -61,6 +61,9 @@
       <Compile Include="Utils\AbstractAreaSelectionTool.cs" />
       <Compile Include="Utils\AbstractLockingTool.cs" />
       <Compile Include="Utils\CustomToolSystem.cs" />
+      <Compile Include="Utils\DynamicClassSerializer.cs" />
+      <Compile Include="Utils\IGameSerializable.cs" />
+      <Compile Include="Utils\StaticClassSerializer.cs" />
       <Compile Include="Utils\ToolWithDescription.cs" />
     </ItemGroup>
     <ItemGroup>

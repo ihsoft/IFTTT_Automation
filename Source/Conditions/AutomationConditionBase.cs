@@ -4,6 +4,7 @@
 
 using System;
 using System.Linq;
+using Automation.Utils;
 using Timberborn.BaseComponentSystem;
 using Timberborn.BlockSystem;
 using Timberborn.Localization;
@@ -19,45 +20,19 @@ namespace Automation.Conditions {
 /// dynamic logic.
 /// </remarks>
 /// <seealso cref="AutomationConditionBehaviorBase"/>
-public abstract class AutomationConditionBase : IEquatable<AutomationConditionBase> {
-  static readonly PropertyKey<string> ConditionTypeIdPropertyKey = new("TypeId");
+public abstract class AutomationConditionBase : IEquatable<AutomationConditionBase>, IGameSerializable {
+  public static readonly IObjectSerializer<AutomationConditionBase> ConditionSerializer =
+      new DynamicClassSerializer<AutomationConditionBase>();
 
-  #region Class serializer
-  class Serializer : IObjectSerializer<AutomationConditionBase> {
-    public void Serialize(AutomationConditionBase value, IObjectSaver objectSaver) {
-      value.SaveTo(objectSaver);
-    }
-
-    public Obsoletable<AutomationConditionBase> Deserialize(IObjectLoader objectLoader) {
-      var typeId = objectLoader.Get(ConditionTypeIdPropertyKey);
-      var conditionType = AppDomain.CurrentDomain.GetAssemblies()
-          .Select(assembly => assembly.GetType(typeId))
-          .FirstOrDefault(t => t != null);
-      if (conditionType == null) {
-        DebugEx.Error("Cannot find type for condition: {0}", typeId);
-        throw new InvalidOperationException("Cannot find condition type");
-      }
-      var instance = (AutomationConditionBase) Activator.CreateInstance(conditionType);
-      instance.LoadFrom(objectLoader);
-      return instance;
-    }
-  }
-  #endregion
-
-  public static readonly IObjectSerializer<AutomationConditionBase> ConditionSerializer = new Serializer();
-
-  public readonly string ConditionTypeId;
   public AutomationBehavior Source;
 
   /// <summary>Default constructor is required for serialization.</summary>
   protected AutomationConditionBase() {
-    ConditionTypeId = GetType().FullName;
   }
 
   /// <summary>Copy constructor is required for cloning.</summary>
   /// <seealso cref="Clone"/>
   protected AutomationConditionBase(AutomationConditionBase src) {
-    ConditionTypeId = src.ConditionTypeId;
   }
 
   /// <summary>Returns a copy of the condition that is not bound to any game object.</summary>
@@ -81,17 +56,11 @@ public abstract class AutomationConditionBase : IEquatable<AutomationConditionBa
   }
 
   /// <summary>Loads condition state and declaration.</summary>
-  protected internal virtual void LoadFrom(IObjectLoader objectLoader) {
-    var savedId = objectLoader.GetValueOrNull(ConditionTypeIdPropertyKey);
-    if (savedId != ConditionTypeId) {
-      DebugEx.Warning("Cannot load type '{0}' from saved state of '{1}'", GetType(), savedId);
-      throw new InvalidOperationException("Cannot load condition state");
-    }
+  public virtual void LoadFrom(IObjectLoader objectLoader) {
   }
 
   /// <summary>Saves condition state and declaration.</summary>
-  protected internal virtual void SaveTo(IObjectSaver objectSaver) {
-    objectSaver.Set(ConditionTypeIdPropertyKey, ConditionTypeId);
+  public virtual void SaveTo(IObjectSaver objectSaver) {
   }
 
   //FIXME: reconsider in favor of set/reset condition state.
@@ -104,18 +73,18 @@ public abstract class AutomationConditionBase : IEquatable<AutomationConditionBa
   /// <inheritdoc/>
   public virtual bool Equals(AutomationConditionBase other) {
     return other != null
-        && ConditionTypeId == other.ConditionTypeId
+        && other.GetType() == GetType()
         && Source == other.Source;
   }
 
   /// <inheritdoc/>
   public override string ToString() {
     if (Source == null) {
-      return $"[Condition:type={ConditionTypeId};source=NULL]";
+      return $"[Condition:type={GetType()};source=NULL]";
     }
     var prefabName = Source.GetComponentFast<Prefab>()?.Name ?? "UNKNOWN";
     var coords = Source.GetComponentFast<BlockObject>().Coordinates;
-    return $"[Condition:type={ConditionTypeId};source={prefabName}@{coords}]";
+    return $"[Condition:type={GetType()};source={prefabName}@{coords}]";
   }
 }
 
