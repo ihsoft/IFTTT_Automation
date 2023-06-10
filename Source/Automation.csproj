@@ -37,8 +37,6 @@
       <Compile Include="Actions\DetonateDynamiteAction.cs" />
       <Compile Include="Actions\PauseAction.cs" />
       <Compile Include="Actions\UnpauseAction.cs" />
-      <Compile Include="AutomationRule.cs" />
-      <Compile Include="AutomationService.cs" />
       <Compile Include="Conditions\AutomationConditionBase.cs" />
       <Compile Include="Conditions\AutomationConditionBehaviorBase.cs" />
       <Compile Include="Conditions\DroughtConditionBase.cs" />
@@ -47,12 +45,14 @@
       <Compile Include="Conditions\DroughtTrackerBehavior.cs" />
       <Compile Include="Conditions\ObjectFinishedCondition.cs" />
       <Compile Include="Conditions\ObjectFinishedConditionBehavior.cs" />
-      <Compile Include="Configurator.cs" />
-      <Compile Include="AutomationBehavior.cs" />
-      <Compile Include="IAutomationModeEnabler.cs" />
+      <Compile Include="Core\AutomationBehavior.cs" />
+      <Compile Include="Core\AutomationRule.cs" />
+      <Compile Include="Core\AutomationService.cs" />
+      <Compile Include="Core\Configurator.cs" />
       <Compile Include="Properties\AssemblyInfo.cs" />
-      <Compile Include="Templates\ApplyTemplateTool.cs" />
+      <Compile Include="Tools\ApplyTemplateTool.cs" />
       <Compile Include="Tools\CancelTool.cs" />
+      <Compile Include="Tools\IAutomationModeEnabler.cs" />
       <Compile Include="Tools\PauseTool.cs" />
       <Compile Include="Tools\ResumeTool.cs" />
       <Compile Include="UI\AutomationFragment.cs" />
