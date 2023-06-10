@@ -4,37 +4,31 @@
 
 using Automation.Actions;
 using Automation.Conditions;
+using Automation.Utils;
 using Timberborn.Persistence;
-using UnityDev.LogUtils;
 
 namespace Automation {
 
-public sealed class AutomationRule {
-  #region Class serializer
+public sealed class AutomationRule : IGameSerializable {
+  #region Implementation of IGameSerializable
   static readonly PropertyKey<AutomationConditionBase> ConditionPropertyKey = new("Condition");
-  static readonly IObjectSerializer<AutomationConditionBase> ConditionPropertySerializer =
-      AutomationConditionBase.ConditionSerializer;
   static readonly PropertyKey<AutomationActionBase> ActionPropertyKey = new("Action");
-  static readonly IObjectSerializer<AutomationActionBase> ActionPropertySerializer =
-      AutomationActionBase.ActionSerializer;
 
-  class SerializerImpl : IObjectSerializer<AutomationRule> {
-    public void Serialize(AutomationRule value, IObjectSaver objectSaver) {
-      objectSaver.Set(ConditionPropertyKey, value.Condition, ConditionPropertySerializer);
-    }
+  /// <inheritdoc/>
+  public void LoadFrom(IObjectLoader objectLoader) {
+    Condition = objectLoader.Get(ConditionPropertyKey, AutomationConditionBase.ConditionSerializer);
+    Action = objectLoader.Get(ActionPropertyKey, AutomationActionBase.ActionSerializer);
+  }
 
-    public Obsoletable<AutomationRule> Deserialize(IObjectLoader objectLoader) {
-      var rule = new AutomationRule {
-          Condition = objectLoader.Get(ConditionPropertyKey, ConditionPropertySerializer),
-          Action = objectLoader.Get(ActionPropertyKey, ActionPropertySerializer)
-      };
-      return new Obsoletable<AutomationRule>(rule);
-    }
+  /// <inheritdoc/>
+  public void SaveTo(IObjectSaver objectSaver) {
+    objectSaver.Set(ConditionPropertyKey, Condition, AutomationConditionBase.ConditionSerializer);
+    objectSaver.Set(ActionPropertyKey, Action, AutomationActionBase.ActionSerializer);
   }
   #endregion
 
   #region API
-  public static readonly IObjectSerializer<AutomationRule> Serializer = new SerializerImpl();
+  public static readonly StaticClassSerializer<AutomationRule> RuleSerializer = new();
 
   public AutomationConditionBase Condition;
   public AutomationActionBase Action;
@@ -47,6 +41,7 @@ public sealed class AutomationRule {
   #endregion
 
   #region Implentation
+  /// <inheritdoc/>
   public override string ToString() {
     return $"[Rule:condition={Condition};action={Action}]";
   }

@@ -22,7 +22,7 @@ sealed class ApplyTemplateTool : AbstractAreaSelectionTool, IAutomationModeEnabl
 
     /// <inheritdoc/>
     public override void Load(IObjectLoader objectLoader) {
-      Rules = objectLoader.Get(RulesListKey, AutomationRule.Serializer).AsReadOnly();
+      Rules = objectLoader.Get(RulesListKey, AutomationRule.RuleSerializer).AsReadOnly();
     }
   }
   #endregion

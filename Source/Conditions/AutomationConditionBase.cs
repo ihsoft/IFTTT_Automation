@@ -3,14 +3,12 @@
 // License: Public Domain
 
 using System;
-using System.Linq;
 using Automation.Utils;
 using Timberborn.BaseComponentSystem;
 using Timberborn.BlockSystem;
 using Timberborn.Localization;
 using Timberborn.Persistence;
 using Timberborn.PrefabSystem;
-using UnityDev.LogUtils;
 
 namespace Automation.Conditions {
 
@@ -21,8 +19,7 @@ namespace Automation.Conditions {
 /// </remarks>
 /// <seealso cref="AutomationConditionBehaviorBase"/>
 public abstract class AutomationConditionBase : IEquatable<AutomationConditionBase>, IGameSerializable {
-  public static readonly IObjectSerializer<AutomationConditionBase> ConditionSerializer =
-      new DynamicClassSerializer<AutomationConditionBase>();
+  public static readonly DynamicClassSerializer<AutomationConditionBase> ConditionSerializer = new();
 
   public AutomationBehavior Source;
 

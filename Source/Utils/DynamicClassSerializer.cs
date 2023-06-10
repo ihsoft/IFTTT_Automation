@@ -16,7 +16,7 @@ namespace Automation.Utils {
 /// type, make the upcast from the loaded instance.
 /// </p>
 /// <p>
-/// Even though the <typeparamref name="T"/> type can be abstract, the actual type that was serialized must have a
+/// Even though the <typeparamref name="T"/> type can be abstract, the actual, type that was serialized, must have a
 /// public default constructor in order to be loaded. Or else an exception will be thrown on the state loading.
 /// </p>
 /// </remarks>

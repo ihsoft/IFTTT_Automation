@@ -3,22 +3,17 @@
 // License: Public Domain
 
 using System;
-using System.Linq;
 using Automation.Conditions;
 using Automation.Utils;
 using Timberborn.BlockSystem;
 using Timberborn.Localization;
 using Timberborn.Persistence;
 using Timberborn.PrefabSystem;
-using UnityDev.LogUtils;
 
 namespace Automation.Actions {
 
 public abstract class AutomationActionBase : IEquatable<AutomationActionBase>, IGameSerializable {
-  public static readonly IObjectSerializer<AutomationActionBase> ActionSerializer =
-      new DynamicClassSerializer<AutomationActionBase>();
-
-  static readonly PropertyKey<string> TypeIdPropertyKey = new("TypeId");
+  public static readonly DynamicClassSerializer<AutomationActionBase> ActionSerializer = new();
 
   /// <summary>Loads action state and declaration.</summary>
   public virtual void LoadFrom(IObjectLoader objectLoader) {

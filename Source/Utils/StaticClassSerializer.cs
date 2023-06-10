@@ -8,9 +8,15 @@ namespace Automation.Utils {
 
 /// <summary>Simple generic serializer for a class that implements <see cref="IGameSerializable"/>.</summary>
 /// <remarks>
-/// This serializer simple passes control to the serializable object. On load, an instance of type
+/// <p>
+/// This serializer simply passes the control to the serializable object. On load, an instance of type
 /// <typeparamref name="T"/> is created and loaded, so in order to load descendant classes, a specialized serializer is
-/// needed for each type. 
+/// needed for each type.
+/// </p>
+/// <p>
+/// In a general case, this serializer should only be used on the sealed classes. If a class can be extended, then it
+/// may be a more reliable way to use <see cref="DynamicClassSerializer{T}"/>.
+/// </p>
 /// </remarks>
 /// <typeparam name="T">the type of the class</typeparam>
 /// <seealso cref="DynamicClassSerializer{T}"/>
