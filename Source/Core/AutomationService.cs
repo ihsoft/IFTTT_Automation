@@ -3,6 +3,9 @@
 // License: Public Domain
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using Timberborn.BaseComponentSystem;
+using Timberborn.Common;
 using Timberborn.SelectionSystem;
 using Timberborn.SingletonSystem;
 using Timberborn.ToolSystem;
@@ -10,6 +13,12 @@ using UnityEngine;
 
 namespace Automation.Core {
 
+/// <summary>Central point for all the automation related logic.</summary>
+/// <remarks>
+/// This components supports a regular singleton pattern. Thus, once in the game, the client code can get the automation
+/// system object via a static field <see cref="Instance"/>.
+/// </remarks>
+[SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 public class AutomationService : IPostLoadableSingleton {
   #region Internal fields
   readonly HashSet<AutomationBehavior> _registeredBehaviors = new();
@@ -18,12 +27,23 @@ public class AutomationService : IPostLoadableSingleton {
   bool _highlightingEnabled;
   #endregion
 
-  public AutomationService(EventBus eventBus, Highlighter highlighter) {
+  public AutomationService(EventBus eventBus, Highlighter highlighter, BaseInstantiator baseInstantiator) {
     eventBus.Register(this);
     _highlighter = highlighter;
+    BaseInstantiator = baseInstantiator;
+    Instance = this;
   }
 
   #region API
+  /// <summary>Shortcut to get to the service without injections.</summary>
+  public static AutomationService Instance { get; private set; }
+
+  /// <summary>Shortcut to get the instantiator fro the conditions and actions.</summary>
+  public readonly BaseInstantiator BaseInstantiator;
+
+  /// <summary>All automation behaviors that has at least one active condition.</summary>
+  public ReadOnlyHashSet<AutomationBehavior> AutomationBehaviors => _registeredBehaviors.AsReadOnly();
+
   /// <summary>Highlights all registered behaviours on the map.</summary>
   public void HighlightAutomationObjects(Color? useColor = null) {
     _highlightingEnabled = true;
