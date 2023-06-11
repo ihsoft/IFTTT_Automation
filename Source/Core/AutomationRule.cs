@@ -7,7 +7,7 @@ using Automation.Conditions;
 using Automation.Utils;
 using Timberborn.Persistence;
 
-namespace Automation {
+namespace Automation.Core {
 
 public sealed class AutomationRule : IGameSerializable {
   #region Implementation of IGameSerializable

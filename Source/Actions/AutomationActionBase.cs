@@ -4,6 +4,7 @@
 
 using System;
 using Automation.Conditions;
+using Automation.Core;
 using Automation.Utils;
 using Timberborn.BlockSystem;
 using Timberborn.Localization;

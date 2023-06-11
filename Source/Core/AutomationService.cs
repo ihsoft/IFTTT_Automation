@@ -8,7 +8,7 @@ using Timberborn.SingletonSystem;
 using Timberborn.ToolSystem;
 using UnityEngine;
 
-namespace Automation {
+namespace Automation.Core {
 
 public class AutomationService : IPostLoadableSingleton {
   #region Internal fields

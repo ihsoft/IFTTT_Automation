@@ -3,6 +3,7 @@
 // License: Public Domain
 
 using System.Text;
+using Automation.Core;
 using TimberApi.UiBuilderSystem;
 using Timberborn.BaseComponentSystem;
 using Timberborn.CoreUI;

@@ -2,6 +2,7 @@
 // Author: igor.zavoychinskiy@gmail.com
 // License: Public Domain
 
+using Automation.Core;
 using Automation.Utils;
 using Timberborn.BlockSystem;
 using UnityEngine;

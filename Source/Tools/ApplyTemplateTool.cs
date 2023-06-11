@@ -3,6 +3,7 @@
 // License: Public Domain
 
 using System.Collections.ObjectModel;
+using Automation.Core;
 using Automation.Utils;
 using Timberborn.BlockSystem;
 using Timberborn.Persistence;

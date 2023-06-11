@@ -12,7 +12,7 @@ using Timberborn.EntitySystem;
 using Timberborn.Persistence;
 using UnityDev.LogUtils;
 
-namespace Automation {
+namespace Automation.Core {
 
 public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializableEntity {
   BaseInstantiator _baseInstantiator;

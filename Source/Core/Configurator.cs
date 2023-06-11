@@ -11,7 +11,7 @@ using TimberApi.SceneSystem;
 using Timberborn.BlockSystem;
 using Timberborn.TemplateSystem;
 
-namespace Automation {
+namespace Automation.Core {
 
 // ReSharper disable once InconsistentNaming
 [Configurator(SceneEntrypoint.InGame)]
