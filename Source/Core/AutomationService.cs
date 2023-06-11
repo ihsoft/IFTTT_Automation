@@ -57,7 +57,9 @@ public class AutomationService : IPostLoadableSingleton {
     _highlightingEnabled = false;
     _highlighter.UnhighlightAllSecondary();
   }
+  #endregion
 
+  #region Implementation
   internal void RegisterBehavior(AutomationBehavior behavior) {
     _registeredBehaviors.Add(behavior);
     if (_highlightingEnabled) {
@@ -71,9 +73,7 @@ public class AutomationService : IPostLoadableSingleton {
     }
     _registeredBehaviors.Remove(behavior);
   }
-  #endregion
 
-  #region Implementation
   [OnEvent]
   public void OnToolEntered(ToolEnteredEvent toolEnteredEvent) {
     if (toolEnteredEvent.Tool is not IAutomationModeEnabler) {
