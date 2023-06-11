@@ -30,21 +30,21 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializab
     _automationService = automationService;
   }
 
-  public bool AddRule(AutomationConditionBase condition, AutomationActionBase action) {
-    if (HasRule(condition, action)) {
-      HostedDebugLog.Warning(TransformFast, "Skipping duplicate rule: condition={0}, action={1}", condition, action);
+  public bool AddRule(AutomationRule rule) {
+    if (HasRule(rule.Condition, rule.Action)) {
+      HostedDebugLog.Warning(TransformFast, "Skipping duplicate rule: {0}", rule);
       return false;
     }
-    condition.SetupComponents(_baseInstantiator);
-    _rules.Add(new AutomationRule { Condition = condition, Action = action});
-    HostedDebugLog.Fine(TransformFast, "Adding rule: {0}, {1}", condition, action);
+    rule.AttachToBehavior(this);
+    _rules.Add(rule);
+    HostedDebugLog.Fine(TransformFast, "Adding rule: {0}", rule);
     UpdateRegistration();
     return true;
   }
 
   public void ClearRules() {
     foreach (var rule in _rules) {
-      rule.Condition.ClearComponents();
+      rule.AttachToBehavior(null);
     }
     _rules.Clear();
     UpdateRegistration();

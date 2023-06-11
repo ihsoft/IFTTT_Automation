@@ -6,15 +6,21 @@ using System;
 using Automation.Conditions;
 using Automation.Core;
 using Automation.Utils;
-using Timberborn.BlockSystem;
 using Timberborn.Localization;
 using Timberborn.Persistence;
-using Timberborn.PrefabSystem;
 
 namespace Automation.Actions {
 
 public abstract class AutomationActionBase : IEquatable<AutomationActionBase>, IGameSerializable {
+  /// <summary>Serializer that handles persistence of all the action types.</summary>
   public static readonly DynamicClassSerializer<AutomationActionBase> ActionSerializer = new();
+
+  /// <summary>The rule which owns this condition.</summary>
+  /// <remarks>Condition is not considered "active" until it's attached to a rule.</remarks>
+  public AutomationRule Rule { get; internal set; }
+
+  /// <inheritdoc cref="AutomationConditionBase.OnBeforeRuleAssociationChange"/>
+  public virtual void OnBeforeRuleAssociationChange(AutomationBehavior newBehavior) {}
 
   /// <summary>Loads action state and declaration.</summary>
   public virtual void LoadFrom(IObjectLoader objectLoader) {
@@ -23,8 +29,6 @@ public abstract class AutomationActionBase : IEquatable<AutomationActionBase>, I
   /// <summary>Saves action state and declaration.</summary>
   public virtual void SaveTo(IObjectSaver objectSaver) {
   }
-
-  public AutomationBehavior Target;
 
   /// <summary>Default constructor is required for serialization.</summary>
   protected AutomationActionBase() {
@@ -42,24 +46,19 @@ public abstract class AutomationActionBase : IEquatable<AutomationActionBase>, I
   /// <remarks>The string must fully describe what the condition checks, but be as short as possible.</remarks>
   public abstract string GetUiDescription(ILoc loc);
 
-  /// <summary>Verifies that the action can be used in its current setup.</summary>
-  public abstract bool IsValid();
+  /// <summary>Verifies that the action can work on the provided automation behavior.</summary>
+  public abstract bool IsValidAt(AutomationBehavior behavior);
 
   // FIXME: in overrides
   // Listener.InvalidateAction(this);
   public abstract void Execute(AutomationConditionBase triggerCondition);
 
   public virtual bool Equals(AutomationActionBase other) {
-    return other != null && other.GetType() == GetType() && Target == other.Target;
+    return other != null && other.GetType() == GetType() && Rule == other.Rule;
   }
 
   public override string ToString() {
-    if (Target == null) {
-      return $"[Action:type={GetType()};target=NULL]";
-    }
-    var prefabName = Target.GetComponentFast<Prefab>()?.Name ?? "UNKNOWN";
-    var coords = Target.GetComponentFast<BlockObject>().Coordinates;
-    return $"[Action:type={GetType()};target={prefabName}@{coords}]";
+    return $"TypeId={GetType()}";
   }
 }
 

@@ -1,4 +1,5 @@
 using Automation.Conditions;
+using Automation.Core;
 using Timberborn.BlockSystem;
 using Timberborn.BuildingsBlocking;
 using Timberborn.Localization;
@@ -29,17 +30,17 @@ public class UnpauseAction : AutomationActionBase {
   }
 
   /// <inheritdoc/>
-  public override bool IsValid() {
-    if (!Target.GetComponentFast<BlockObject>().Finished) {
+  public override bool IsValidAt(AutomationBehavior behavior) {
+    if (!behavior.GetComponentFast<BlockObject>().Finished) {
       return false;
     }
-    var component = Target.GetComponentFast<PausableBuilding>();
+    var component = behavior.GetComponentFast<PausableBuilding>();
     return component != null && component.IsPausable();
   }
 
   /// <inheritdoc/>
   public override void Execute(AutomationConditionBase triggerCondition) {
-    var component = Target.GetComponentFast<PausableBuilding>();
+    var component = Rule.Behavior.GetComponentFast<PausableBuilding>();
     if (component.Paused) {
       component.Resume();
     }

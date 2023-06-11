@@ -2,6 +2,8 @@
 // Author: igor.zavoychinskiy@gmail.com
 // License: Public Domain
 
+using Automation.Core;
+
 namespace Automation.Conditions {
 
 public abstract class DroughtConditionBase : AutomationConditionBase<DroughtTrackerBehavior> {
@@ -14,7 +16,7 @@ public abstract class DroughtConditionBase : AutomationConditionBase<DroughtTrac
   }
 
   /// <inheritdoc/>
-  public override bool IsValid() {
+  public override bool IsValidAt(AutomationBehavior behavior) {
     return true;
   }
 }

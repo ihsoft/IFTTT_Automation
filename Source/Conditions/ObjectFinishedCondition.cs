@@ -2,6 +2,7 @@
 // Author: igor.zavoychinskiy@gmail.com
 // License: Public Domain
 
+using Automation.Core;
 using Timberborn.BlockSystem;
 using Timberborn.Localization;
 
@@ -22,8 +23,8 @@ public sealed class ObjectFinishedCondition : AutomationConditionBase<ObjectFini
   }
 
   /// <inheritdoc/>
-  public override bool IsValid() {
-    return !Source.GetComponentFast<BlockObject>().Finished;
+  public override bool IsValidAt(AutomationBehavior behavior) {
+    return !behavior.GetComponentFast<BlockObject>().Finished;
   }
 
   /// <inheritdoc/>

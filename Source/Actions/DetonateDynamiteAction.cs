@@ -53,8 +53,8 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
   }
 
   /// <inheritdoc/>
-  public override bool IsValid() {
-    return Target.GetComponentFast<Dynamite>() != null;
+  public override bool IsValidAt(AutomationBehavior behavior) {
+    return behavior.GetComponentFast<Dynamite>() != null;
   }
 
   /// <summary>Loads action state and declaration.</summary>
@@ -79,8 +79,8 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
 
   /// <inheritdoc/>
   public override void Execute(AutomationConditionBase triggerCondition) {
-    var blockObject = Target.GetComponentFast<BlockObject>();
-    var dynamite = Target.GetComponentFast<Dynamite>();
+    var blockObject = Rule.BlockObject;
+    var dynamite = blockObject.GetComponentFast<Dynamite>();
     DebugEx.Fine("Detonate dynamite: coordinates={0}, tries={1}", blockObject.Coordinates, RepeatCount);
     dynamite.TriggerDelayed(DetonateDelayTicks);
     if (RepeatCount <= 0) {
@@ -136,9 +136,10 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
       } while (newDynamite == null);
 
       var automationObj = newDynamite.GetComponentFast<AutomationBehavior>();
-      automationObj.AddRule(
-          new ObjectFinishedCondition { Source = automationObj },
-          new DetonateDynamiteAction { Target = automationObj, RepeatCount = repeatCount });
+      var rule = new AutomationRule(
+          new ObjectFinishedCondition(),
+          new DetonateDynamiteAction { RepeatCount = repeatCount });
+      automationObj.AddRule(rule);
       Destroy(gameObject);
     }
   }

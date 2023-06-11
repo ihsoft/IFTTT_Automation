@@ -3,6 +3,7 @@
 // License: Public Domain
 
 using System.Collections.ObjectModel;
+using System.Linq;
 using Automation.Core;
 using Automation.Utils;
 using Timberborn.BlockSystem;
@@ -36,15 +37,7 @@ sealed class ApplyTemplateTool : AbstractAreaSelectionTool, IAutomationModeEnabl
       return false;
     }
     var info = (ToolInfo) ToolInformation;
-    foreach (var rule in info.Rules) {
-      var copy = rule.Clone();
-      copy.Condition.Source = automationBehavior;
-      copy.Action.Target = automationBehavior;
-      if (!copy.IsValid) {
-        return false;
-      }
-    }
-    return true;
+    return info.Rules.All(rule => rule.IsValidAt(automationBehavior));
   }
 
   /// <inheritdoc/>
@@ -53,10 +46,7 @@ sealed class ApplyTemplateTool : AbstractAreaSelectionTool, IAutomationModeEnabl
     automationBehavior.ClearRules();
     var info = (ToolInfo) ToolInformation;
     foreach (var rule in info.Rules) {
-      var copy = rule.Clone();
-      copy.Condition.Source = automationBehavior;
-      copy.Action.Target = automationBehavior;
-      automationBehavior.AddRule(copy.Condition, copy.Action);
+      automationBehavior.AddRule(rule.Clone());
     }
   }
 
