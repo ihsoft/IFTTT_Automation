@@ -55,7 +55,7 @@ public abstract class AutomationConditionBase : IEquatable<AutomationConditionBa
   /// <param name="newBehavior">The new automation behavior or <c>null</c>.</param>
   /// <seealso cref="Rule"/>
   /// <seealso cref="AutomationRule.Behavior"/>
-  public virtual void OnBeforeRuleAssociationChange(AutomationBehavior newBehavior) {}
+  public abstract void OnBeforeRuleAssociationChange(AutomationBehavior newBehavior);
 
   /// <summary>Verifies that the condition can be used at the provided automation behavior.</summary>
   public virtual bool IsValidAt(AutomationBehavior behavior) {
@@ -70,9 +70,6 @@ public abstract class AutomationConditionBase : IEquatable<AutomationConditionBa
   public virtual void SaveTo(IObjectSaver objectSaver) {}
 
   public virtual void Trigger() {
-    //FXIME
-    DebugEx.Warning("*** rule is: {0}", Rule);
-    DebugEx.Warning("*** behavior is: {0}", Rule?.Behavior);
     Rule.Behavior.TriggerAction(this);
   }
 
@@ -101,7 +98,7 @@ public abstract class AutomationConditionBase<T> : AutomationConditionBase where
   public override void OnBeforeRuleAssociationChange(AutomationBehavior newBehavior) {
     if (newBehavior != null) {
       var behavior = newBehavior.GetComponentFast<T>()
-          ?? AutomationService.Instance.BaseInstantiator.AddComponent<T>(newBehavior.GameObjectFast);
+          ?? newBehavior.BaseInstantiator.AddComponent<T>(newBehavior.GameObjectFast);
       behavior.AddCondition(this);
     } else {
       Rule.Behavior.GetComponentFast<T>().DeleteCondition(this);
