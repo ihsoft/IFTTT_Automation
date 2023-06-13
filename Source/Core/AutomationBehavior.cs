@@ -15,8 +15,8 @@ using UnityDev.LogUtils;
 namespace Automation.Core {
 
 public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializableEntity {
-  BaseInstantiator _baseInstantiator;
-  AutomationService _automationService;
+  public BaseInstantiator BaseInstantiator { get; private set; }
+  public AutomationService AutomationService { get; private set; }
 
   public bool HasRules => _rules.Count > 0;
 
@@ -26,8 +26,8 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializab
 
   [Inject]
   public void InjectDependencies(BaseInstantiator baseInstantiator, AutomationService automationService) {
-    _baseInstantiator = baseInstantiator;
-    _automationService = automationService;
+    BaseInstantiator = baseInstantiator;
+    AutomationService = automationService;
   }
 
   public bool AddRule(AutomationRule rule) {
@@ -82,9 +82,9 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializab
   #region Implementation
   void UpdateRegistration() {
     if (HasRules) {
-      _automationService.RegisterBehavior(this);
+      AutomationService.RegisterBehavior(this);
     } else {
-      _automationService.UnregisterBehavior(this);
+      AutomationService.UnregisterBehavior(this);
     }
   }
   #endregion
