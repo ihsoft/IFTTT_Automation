@@ -39,10 +39,10 @@
       <Compile Include="Actions\UnpauseAction.cs" />
       <Compile Include="Conditions\AutomationConditionBase.cs" />
       <Compile Include="Conditions\AutomationConditionBehaviorBase.cs" />
-      <Compile Include="Conditions\DroughtConditionBase.cs" />
+      <Compile Include="Conditions\WeatherTrackerConditionBase.cs" />
       <Compile Include="Conditions\DroughtEndedCondition.cs" />
       <Compile Include="Conditions\DroughtStartedCondition.cs" />
-      <Compile Include="Conditions\DroughtTrackerBehavior.cs" />
+      <Compile Include="Conditions\WeatherTrackerConditionBehavior.cs" />
       <Compile Include="Conditions\ObjectFinishedCondition.cs" />
       <Compile Include="Conditions\ObjectFinishedConditionBehavior.cs" />
       <Compile Include="Core\AutomationBehavior.cs" />

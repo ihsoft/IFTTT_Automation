@@ -9,7 +9,7 @@ using Timberborn.WeatherSystem;
 
 namespace Automation.Conditions {
 
-public class DroughtTrackerBehavior : AutomationConditionBehaviorBase {
+public class WeatherTrackerBehavior : AutomationConditionBehaviorBase {
   [Inject]
   public void InjectDependencies(EventBus eventBus) {
     eventBus.Register(this);
