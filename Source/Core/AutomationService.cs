@@ -14,10 +14,6 @@ using UnityEngine;
 namespace Automation.Core {
 
 /// <summary>Central point for all the automation related logic.</summary>
-/// <remarks>
-/// This components supports a regular singleton pattern. Thus, once in the game, the client code can get the automation
-/// system object via a static field <see cref="Instance"/>.
-/// </remarks>
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 public class AutomationService : IPostLoadableSingleton {
   #region Internal fields
@@ -31,13 +27,14 @@ public class AutomationService : IPostLoadableSingleton {
     eventBus.Register(this);
     _highlighter = highlighter;
     BaseInstantiator = baseInstantiator;
-    Instance = this;
   }
 
-  #region API
-  /// <summary>Shortcut to get to the service without injections.</summary>
-  public static AutomationService Instance { get; private set; }
+  #region Implemetation of IPostLoadableSingleton
+  /// <inheritdoc/>
+  public void PostLoad() {}
+  #endregion
 
+  #region API
   /// <summary>Shortcut to get the instantiator fro the conditions and actions.</summary>
   public readonly BaseInstantiator BaseInstantiator;
 
@@ -85,9 +82,6 @@ public class AutomationService : IPostLoadableSingleton {
   [OnEvent]
   public void OnToolExited(ToolExitedEvent toolExitedEvent) {
     UnhighlightAutomationObjects();
-  }
-
-  public void PostLoad() {
   }
   #endregion
 }
