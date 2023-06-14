@@ -12,9 +12,11 @@ using Automation.UnityDevCandidates;
 using TimberApi.DependencyContainerSystem;
 using Timberborn.BlockObjectTools;
 using Timberborn.BlockSystem;
+using Timberborn.Characters;
 using Timberborn.Coordinates;
 using Timberborn.Explosions;
 using Timberborn.Localization;
+using Timberborn.Navigation;
 using Timberborn.Persistence;
 using Timberborn.ToolSystem;
 using UnityDev.LogUtils;
@@ -27,7 +29,6 @@ namespace Automation.Actions {
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 public sealed class DetonateDynamiteAction : AutomationActionBase {
   static readonly PropertyKey<int> RepeatPropertyKey = new("Repeat");
-  const int DetonateDelayTicks = 3; // 1 tick = 300ms
 
   /// <summary>
   /// Number of times to place a new dynamite. Any value less or equal to zero results in no extra actions on trigger.
@@ -79,21 +80,16 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
 
   /// <inheritdoc/>
   public override void Execute(AutomationConditionBase triggerCondition) {
+    // This object will get destroyed on detonate, so create am independent component.
     var blockObject = Rule.BlockObject;
-    var dynamite = blockObject.GetComponentFast<Dynamite>();
-    DebugEx.Fine("Detonate dynamite: coordinates={0}, tries={1}", blockObject.Coordinates, RepeatCount);
-    dynamite.TriggerDelayed(DetonateDelayTicks);
-    if (RepeatCount <= 0) {
-      return;
-    }
-    var component = new GameObject("#Automation_PlaceDynamiteAction").AddComponent<RepeatRule>();
+    var component = new GameObject("#Automation_PlaceDynamiteAction").AddComponent<DetonateAndRepeatRule>();
     component.blockObject = blockObject;
     component.repeatCount = RepeatCount - 1;
   }
   #endregion
 
   #region MonoBehavior object to handle action repeat
-  class RepeatRule : MonoBehaviour {
+  class DetonateAndRepeatRule : MonoBehaviour {
     static BlockObjectTool DynamiteTool =>
         _dynamiteTool ??= DependencyContainer.GetInstance<ToolButtonService>()
             .ToolButtons.Select(x => x.Tool)
@@ -104,28 +100,39 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
     static readonly ReflectedAction<BlockObjectTool, IEnumerable<OrientedCoordinates>> BlockObjectToolPlace =
         new("Place");
 
+    CharacterPopulation _characterPopulation;
+
     public BlockObject blockObject;
     public int repeatCount;
 
     void Awake() {
-      if (DynamiteTool == null || !BlockObjectToolPlace.IsValid()) {
-        DebugEx.Error("Cannot execute dynamite place tool");
-        Destroy(gameObject);
-        return;
-      }
+      _characterPopulation = DependencyContainer.GetInstance<CharacterPopulation>();
       StartCoroutine(WaitAndPlace());
     }
 
     IEnumerator WaitAndPlace() {
-      yield return null;
+      yield return null; // Act on the next frame to avoid synchronous complications.
 
-      var coordinates = blockObject.Coordinates;
-      if (coordinates.z <= 1) {
+      yield return new WaitUntil(NoCharactersOnBlock);
+      var dynamite = blockObject.GetComponentFast<Dynamite>();
+      DebugEx.Fine("Detonate dynamite: coordinates={0}, tries={1}", blockObject.Coordinates, repeatCount);
+      dynamite.Trigger();
+      if (repeatCount <= 0) {
+        yield break;
+      }
+      if (blockObject.Coordinates.z <= 1) {
         DebugEx.Fine("Reached the bottom of the map. Abort placing dynamite.");
         yield break;
       }
-      yield return new WaitUntil(() => blockObject == null);
+      if (DynamiteTool == null || !BlockObjectToolPlace.IsValid()) {
+        DebugEx.Error("Cannot execute dynamite place tool");
+        Destroy(gameObject);
+        yield break;
+      }
 
+      // Wait for the old object to cleaned up and place another one.
+      yield return new WaitUntil(() => blockObject == null);
+      var coordinates = blockObject.Coordinates;
       coordinates.z = coordinates.z - 1;
       BlockObjectToolPlace.Invoke(DynamiteTool, new List<OrientedCoordinates> { new(coordinates, Orientation.Cw0) });
       var blockService = DependencyContainer.GetInstance<BlockService>();
@@ -141,6 +148,12 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
           new DetonateDynamiteAction { RepeatCount = repeatCount });
       automationObj.AddRule(rule);
       Destroy(gameObject);
+    }
+
+    bool NoCharactersOnBlock() {
+      return _characterPopulation.Characters
+          .Select(character => NavigationCoordinateSystem.WorldToGridInt(character.TransformFast.position))
+          .All(gridInt => blockObject.Coordinates != gridInt);
     }
   }
   #endregion
