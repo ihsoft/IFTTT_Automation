@@ -75,6 +75,9 @@
       <Reference Include="Bindito.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\Dependencies\Timberborn\Bindito.Core.dll</HintPath>
       </Reference>
+      <Reference Include="Bindito.Unity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Dependencies\Timberborn\Bindito.Unity.dll</HintPath>
+      </Reference>
       <Reference Include="TimberApi, Version=0.5.5.3, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\Dependencies\Timberborn\TimberApi.dll</HintPath>
       </Reference>
@@ -173,6 +176,9 @@
       </Reference>
       <Reference Include="UnityDev_Utils, Version=1.0.8536.42668, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\Binaries\UnityDev_Utils.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Dependencies\Unity\UnityEngine.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\Dependencies\Unity\UnityEngine.CoreModule.dll</HintPath>
