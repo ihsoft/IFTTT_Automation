@@ -10,7 +10,6 @@ using Timberborn.BaseComponentSystem;
 using Timberborn.BlockSystem;
 using Timberborn.Localization;
 using Timberborn.Persistence;
-using UnityDev.LogUtils;
 
 namespace Automation.Conditions {
 
@@ -81,28 +80,6 @@ public abstract class AutomationConditionBase : IEquatable<AutomationConditionBa
   /// <inheritdoc/>
   public override string ToString() {
     return $"TypeId={GetType()}";
-  }
-}
-
-/// <summary>The base class for an action that has behavior.</summary>
-/// <remarks>It encapsulates te basic logic on dealing with the behavior components.</remarks>
-/// <typeparam name="T">type of the behavior component</typeparam>
-public abstract class AutomationConditionBase<T> : AutomationConditionBase where T : AutomationConditionBehaviorBase {
-  /// <inheritdoc/>
-  protected AutomationConditionBase() {}
-
-  /// <inheritdoc/>
-  protected AutomationConditionBase(AutomationConditionBase src) : base(src) {}
-
-  /// <inheritdoc/>
-  public override void OnBeforeRuleAssociationChange(AutomationBehavior newBehavior) {
-    if (newBehavior != null) {
-      var behavior = newBehavior.GetComponentFast<T>()
-          ?? newBehavior.BaseInstantiator.AddComponent<T>(newBehavior.GameObjectFast);
-      behavior.AddCondition(this);
-    } else {
-      Rule.Behavior.GetComponentFast<T>().DeleteCondition(this);
-    }
   }
 }
 

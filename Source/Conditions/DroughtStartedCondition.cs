@@ -6,7 +6,7 @@ using Timberborn.Localization;
 
 namespace Automation.Conditions {
 
-public sealed class DroughtStartedCondition : DroughtConditionBase {
+public sealed class DroughtStartedCondition : WeatherTrackerConditionBase {
   /// <inheritdoc/>
   public DroughtStartedCondition() {
   }

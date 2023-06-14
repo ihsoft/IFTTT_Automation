@@ -39,6 +39,8 @@
       <Compile Include="Actions\UnpauseAction.cs" />
       <Compile Include="Conditions\AutomationConditionBase.cs" />
       <Compile Include="Conditions\AutomationConditionBehaviorBase.cs" />
+      <Compile Include="Conditions\BlockObjectConditionBase.cs" />
+      <Compile Include="Conditions\GlobalConditionBase.cs" />
       <Compile Include="Conditions\WeatherTrackerConditionBase.cs" />
       <Compile Include="Conditions\DroughtEndedCondition.cs" />
       <Compile Include="Conditions\DroughtStartedCondition.cs" />

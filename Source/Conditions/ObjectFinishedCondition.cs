@@ -8,7 +8,7 @@ using Timberborn.Localization;
 
 namespace Automation.Conditions {
 
-public sealed class ObjectFinishedCondition : AutomationConditionBase<ObjectFinishedConditionBehavior> {
+public sealed class ObjectFinishedCondition : BlockObjectConditionBase<ObjectFinishedConditionBehavior> {
   /// <inheritdoc/>
   public ObjectFinishedCondition() {
   }
