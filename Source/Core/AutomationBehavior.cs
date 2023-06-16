@@ -5,18 +5,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using Automation.Actions;
-using Automation.Conditions;
 using Bindito.Core;
 using Timberborn.BaseComponentSystem;
 using Timberborn.BlockSystem;
-using Timberborn.EntitySystem;
 using Timberborn.Localization;
 using Timberborn.Persistence;
 using UnityDev.LogUtils;
 
 namespace Automation.Core {
 
-public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializableEntity {
+public class AutomationBehavior : BaseComponent, IPersistentEntity {
   public BaseInstantiator BaseInstantiator { get; private set; }
   public AutomationService AutomationService { get; private set; }
   public ILoc Loc { get; private set; }
@@ -27,7 +25,7 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializab
   public bool HasActions => _actions.Count > 0;
 
   public IReadOnlyCollection<IAutomationAction> Actions => _actions.AsReadOnly();
-  readonly List<IAutomationAction> _actions = new();
+  List<IAutomationAction> _actions = new();
 
   void OnDestroy() {
     ClearActions();
@@ -40,6 +38,7 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializab
     Loc = loc;
   }
 
+  #region API
   public bool AddRule(IAutomationCondition condition, IAutomationAction action) {
     if (HasRule(condition, action)) {
       HostedDebugLog.Warning(TransformFast, "Skipping duplicate rule: condition={0}, action={1}", condition, action);
@@ -64,19 +63,34 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializab
   public bool HasRule(IAutomationCondition condition, IAutomationAction action) {
     return _actions.Any(r => r.CheckSameDefinition(action) && r.Condition.CheckSameDefinition(condition));
   }
+  #endregion
 
+  #region IPersistentEntity implemenatation
+  static readonly ComponentKey AutomationBehaviorKey = new(typeof(AutomationBehavior).FullName);
+  static readonly ListKey<AutomationActionBase> ActionsKey = new("Actions");
+
+  /// <inheritdoc/>
   public void Save(IEntitySaver entitySaver) {
-    //throw new NotImplementedException();
+    if (!HasActions) {
+      return;
+    }
+    var component = entitySaver.GetComponent(AutomationBehaviorKey);
+    var actionsToSave = _actions.OfType<AutomationActionBase>().ToList();
+    component.Set(ActionsKey, actionsToSave, AutomationActionBase.ActionSerializer);
   }
 
+  /// <inheritdoc/>
   public void Load(IEntityLoader entityLoader) {
-    //throw new NotImplementedException();
-    //DebugEx.Warning("*** loader state: {0}", GameLoader.LoadedSave);
+    if (!entityLoader.HasComponent(AutomationBehaviorKey)) {
+      return;
+    }
+    var component = entityLoader.GetComponent(AutomationBehaviorKey);
+    _actions = component
+        .Get(ActionsKey, AutomationActionBase.ActionSerializer)
+        .OfType<IAutomationAction>()
+        .ToList();
   }
-
-  public void InitializeEntity() {
-    //DebugEx.Warning("*** initializer called");
-  }
+  #endregion
 
   #region Implementation
   void UpdateRegistration() {
