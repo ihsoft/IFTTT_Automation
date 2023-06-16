@@ -2,6 +2,7 @@
 // Author: igor.zavoychinskiy@gmail.com
 // License: Public Domain
 
+using System;
 using Automation.Actions;
 using Automation.Conditions;
 using Automation.Core;
@@ -25,6 +26,9 @@ public sealed class AutomationRule : IGameSerializable {
   public void LoadFrom(IObjectLoader objectLoader) {
     Condition = objectLoader.Get(ConditionPropertyKey, AutomationConditionBase.ConditionSerializer);
     Action = objectLoader.Get(ActionPropertyKey, AutomationActionBase.ActionSerializer);
+    if (Action.Condition != null) {
+      throw new InvalidOperationException("Rule spec must not have conditions: " + Action);
+    }
   }
 
   /// <inheritdoc/>

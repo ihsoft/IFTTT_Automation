@@ -3,6 +3,7 @@
 // License: Public Domain
 
 using System.Diagnostics.CodeAnalysis;
+using Automation.Conditions;
 using Automation.Core;
 using Automation.Utils;
 using Timberborn.Persistence;
@@ -10,9 +11,13 @@ using Timberborn.Persistence;
 namespace Automation.Actions {
 
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
+[SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 public abstract class AutomationActionBase : IAutomationAction, IAutomationConditionListener {
   /// <summary>Serializer that handles persistence of all the action types.</summary>
   public static readonly DynamicClassSerializer<AutomationActionBase> ActionSerializer = new();
+
+  /// <summary>Key for the action condition.</summary>
+  protected static readonly PropertyKey<AutomationConditionBase> ConditionPropertyKey = new("Condition");
 
   #region ICondition implementation
   /// <inheritdoc/>
@@ -42,10 +47,16 @@ public abstract class AutomationActionBase : IAutomationAction, IAutomationCondi
 
   #region IGameSerializable implemenation
   /// <inheritdoc/>
-  public virtual void LoadFrom(IObjectLoader objectLoader) {}
+  public virtual void LoadFrom(IObjectLoader objectLoader) {
+    Condition = objectLoader.GetValueOrNull(ConditionPropertyKey, AutomationConditionBase.ConditionSerializer);
+  }
 
   /// <inheritdoc/>
-  public virtual void SaveTo(IObjectSaver objectSaver) {}
+  public virtual void SaveTo(IObjectSaver objectSaver) {
+    if (Condition is AutomationConditionBase condition) {
+      objectSaver.Set(ConditionPropertyKey, condition, AutomationConditionBase.ConditionSerializer);
+    }
+  }
   #endregion
 
   #region API
