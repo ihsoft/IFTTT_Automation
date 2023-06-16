@@ -41,7 +41,7 @@ public sealed class DynamicClassSerializer<T> : IObjectSerializer<T> where T : c
 
   /// <inheritdoc/>
   public void Serialize(T value, IObjectSaver objectSaver) {
-    objectSaver.Set(TypeIdPropertyKey, typeof(T).FullName);
+    objectSaver.Set(TypeIdPropertyKey, value.GetType().FullName);
     value.SaveTo(objectSaver);
   }
 
