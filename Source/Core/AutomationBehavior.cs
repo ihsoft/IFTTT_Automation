@@ -8,7 +8,9 @@ using Automation.Actions;
 using Automation.Conditions;
 using Bindito.Core;
 using Timberborn.BaseComponentSystem;
+using Timberborn.BlockSystem;
 using Timberborn.EntitySystem;
+using Timberborn.Localization;
 using Timberborn.Persistence;
 using UnityDev.LogUtils;
 
@@ -17,53 +19,50 @@ namespace Automation.Core {
 public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializableEntity {
   public BaseInstantiator BaseInstantiator { get; private set; }
   public AutomationService AutomationService { get; private set; }
+  public ILoc Loc { get; private set; }
 
-  public bool HasRules => _rules.Count > 0;
+  public BlockObject BlockObject => _blockObject ??= GetComponentFast<BlockObject>();
+  BlockObject _blockObject;
 
-  public IReadOnlyCollection<AutomationRule> Rules => _rules.AsReadOnly();
+  public bool HasActions => _actions.Count > 0;
 
-  readonly List<AutomationRule> _rules = new();
+  public IReadOnlyCollection<IAutomationAction> Actions => _actions.AsReadOnly();
+  readonly List<IAutomationAction> _actions = new();
 
-  [Inject]
-  public void InjectDependencies(BaseInstantiator baseInstantiator, AutomationService automationService) {
-    BaseInstantiator = baseInstantiator;
-    AutomationService = automationService;
+  void OnDestroy() {
+    ClearActions();
   }
 
-  public bool AddRule(AutomationRule rule) {
-    if (HasRule(rule.Condition, rule.Action)) {
-      HostedDebugLog.Warning(TransformFast, "Skipping duplicate rule: {0}", rule);
+  [Inject]
+  public void InjectDependencies(BaseInstantiator baseInstantiator, AutomationService automationService, ILoc loc) {
+    BaseInstantiator = baseInstantiator;
+    AutomationService = automationService;
+    Loc = loc;
+  }
+
+  public bool AddRule(IAutomationCondition condition, IAutomationAction action) {
+    if (HasRule(condition, action)) {
+      HostedDebugLog.Warning(TransformFast, "Skipping duplicate rule: condition={0}, action={1}", condition, action);
       return false;
     }
-    rule.AttachToBehavior(this);
-    _rules.Add(rule);
-    HostedDebugLog.Fine(TransformFast, "Adding rule: {0}", rule);
+    action.Condition = condition;
+    _actions.Add(action);
+    HostedDebugLog.Fine(TransformFast, "Adding rule: {0}", action);
     UpdateRegistration();
     return true;
   }
 
-  public void ClearRules() {
-    foreach (var rule in _rules) {
-      rule.AttachToBehavior(null);
+  public void ClearActions() {
+    foreach (var action in _actions) {
+      action.Condition.Behavior = null;
+      action.Behavior = null;
     }
-    _rules.Clear();
+    _actions.Clear();
     UpdateRegistration();
   }
 
-  public bool HasRule(AutomationConditionBase condition, AutomationActionBase action) {
-    return _rules.Any(r => r.Condition.Equals(condition) && r.Action.Equals(action));
-  }
-
-  public void TriggerAction(AutomationConditionBase condition) {
-    DebugEx.Fine("Handle triggered condition: {0}", condition);
-    foreach (var rule in _rules) {
-      if (rule.Condition.Equals(condition)) {
-        var action = rule.Action;
-        DebugEx.Fine("Triggering action: {0}", action);
-        action.Execute(rule.Condition);
-      }
-      //FIXME: maybe deleting condition if it fires once
-    }
+  public bool HasRule(IAutomationCondition condition, IAutomationAction action) {
+    return _actions.Any(r => r.CheckSameDefinition(action) && r.Condition.CheckSameDefinition(condition));
   }
 
   public void Save(IEntitySaver entitySaver) {
@@ -81,7 +80,7 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity, IInitializab
 
   #region Implementation
   void UpdateRegistration() {
-    if (HasRules) {
+    if (HasActions) {
       AutomationService.RegisterBehavior(this);
     } else {
       AutomationService.UnregisterBehavior(this);

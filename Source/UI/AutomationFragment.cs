@@ -42,17 +42,17 @@ sealed class AutomationFragment : IEntityPanelFragment {
 
   public void ShowFragment(BaseComponent entity) {
     var component = entity.GetComponentFast<AutomationBehavior>();
-    if (component == null || !component.HasRules) {
+    if (component == null || !component.HasActions) {
       return;
     }
     var rules = new StringBuilder();
-    var rulesAdded = 0;
-    foreach (var rule in component.Rules) {
-      if (rulesAdded++ > 0) {
+    var actionsAdded = 0;
+    foreach (var action in component.Actions) {
+      if (actionsAdded++ > 0) {
         rules.AppendLine();
       }
       rules.Append(SpecialStrings.RowStarter);
-      rules.Append(string.Format("If {0}, then {1}", rule.Condition.GetUiDescription(_loc), rule.Action.GetUiDescription(_loc)));
+      rules.Append(string.Format("If {0}, then {1}", action.Condition.UiDescription, action.UiDescription));
     }
     _caption.text = "Automation rules:";
     _rulesList.text = TextColors.ColorizeText(rules.ToString());

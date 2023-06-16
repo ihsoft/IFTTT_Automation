@@ -24,12 +24,12 @@ sealed class CancelTool : AbstractAreaSelectionTool, IAutomationModeEnabler {
   /// <inheritdoc/>
   protected override bool ObjectFilterExpression(BlockObject blockObject) {
     var automationBehavior = blockObject.GetComponentFast<AutomationBehavior>();
-    return automationBehavior != null && automationBehavior.enabled && automationBehavior.HasRules;
+    return automationBehavior != null && automationBehavior.enabled && automationBehavior.HasActions;
   }
 
   /// <inheritdoc/>
   protected override void OnObjectAction(BlockObject blockObject) {
-    blockObject.GetComponentFast<AutomationBehavior>().ClearRules();
+    blockObject.GetComponentFast<AutomationBehavior>().ClearActions();
   }
   #endregion
 }

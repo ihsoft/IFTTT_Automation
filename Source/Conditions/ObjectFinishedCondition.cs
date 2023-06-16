@@ -4,21 +4,28 @@
 
 using Automation.Core;
 using Timberborn.BlockSystem;
-using Timberborn.Localization;
 
 namespace Automation.Conditions {
 
 public sealed class ObjectFinishedCondition : BlockObjectConditionBase<ObjectFinishedConditionBehavior> {
+  #region BlockObjectConditionBase implementation
+
   /// <inheritdoc/>
-  public ObjectFinishedCondition() {
+  public override bool ConditionState {
+    get => base.ConditionState;
+    internal set {
+      base.ConditionState = value;
+      if (ConditionState) {
+        IsMarkedForCleanup = true; // Block object can be constructed only once.
+      }
+    }
   }
 
   /// <inheritdoc/>
-  ObjectFinishedCondition(ObjectFinishedCondition src) : base(src) {
-  }
+  public override string UiDescription => "<SolidHighlight>construction complete</SolidHighlight>";
 
   /// <inheritdoc/>
-  public override AutomationConditionBase Clone() {
+  public override IAutomationCondition CloneDefinition() {
     return new ObjectFinishedCondition(this);
   }
 
@@ -26,11 +33,15 @@ public sealed class ObjectFinishedCondition : BlockObjectConditionBase<ObjectFin
   public override bool IsValidAt(AutomationBehavior behavior) {
     return !behavior.GetComponentFast<BlockObject>().Finished;
   }
+  #endregion
+
+  #region Implementation
+  /// <inheritdoc/>
+  public ObjectFinishedCondition() {}
 
   /// <inheritdoc/>
-  public override string GetUiDescription(ILoc loc) {
-    return "<SolidHighlight>construction complete</SolidHighlight>";
-  }
+  ObjectFinishedCondition(ObjectFinishedCondition src) : base(src) {}
+  #endregion
 }
 
 }

@@ -48,11 +48,14 @@
       <Compile Include="Conditions\ObjectFinishedCondition.cs" />
       <Compile Include="Conditions\ObjectFinishedConditionBehavior.cs" />
       <Compile Include="Core\AutomationBehavior.cs" />
-      <Compile Include="Core\AutomationRule.cs" />
       <Compile Include="Core\AutomationService.cs" />
       <Compile Include="Core\Configurator.cs" />
+      <Compile Include="Core\IAutomationConditionListener.cs" />
+      <Compile Include="Core\IAutomationCondition.cs" />
+      <Compile Include="Core\IAutomationAction.cs" />
       <Compile Include="Properties\AssemblyInfo.cs" />
       <Compile Include="Tools\ApplyTemplateTool.cs" />
+      <Compile Include="Tools\AutomationRule.cs" />
       <Compile Include="Tools\CancelTool.cs" />
       <Compile Include="Tools\IAutomationModeEnabler.cs" />
       <Compile Include="Tools\PauseTool.cs" />

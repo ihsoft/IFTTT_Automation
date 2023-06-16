@@ -20,14 +20,12 @@ public class UnpauseAction : AutomationActionBase {
   }
 
   /// <inheritdoc/>
-  public override AutomationActionBase Clone() {
+  public override IAutomationAction CloneDefinition() {
     return new UnpauseAction(this);
   }
 
   /// <inheritdoc/>
-  public override string GetUiDescription(ILoc loc) {
-    return "<SolidHighlight>unpause building</SolidHighlight>";
-  }
+  public override string UiDescription => "<SolidHighlight>unpause building</SolidHighlight>";
 
   /// <inheritdoc/>
   public override bool IsValidAt(AutomationBehavior behavior) {
@@ -39,8 +37,8 @@ public class UnpauseAction : AutomationActionBase {
   }
 
   /// <inheritdoc/>
-  public override void Execute(AutomationConditionBase triggerCondition) {
-    var component = Rule.Behavior.GetComponentFast<PausableBuilding>();
+  public override void OnConditionState(IAutomationCondition automationCondition) {
+    var component = Behavior.GetComponentFast<PausableBuilding>();
     if (component.Paused) {
       component.Resume();
     }

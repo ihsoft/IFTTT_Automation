@@ -2,85 +2,123 @@
 // Author: igor.zavoychinskiy@gmail.com
 // License: Public Domain
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 using Automation.Core;
 using Automation.Utils;
-using Timberborn.BaseComponentSystem;
-using Timberborn.BlockSystem;
-using Timberborn.Localization;
 using Timberborn.Persistence;
 
 namespace Automation.Conditions {
 
 /// <summary>The base class of any automation condition.</summary>
 /// <remarks>
+/// <p>
 /// The descendants of this class must encapsulate all settings of the condition and provide functionality to set up the
 /// dynamic logic.
+/// </p>
+/// <p>
+/// The default base implementation matches by the type name only and valid on finished block objects only. To change
+/// this, override <see cref="CheckSameDefinition"/> and <see cref="IsValidAt"/>.
+/// </p>
 /// </remarks>
 /// <seealso cref="AutomationConditionBehaviorBase"/>
 [SuppressMessage("ReSharper", "MemberCanBeProtected.Global")]
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
-public abstract class AutomationConditionBase : IEquatable<AutomationConditionBase>, IGameSerializable {
+public abstract class AutomationConditionBase : IAutomationCondition {
   /// <summary>Serializer that handles persistence of all the condition types.</summary>
   public static readonly DynamicClassSerializer<AutomationConditionBase> ConditionSerializer = new();
 
-  /// <summary>The rule which owns this condition.</summary>
-  /// <remarks>It can be <c>null</c> for an unowned condition.</remarks>
-  public AutomationRule Rule = null;
+  #region ICondition implementation
+  /// <inheritdoc/>
+  public virtual AutomationBehavior Behavior {
+    get => _behavior;
+    set {
+      if (value == _behavior) {
+        return;
+      }
+      if (value == null || _behavior != null) {
+        OnBehaviorToBeCleared();
+      }
+      _behavior = value;
+      if (_behavior != null) {
+        OnBehaviorAssigned();
+      }
+    }
+  }
+  AutomationBehavior _behavior;
 
+  /// <inheritdoc/>
+  public virtual IAutomationConditionListener Listener { get; set; }
+
+  /// <inheritdoc/>
+  public virtual bool ConditionState {
+    get => _conditionState;
+    internal set {
+      if (_conditionState == value) {
+        return;
+      }
+      _conditionState = value;
+      if (value) {
+        Listener?.OnConditionState(this);
+      }
+    }
+  }
+  bool _conditionState;
+
+  /// <inheritdoc/>
+  public bool IsMarkedForCleanup { get; protected set; }
+  #endregion
+
+  #region IGameSerializable implemenation
+  /// <inheritdoc/>
+  public virtual void LoadFrom(IObjectLoader objectLoader) {}
+
+  /// <inheritdoc/>
+  public virtual void SaveTo(IObjectSaver objectSaver) {}
+  #endregion
+
+  #region API
+  /// <inheritdoc/>
+  public abstract string UiDescription { get; }
+
+  /// <inheritdoc/>
+  public abstract IAutomationCondition CloneDefinition();
+
+  /// <inheritdoc/>
+  public virtual bool CheckSameDefinition(IAutomationCondition other) {
+    return other != null && other.GetType() == GetType();
+  }
+
+  /// <inheritdoc/>
+  public virtual bool IsValidAt(AutomationBehavior behavior) {
+    return behavior.BlockObject.Finished;
+  }
+
+  /// <summary>
+  /// Notifies that a new behavior has been assigned to the condition. It's the time to setup the behaviors. 
+  /// </summary>
+  /// <seealso cref="Behavior"/>
+  protected abstract void OnBehaviorAssigned();
+
+  /// <summary>
+  /// Notifies that the current behavior is about to be cleared. It's the time to cleanup the behaviors. 
+  /// </summary>
+  /// <seealso cref="Behavior"/>
+  protected abstract void OnBehaviorToBeCleared();
+  #endregion
+
+  #region Implementation
   /// <summary>Default constructor is required for serialization.</summary>
   protected AutomationConditionBase() {}
 
   /// <summary>Copy constructor is required for cloning.</summary>
-  /// <seealso cref="Clone"/>
+  /// <seealso cref="CloneDefinition"/>
   protected AutomationConditionBase(AutomationConditionBase src) {}
-
-  /// <summary>Returns a copy of the condition that is not bound to any game object.</summary>
-  public abstract AutomationConditionBase Clone();
-
-  /// <summary>Returns a localized string to present as description of the condition.</summary>
-  /// <remarks>The string must fully describe what the condition checks, but be as short as possible.</remarks>
-  public abstract string GetUiDescription(ILoc loc);
-
-  /// <summary>Notifies that the owning rule association to an automation behavior is going to be changed.</summary>
-  /// <remarks>
-  /// When the rule gets associated with <see cref="AutomationBehavior"/>, its becomes <i>active</i>. It means, it now
-  /// should be checking the condition and triggering the action. The rule can also be detached from the automation
-  /// behavior (in which case <see cref="AutomationRule.Behavior"/> becomes <c>null</c>). The condition logic that needs
-  /// active <see cref="BaseComponent"/> objects to work, must react appropriately and either setup the needed
-  /// components or destroy some of the existing.
-  /// </remarks>
-  /// <param name="newBehavior">The new automation behavior or <c>null</c>.</param>
-  /// <seealso cref="Rule"/>
-  /// <seealso cref="AutomationRule.Behavior"/>
-  public abstract void OnBeforeRuleAssociationChange(AutomationBehavior newBehavior);
-
-  /// <summary>Verifies that the condition can be used at the provided automation behavior.</summary>
-  public virtual bool IsValidAt(AutomationBehavior behavior) {
-    var blockObject = behavior.GetComponentFast<BlockObject>();
-    return blockObject != null && blockObject.Finished;
-  }
-
-  /// <summary>Loads condition state and declaration.</summary>
-  public virtual void LoadFrom(IObjectLoader objectLoader) {}
-
-  /// <summary>Saves condition state and declaration.</summary>
-  public virtual void SaveTo(IObjectSaver objectSaver) {}
-
-  public virtual void Trigger() {
-    Rule.Behavior.TriggerAction(this);
-  }
-
-  /// <inheritdoc/>
-  public virtual bool Equals(AutomationConditionBase other) {
-    return other != null && other.GetType() == GetType() && Rule == other.Rule;
-  }
 
   /// <inheritdoc/>
   public override string ToString() {
-    return $"TypeId={GetType()}";
+    return $"TypeId={GetType()},Listener={Listener?.GetType()}";
   }
+  #endregion
 }
 
 }

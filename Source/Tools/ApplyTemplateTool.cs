@@ -2,9 +2,11 @@
 // Author: igor.zavoychinskiy@gmail.com
 // License: Public Domain
 
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Automation.Core;
+using Automation.Tools;
 using Automation.Utils;
 using Timberborn.BlockSystem;
 using Timberborn.Persistence;
@@ -32,21 +34,29 @@ sealed class ApplyTemplateTool : AbstractAreaSelectionTool, IAutomationModeEnabl
   #region AbstractAreaSelectionTool overries
   /// <inheritdoc/>
   protected override bool ObjectFilterExpression(BlockObject blockObject) {
-    var automationBehavior = blockObject.GetComponentFast<AutomationBehavior>();
-    if (automationBehavior == null || !automationBehavior.enabled) {
+    var behavior = blockObject.GetComponentFast<AutomationBehavior>();
+    if (behavior == null || !behavior.enabled) {
       return false;
     }
     var info = (ToolInfo) ToolInformation;
-    return info.Rules.All(rule => rule.IsValidAt(automationBehavior));
+    return info.Rules.All(rule => rule.IsValidAt(behavior));
   }
 
   /// <inheritdoc/>
   protected override void OnObjectAction(BlockObject blockObject) {
-    var automationBehavior = blockObject.GetComponentFast<AutomationBehavior>();
-    automationBehavior.ClearRules();
+    var behavior = blockObject.GetComponentFast<AutomationBehavior>();
+    behavior.ClearActions();
     var info = (ToolInfo) ToolInformation;
     foreach (var rule in info.Rules) {
-      automationBehavior.AddRule(rule.Clone());
+      var action = rule.Action.CloneDefinition();
+      if (action is not IAutomationConditionListener listener) {
+        throw new InvalidOperationException("Action is not a condition state listener: " + action);
+      }
+      action.Behavior = behavior;
+      var condition = rule.Condition.CloneDefinition();
+      condition.Behavior = behavior;
+      condition.Listener = listener;
+      behavior.AddRule(condition, action);
     }
   }
 

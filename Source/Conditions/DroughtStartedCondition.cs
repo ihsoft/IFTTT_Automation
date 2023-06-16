@@ -2,28 +2,28 @@
 // Author: igor.zavoychinskiy@gmail.com
 // License: Public Domain
 
-using Timberborn.Localization;
+using Automation.Core;
 
 namespace Automation.Conditions {
 
 public sealed class DroughtStartedCondition : WeatherTrackerConditionBase {
+  #region WeatherTrackerConditionBase
   /// <inheritdoc/>
-  public DroughtStartedCondition() {
-  }
+  public override string UiDescription => "<SolidHighlight>drought started</SolidHighlight>";
 
   /// <inheritdoc/>
-  public DroughtStartedCondition(DroughtStartedCondition src) : base(src) {
-  }
-
-  /// <inheritdoc/>
-  public override AutomationConditionBase Clone() {
+  public override IAutomationCondition CloneDefinition() {
     return new DroughtStartedCondition(this);
   }
+  #endregion
+
+  #region Implementation
+  /// <inheritdoc/>
+  public DroughtStartedCondition() {}
 
   /// <inheritdoc/>
-  public override string GetUiDescription(ILoc loc) {
-    return "<SolidHighlight>drought started</SolidHighlight>";
-  }
+  public DroughtStartedCondition(DroughtStartedCondition src) : base(src) {}
+  #endregion
 }
 
 }

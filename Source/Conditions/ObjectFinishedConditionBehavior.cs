@@ -7,10 +7,10 @@ using Timberborn.ConstructibleSystem;
 
 namespace Automation.Conditions {
 
-public class ObjectFinishedConditionBehavior : AutomationConditionBehaviorBase, IFinishedStateListener {
+public sealed class ObjectFinishedConditionBehavior : AutomationConditionBehaviorBase, IFinishedStateListener {
   public void OnEnterFinishedState() {
     foreach (var condition in Conditions.OfType<ObjectFinishedCondition>()) {
-      condition.Trigger();
+      condition.ConditionState = true;
     }
   }
 

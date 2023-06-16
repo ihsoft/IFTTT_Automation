@@ -1,4 +1,6 @@
-using Automation.Core;
+// Timberborn Utils
+// Author: igor.zavoychinskiy@gmail.com
+// License: Public Domain
 
 namespace Automation.Conditions {
 
@@ -6,22 +8,26 @@ namespace Automation.Conditions {
 /// <remarks>Block object behavior lives as a component on the same object which the condition belongs to.</remarks>
 /// <typeparam name="T">type of the behavior component</typeparam>
 public abstract class BlockObjectConditionBase<T> : AutomationConditionBase where T : AutomationConditionBehaviorBase {
+  #region AutomationConditionBase implementanton
+  /// <inheritdoc/>
+  protected override void OnBehaviorAssigned() {
+    var behavior = Behavior.GetComponentFast<T>() ?? Behavior.BaseInstantiator.AddComponent<T>(Behavior.GameObjectFast);
+    behavior.AddCondition(this);
+  }
+
+  /// <inheritdoc/>
+  protected override void OnBehaviorToBeCleared() {
+    Behavior.GetComponentFast<T>().DeleteCondition(this);
+  }
+  #endregion
+
+  #region Implementation
   /// <inheritdoc/>
   protected BlockObjectConditionBase() {}
 
   /// <inheritdoc/>
   protected BlockObjectConditionBase(BlockObjectConditionBase<T> src) : base(src) {}
-
-  /// <inheritdoc/>
-  public override void OnBeforeRuleAssociationChange(AutomationBehavior newBehavior) {
-    if (newBehavior != null) {
-      var behavior = newBehavior.GetComponentFast<T>()
-          ?? newBehavior.BaseInstantiator.AddComponent<T>(newBehavior.GameObjectFast);
-      behavior.AddCondition(this);
-    } else {
-      Rule.Behavior.GetComponentFast<T>().DeleteCondition(this);
-    }
-  }
+  #endregion
 }
 
 }

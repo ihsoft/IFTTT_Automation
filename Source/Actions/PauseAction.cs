@@ -23,14 +23,12 @@ public class PauseAction : AutomationActionBase {
   }
 
   /// <inheritdoc/>
-  public override AutomationActionBase Clone() {
+  public override IAutomationAction CloneDefinition() {
     return new PauseAction(this);
   }
 
   /// <inheritdoc/>
-  public override string GetUiDescription(ILoc loc) {
-    return "<SolidHighlight>pause building</SolidHighlight>";
-  }
+  public override string UiDescription => "<SolidHighlight>pause building</SolidHighlight>";
 
   /// <inheritdoc/>
   public override bool IsValidAt(AutomationBehavior behavior) {
@@ -42,8 +40,8 @@ public class PauseAction : AutomationActionBase {
   }
 
   /// <inheritdoc/>
-  public override void Execute(AutomationConditionBase triggerCondition) {
-    var component = Rule.Behavior.GetComponentFast<PausableBuilding>();
+  public override void OnConditionState(IAutomationCondition automationCondition) {
+    var component = Behavior.GetComponentFast<PausableBuilding>();
     if (!component.Paused) {
       component.Pause();
     }

@@ -2,64 +2,100 @@
 // Author: igor.zavoychinskiy@gmail.com
 // License: Public Domain
 
-using System;
-using Automation.Conditions;
+using System.Diagnostics.CodeAnalysis;
 using Automation.Core;
 using Automation.Utils;
-using Timberborn.Localization;
 using Timberborn.Persistence;
 
 namespace Automation.Actions {
 
-public abstract class AutomationActionBase : IEquatable<AutomationActionBase>, IGameSerializable {
+[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
+public abstract class AutomationActionBase : IAutomationAction, IAutomationConditionListener {
   /// <summary>Serializer that handles persistence of all the action types.</summary>
   public static readonly DynamicClassSerializer<AutomationActionBase> ActionSerializer = new();
 
-  /// <summary>The rule which owns this condition.</summary>
-  /// <remarks>Condition is not considered "active" until it's attached to a rule.</remarks>
-  public AutomationRule Rule { get; internal set; }
+  #region ICondition implementation
+  /// <inheritdoc/>
+  public virtual AutomationBehavior Behavior {
+    get => _behavior;
+    set {
+      if (value == _behavior) {
+        return;
+      }
+      if (value == null || _behavior != null) {
+        OnBehaviorToBeCleared();
+      }
+      _behavior = value;
+      if (_behavior != null) {
+        OnBehaviorAssigned();
+      }
+    }
+  }
+  AutomationBehavior _behavior;
 
-  /// <inheritdoc cref="AutomationConditionBase.OnBeforeRuleAssociationChange"/>
-  public virtual void OnBeforeRuleAssociationChange(AutomationBehavior newBehavior) {}
+  /// <inheritdoc/>
+  public virtual IAutomationCondition Condition { get; set; }
 
-  /// <summary>Loads action state and declaration.</summary>
-  public virtual void LoadFrom(IObjectLoader objectLoader) {
+  /// <inheritdoc/>
+  public bool IsMarkedForCleanup { get; protected set; }
+  #endregion
+
+  #region IGameSerializable implemenation
+  /// <inheritdoc/>
+  public virtual void LoadFrom(IObjectLoader objectLoader) {}
+
+  /// <inheritdoc/>
+  public virtual void SaveTo(IObjectSaver objectSaver) {}
+  #endregion
+
+  #region API
+  /// <inheritdoc/>
+  public abstract string UiDescription { get; }
+
+  /// <inheritdoc/>
+  public abstract IAutomationAction CloneDefinition();
+
+  /// <inheritdoc/>
+  public virtual bool CheckSameDefinition(IAutomationAction other) {
+    return other != null && other.GetType() == GetType();
   }
 
-  /// <summary>Saves action state and declaration.</summary>
-  public virtual void SaveTo(IObjectSaver objectSaver) {
+  /// <inheritdoc/>
+  public virtual bool IsValidAt(AutomationBehavior behavior) {
+    return behavior.BlockObject.Finished;
   }
 
+  /// <summary>
+  /// Notifies that a new behavior has been assigned to the condition. It's the time to setup the behaviors. 
+  /// </summary>
+  /// <seealso cref="Behavior"/>
+  protected virtual void OnBehaviorAssigned() {}
+
+  /// <summary>
+  /// Notifies that the current behavior is about to be cleared. It's the time to cleanup the behaviors. 
+  /// </summary>
+  /// <seealso cref="Behavior"/>
+  protected virtual void OnBehaviorToBeCleared() {}
+  #endregion
+
+  #region IAutomationConditionListener
+  /// <inheritdoc/>
+  public abstract void OnConditionState(IAutomationCondition automationCondition);
+  #endregion
+
+  #region Implementation
   /// <summary>Default constructor is required for serialization.</summary>
-  protected AutomationActionBase() {
-  }
+  protected AutomationActionBase() {}
 
   /// <summary>Copy constructor is required for cloning.</summary>
-  /// <seealso cref="Clone"/>
-  protected AutomationActionBase(AutomationActionBase src) {
-  }
+  /// <seealso cref="CloneDefinition"/>
+  protected AutomationActionBase(AutomationActionBase src) {}
 
-  /// <summary>Returns a copy of the action that is not bound to any game object.</summary>
-  public abstract AutomationActionBase Clone();
-
-  /// <summary>Returns a localized string to present as description of the condition.</summary>
-  /// <remarks>The string must fully describe what the condition checks, but be as short as possible.</remarks>
-  public abstract string GetUiDescription(ILoc loc);
-
-  /// <summary>Verifies that the action can work on the provided automation behavior.</summary>
-  public abstract bool IsValidAt(AutomationBehavior behavior);
-
-  // FIXME: in overrides
-  // Listener.InvalidateAction(this);
-  public abstract void Execute(AutomationConditionBase triggerCondition);
-
-  public virtual bool Equals(AutomationActionBase other) {
-    return other != null && other.GetType() == GetType() && Rule == other.Rule;
-  }
-
+  /// <inheritdoc/>
   public override string ToString() {
-    return $"TypeId={GetType()}";
+    return $"TypeId={GetType()},Condition={Condition?.GetType()}";
   }
+  #endregion
 }
 
 }

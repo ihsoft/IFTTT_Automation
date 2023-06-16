@@ -15,7 +15,6 @@ using Timberborn.BlockSystem;
 using Timberborn.Characters;
 using Timberborn.Coordinates;
 using Timberborn.Explosions;
-using Timberborn.Localization;
 using Timberborn.Navigation;
 using Timberborn.Persistence;
 using Timberborn.ToolSystem;
@@ -49,7 +48,7 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
   }
 
   /// <inheritdoc/>
-  public override AutomationActionBase Clone() {
+  public override IAutomationAction CloneDefinition() {
     return new DetonateDynamiteAction(this);
   }
 
@@ -58,6 +57,14 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
     return behavior.GetComponentFast<Dynamite>() != null;
   }
 
+  public override void OnConditionState(IAutomationCondition automationCondition) {
+    // This object will get destroyed on detonate, so create am independent component.
+    var component = new GameObject("#Automation_PlaceDynamiteAction").AddComponent<DetonateAndRepeatRule>();
+    component.blockObject = Behavior.BlockObject;
+    component.repeatCount = RepeatCount - 1;
+  }
+
+  #region IGameSerializable implemenation
   /// <summary>Loads action state and declaration.</summary>
   public override void LoadFrom(IObjectLoader objectLoader) {
     base.LoadFrom(objectLoader);
@@ -68,23 +75,16 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
   public override void SaveTo(IObjectSaver objectSaver) {
     objectSaver.Set(RepeatPropertyKey, RepeatCount);
   }
+  #endregion
 
-  /// <inheritdoc/>
-  public override string GetUiDescription(ILoc loc) {
-    var res = "<SolidHighlight>detonate dynamite</SolidHighlight>";
-    if (RepeatCount > 0) {
-      res += string.Format(" and add another <GreenHighlight>{0} times</GreenHighlight>", RepeatCount);
+  public override string UiDescription {
+    get {
+      var res = "<SolidHighlight>detonate dynamite</SolidHighlight>";
+      if (RepeatCount > 0) {
+        res += string.Format(" and add another <GreenHighlight>{0} times</GreenHighlight>", RepeatCount);
+      }
+      return res;
     }
-    return res;
-  }
-
-  /// <inheritdoc/>
-  public override void Execute(AutomationConditionBase triggerCondition) {
-    // This object will get destroyed on detonate, so create am independent component.
-    var blockObject = Rule.BlockObject;
-    var component = new GameObject("#Automation_PlaceDynamiteAction").AddComponent<DetonateAndRepeatRule>();
-    component.blockObject = blockObject;
-    component.repeatCount = RepeatCount - 1;
   }
   #endregion
 
@@ -142,11 +142,10 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
         newDynamite = blockService.GetBottomObjectAt(coordinates);
       } while (newDynamite == null);
 
-      var automationObj = newDynamite.GetComponentFast<AutomationBehavior>();
-      var rule = new AutomationRule(
-          new ObjectFinishedCondition(),
-          new DetonateDynamiteAction { RepeatCount = repeatCount });
-      automationObj.AddRule(rule);
+      var behavior = newDynamite.GetComponentFast<AutomationBehavior>();
+      behavior.AddRule(
+          new ObjectFinishedCondition() { Behavior = behavior },
+          new DetonateDynamiteAction { Behavior = behavior, RepeatCount = repeatCount });
       Destroy(gameObject);
     }
 
