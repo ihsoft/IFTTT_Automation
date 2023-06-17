@@ -10,7 +10,7 @@ namespace Automation.Conditions {
 
 //FXIME  make it generic to control teh base type
 public class AutomationConditionBehaviorBase : BaseComponent {
-  protected IReadOnlyCollection<IAutomationCondition> Conditions => _conditions.AsReadOnly();
+  protected IEnumerable<IAutomationCondition> Conditions => _conditions.AsReadOnly();
   readonly List<IAutomationCondition> _conditions = new();
 
   public void AddCondition(AutomationConditionBase automationCondition) {

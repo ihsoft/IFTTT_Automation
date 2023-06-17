@@ -21,7 +21,7 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity {
 
   public bool HasActions => _actions.Count > 0;
 
-  public IReadOnlyCollection<IAutomationAction> Actions => _actions.AsReadOnly();
+  public IEnumerable<IAutomationAction> Actions => _actions.AsReadOnly();
   List<IAutomationAction> _actions = new();
 
   #region API
