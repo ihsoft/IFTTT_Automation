@@ -31,7 +31,7 @@ public sealed class ObjectFinishedCondition : BlockObjectConditionBase<ObjectFin
 
   /// <inheritdoc/>
   public override bool IsValidAt(AutomationBehavior behavior) {
-    return !behavior.GetComponentFast<BlockObject>().Finished;
+    return !behavior.BlockObject.Finished;
   }
   #endregion
 }

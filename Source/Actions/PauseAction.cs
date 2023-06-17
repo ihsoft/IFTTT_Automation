@@ -2,11 +2,8 @@
 // Author: igor.zavoychinskiy@gmail.com
 // License: Public Domain
 
-using Automation.Conditions;
 using Automation.Core;
-using Timberborn.BlockSystem;
 using Timberborn.BuildingsBlocking;
-using Timberborn.Localization;
 
 namespace Automation.Actions {
 
@@ -24,7 +21,7 @@ public class PauseAction : AutomationActionBase {
 
   /// <inheritdoc/>
   public override bool IsValidAt(AutomationBehavior behavior) {
-    if (!behavior.GetComponentFast<BlockObject>().Finished) {
+    if (!behavior.BlockObject.Finished) {
       return false;
     }
     var component = behavior.GetComponentFast<PausableBuilding>();
