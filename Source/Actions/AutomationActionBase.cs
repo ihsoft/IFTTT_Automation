@@ -14,7 +14,12 @@ namespace Automation.Actions {
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 public abstract class AutomationActionBase : IAutomationAction, IAutomationConditionListener {
   /// <summary>Serializer that handles persistence of all the action types.</summary>
+  /// <remarks>Loading will fail if the action cannot be loaded.</remarks>
   public static readonly DynamicClassSerializer<AutomationActionBase> ActionSerializer = new();
+
+  /// <summary>Serializer that handles persistence of all the action types.</summary>
+  /// <remarks>This version returns <c>null</c> if the action cannot be loaded.</remarks>
+  public static readonly DynamicClassSerializer<AutomationActionBase> ActionSerializerNullable = new(false);
 
   #region ICondition implementation
   /// <inheritdoc/>
@@ -63,7 +68,7 @@ public abstract class AutomationActionBase : IAutomationAction, IAutomationCondi
 
   /// <inheritdoc/>
   public virtual void LoadFrom(IObjectLoader objectLoader) {
-    Condition = objectLoader.GetValueOrNull(ConditionPropertyKey, AutomationConditionBase.ConditionSerializer);
+    Condition = objectLoader.GetValueOrNull(ConditionPropertyKey, AutomationConditionBase.ConditionSerializerNullable);
     IsMarkedForCleanup = objectLoader.Has(IsMarkedForCleanupKey) && objectLoader.Get(IsMarkedForCleanupKey);
   }
 

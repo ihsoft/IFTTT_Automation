@@ -25,7 +25,12 @@ namespace Automation.Conditions {
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
 public abstract class AutomationConditionBase : IAutomationCondition {
   /// <summary>Serializer that handles persistence of all the condition types.</summary>
+  /// <remarks>Loading will fail if the condition cannot be loaded.</remarks>
   public static readonly DynamicClassSerializer<AutomationConditionBase> ConditionSerializer = new();
+
+  /// <summary>Serializer that handles persistence of all the condition types.</summary>
+  /// <remarks>This version returns <c>null</c> if the condition cannot be loaded.</remarks>
+  public static readonly DynamicClassSerializer<AutomationConditionBase> ConditionSerializerNullable = new(false);
 
   #region ICondition implementation
   /// <inheritdoc/>

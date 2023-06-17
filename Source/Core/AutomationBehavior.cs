@@ -74,7 +74,7 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity {
     }
     var component = entityLoader.GetComponent(AutomationBehaviorKey);
     _actions = component
-        .Get(ActionsKey, AutomationActionBase.ActionSerializer)
+        .Get(ActionsKey, AutomationActionBase.ActionSerializerNullable)
         .OfType<IAutomationAction>()
         .Where(a => !a.IsMarkedForCleanup && a.Condition is { IsMarkedForCleanup: false })
         .ToList();
