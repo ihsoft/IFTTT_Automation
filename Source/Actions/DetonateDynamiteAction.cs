@@ -73,6 +73,7 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
 
   /// <summary>Saves action state and declaration.</summary>
   public override void SaveTo(IObjectSaver objectSaver) {
+    base.SaveTo(objectSaver);
     objectSaver.Set(RepeatPropertyKey, RepeatCount);
   }
   #endregion
@@ -90,13 +91,6 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
 
   #region MonoBehavior object to handle action repeat
   class DetonateAndRepeatRule : MonoBehaviour {
-    static BlockObjectTool DynamiteTool =>
-        _dynamiteTool ??= DependencyContainer.GetInstance<ToolButtonService>()
-            .ToolButtons.Select(x => x.Tool)
-            .OfType<BlockObjectTool>()
-            .FirstOrDefault(x => x.Prefab.name.StartsWith("Dynamite"));
-    static BlockObjectTool _dynamiteTool;
-
     static readonly ReflectedAction<BlockObjectTool, IEnumerable<OrientedCoordinates>> BlockObjectToolPlace =
         new("Place");
 
@@ -124,17 +118,22 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
         DebugEx.Fine("Reached the bottom of the map. Abort placing dynamite.");
         yield break;
       }
-      if (DynamiteTool == null || !BlockObjectToolPlace.IsValid()) {
+      
+      var dynamiteTool = DependencyContainer.GetInstance<ToolButtonService>()
+          .ToolButtons.Select(x => x.Tool)
+          .OfType<BlockObjectTool>()
+          .FirstOrDefault(x => x.Prefab.name.StartsWith("Dynamite"));
+      if (dynamiteTool == null || !BlockObjectToolPlace.IsValid()) {
         DebugEx.Error("Cannot execute dynamite place tool");
         Destroy(gameObject);
         yield break;
       }
 
       // Wait for the old object to cleaned up and place another one.
-      yield return new WaitUntil(() => blockObject == null);
       var coordinates = blockObject.Coordinates;
+      yield return new WaitUntil(() => blockObject == null);
       coordinates.z = coordinates.z - 1;
-      BlockObjectToolPlace.Invoke(DynamiteTool, new List<OrientedCoordinates> { new(coordinates, Orientation.Cw0) });
+      BlockObjectToolPlace.Invoke(dynamiteTool, new List<OrientedCoordinates> { new(coordinates, Orientation.Cw0) });
       var blockService = DependencyContainer.GetInstance<BlockService>();
       BlockObject newDynamite;
       do {
