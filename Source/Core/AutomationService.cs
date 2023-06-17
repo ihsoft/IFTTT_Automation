@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using Automation.Conditions;
 using Timberborn.BaseComponentSystem;
 using Timberborn.Common;
+using Timberborn.Localization;
 using Timberborn.SelectionSystem;
 using Timberborn.SingletonSystem;
 using Timberborn.ToolSystem;
@@ -25,10 +26,11 @@ public class AutomationService : IPostLoadableSingleton {
   BaseComponent _rootComponent;
   #endregion
 
-  public AutomationService(EventBus eventBus, Highlighter highlighter, BaseInstantiator baseInstantiator) {
+  public AutomationService(EventBus eventBus, Highlighter highlighter, BaseInstantiator baseInstantiator, ILoc loc) {
     eventBus.Register(this);
     _highlighter = highlighter;
     BaseInstantiator = baseInstantiator;
+    Loc = loc;
   }
 
   #region Implemetation of IPostLoadableSingleton
@@ -37,8 +39,11 @@ public class AutomationService : IPostLoadableSingleton {
   #endregion
 
   #region API
-  /// <summary>Shortcut to get the instantiator fro the conditions and actions.</summary>
+  /// <summary>Shortcut to get the instantiator for the conditions and actions.</summary>
   public readonly BaseInstantiator BaseInstantiator;
+
+  /// <summary>Shortcut to get the localizator.</summary>
+  public readonly ILoc Loc;
 
   /// <summary>All automation behaviors that has at least one active condition.</summary>
   public ReadOnlyHashSet<AutomationBehavior> AutomationBehaviors => _registeredBehaviors.AsReadOnly();

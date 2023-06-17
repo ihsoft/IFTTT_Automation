@@ -8,16 +8,13 @@ using Automation.Actions;
 using Bindito.Core;
 using Timberborn.BaseComponentSystem;
 using Timberborn.BlockSystem;
-using Timberborn.Localization;
 using Timberborn.Persistence;
 using UnityDev.LogUtils;
 
 namespace Automation.Core {
 
 public class AutomationBehavior : BaseComponent, IPersistentEntity {
-  public BaseInstantiator BaseInstantiator { get; private set; }
   public AutomationService AutomationService { get; private set; }
-  public ILoc Loc { get; private set; }
 
   public BlockObject BlockObject => _blockObject ??= GetComponentFast<BlockObject>();
   BlockObject _blockObject;
@@ -26,17 +23,6 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity {
 
   public IReadOnlyCollection<IAutomationAction> Actions => _actions.AsReadOnly();
   List<IAutomationAction> _actions = new();
-
-  void OnDestroy() {
-    ClearActions();
-  }
-
-  [Inject]
-  public void InjectDependencies(BaseInstantiator baseInstantiator, AutomationService automationService, ILoc loc) {
-    BaseInstantiator = baseInstantiator;
-    AutomationService = automationService;
-    Loc = loc;
-  }
 
   #region API
   public bool AddRule(IAutomationCondition condition, IAutomationAction action) {
@@ -101,6 +87,15 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity {
   #endregion
 
   #region Implementation
+  [Inject]
+  public void InjectDependencies(AutomationService automationService) {
+    AutomationService = automationService;
+  }
+
+  void OnDestroy() {
+    ClearActions();
+  }
+
   void UpdateRegistration() {
     if (HasActions) {
       AutomationService.RegisterBehavior(this);
