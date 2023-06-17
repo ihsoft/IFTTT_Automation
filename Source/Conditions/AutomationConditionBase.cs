@@ -53,11 +53,8 @@ public abstract class AutomationConditionBase : IAutomationCondition {
   public virtual bool ConditionState {
     get => _conditionState;
     internal set {
-      if (_conditionState == value) {
-        return;
-      }
-      _conditionState = value;
-      if (value) {
+      if (_conditionState != value) {
+        _conditionState = value;
         Listener?.OnConditionState(this);
       }
     }

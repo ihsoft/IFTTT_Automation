@@ -58,6 +58,9 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
   }
 
   public override void OnConditionState(IAutomationCondition automationCondition) {
+    if (!Condition.ConditionState) {
+      return;
+    }
     // This object will get destroyed on detonate, so create am independent component.
     var component = new GameObject("#Automation_PlaceDynamiteAction").AddComponent<DetonateAndRepeatRule>();
     component.blockObject = Behavior.BlockObject;

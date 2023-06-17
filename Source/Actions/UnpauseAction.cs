@@ -38,6 +38,9 @@ public class UnpauseAction : AutomationActionBase {
 
   /// <inheritdoc/>
   public override void OnConditionState(IAutomationCondition automationCondition) {
+    if (!Condition.ConditionState) {
+      return;
+    }
     var component = Behavior.GetComponentFast<PausableBuilding>();
     if (component.Paused) {
       component.Resume();

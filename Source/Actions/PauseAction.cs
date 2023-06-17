@@ -41,6 +41,9 @@ public class PauseAction : AutomationActionBase {
 
   /// <inheritdoc/>
   public override void OnConditionState(IAutomationCondition automationCondition) {
+    if (!Condition.ConditionState) {
+      return;
+    }
     var component = Behavior.GetComponentFast<PausableBuilding>();
     if (!component.Paused) {
       component.Pause();

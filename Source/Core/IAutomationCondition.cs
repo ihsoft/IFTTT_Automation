@@ -36,7 +36,7 @@ public interface IAutomationCondition : IGameSerializable {
 
   /// <summary>The current condition state.</summary>
   /// <remarks>
-  /// Value <c>true</c> is <c>ON</c> state, and <c>false</c> is <c>OFF</c>. The new state must be reported via
+  /// Value <c>true</c> is <c>ON</c> state, and <c>false</c> is <c>OFF</c>. The state change must be reported via
   /// <see cref="IAutomationConditionListener.OnConditionState"/>.
   /// </remarks>
   /// <seealso cref="Listener"/>
