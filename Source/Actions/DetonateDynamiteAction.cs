@@ -61,7 +61,7 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
     // This object will get destroyed on detonate, so create am independent component.
     var component = new GameObject("#Automation_PlaceDynamiteAction").AddComponent<DetonateAndRepeatRule>();
     component.blockObject = Behavior.BlockObject;
-    component.repeatCount = RepeatCount - 1;
+    component.repeatCount = RepeatCount;
   }
 
   #region IGameSerializable implemenation
@@ -144,7 +144,7 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
       var behavior = newDynamite.GetComponentFast<AutomationBehavior>();
       behavior.AddRule(
           new ObjectFinishedCondition() { Behavior = behavior },
-          new DetonateDynamiteAction { Behavior = behavior, RepeatCount = repeatCount });
+          new DetonateDynamiteAction { Behavior = behavior, RepeatCount = repeatCount - 1 });
       Destroy(gameObject);
     }
 

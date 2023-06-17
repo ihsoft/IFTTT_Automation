@@ -10,7 +10,7 @@
     "Rules": [
       {
         "Condition": { "TypeId": "Automation.Conditions.ObjectFinishedCondition" },
-        "Action": { "TypeId": "Automation.Actions.DetonateDynamiteAction", "Repeat": 5 }
+        "Action": { "TypeId": "Automation.Actions.DetonateDynamiteAction", "Repeat": 4 }
       }
     ]
   }
