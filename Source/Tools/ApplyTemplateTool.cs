@@ -48,15 +48,10 @@ sealed class ApplyTemplateTool : AbstractAreaSelectionTool, IAutomationModeEnabl
     behavior.ClearActions();
     var info = (ToolInfo) ToolInformation;
     foreach (var rule in info.Rules) {
-      var action = rule.Action.CloneDefinition();
-      if (action is not IAutomationConditionListener listener) {
-        throw new InvalidOperationException("Action is not a condition state listener: " + action);
+      if (rule.Action is not IAutomationConditionListener listener) {
+        throw new InvalidOperationException("Action is not a condition state listener: " + rule.Action);
       }
-      action.Behavior = behavior;
-      var condition = rule.Condition.CloneDefinition();
-      condition.Behavior = behavior;
-      condition.Listener = listener;
-      behavior.AddRule(condition, action);
+      behavior.AddRule(rule.Condition.CloneDefinition(), rule.Action.CloneDefinition());
     }
   }
 

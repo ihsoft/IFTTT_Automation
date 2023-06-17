@@ -39,7 +39,22 @@ public abstract class AutomationActionBase : IAutomationAction, IAutomationCondi
   AutomationBehavior _behavior;
 
   /// <inheritdoc/>
-  public virtual IAutomationCondition Condition { get; set; }
+  public virtual IAutomationCondition Condition {
+    get => _condition;
+    set {
+      if (_condition == value) {
+        return;
+      }
+      if (_condition != null) {
+        _condition.Listener = null;
+      }
+      _condition = value;
+      if (_condition != null) {
+        _condition.Listener = this;
+      }
+    }
+  }
+  IAutomationCondition _condition;
 
   /// <inheritdoc/>
   public bool IsMarkedForCleanup { get; protected set; }

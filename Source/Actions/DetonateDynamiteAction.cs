@@ -141,10 +141,9 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
         newDynamite = blockService.GetBottomObjectAt(coordinates);
       } while (newDynamite == null);
 
-      var behavior = newDynamite.GetComponentFast<AutomationBehavior>();
-      behavior.AddRule(
-          new ObjectFinishedCondition() { Behavior = behavior },
-          new DetonateDynamiteAction { Behavior = behavior, RepeatCount = repeatCount - 1 });
+      newDynamite.GetComponentFast<AutomationBehavior>().AddRule(
+          new ObjectFinishedCondition(),
+          new DetonateDynamiteAction { RepeatCount = repeatCount - 1 });
       Destroy(gameObject);
     }
 

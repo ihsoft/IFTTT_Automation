@@ -45,6 +45,8 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity {
       return false;
     }
     action.Condition = condition;
+    condition.Behavior = this;
+    action.Behavior = this;
     _actions.Add(action);
     HostedDebugLog.Fine(TransformFast, "Adding rule: {0}", action);
     UpdateRegistration();
@@ -88,7 +90,13 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity {
     _actions = component
         .Get(ActionsKey, AutomationActionBase.ActionSerializer)
         .OfType<IAutomationAction>()
+        .Where(a => a.Condition != null)
         .ToList();
+    foreach (var action in _actions) {
+      action.Condition.Behavior = this;
+      action.Behavior = this;
+    }
+    UpdateRegistration();
   }
   #endregion
 
