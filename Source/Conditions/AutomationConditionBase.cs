@@ -66,11 +66,20 @@ public abstract class AutomationConditionBase : IAutomationCondition {
   #endregion
 
   #region IGameSerializable implemenation
-  /// <inheritdoc/>
-  public virtual void LoadFrom(IObjectLoader objectLoader) {}
+  static readonly PropertyKey<bool> ConditionStateKey = new("ConditionState");
+  static readonly PropertyKey<bool> IsMarkedForCleanupKey = new("IsMarkedForCleanup");
 
   /// <inheritdoc/>
-  public virtual void SaveTo(IObjectSaver objectSaver) {}
+  public virtual void LoadFrom(IObjectLoader objectLoader) {
+    ConditionState = objectLoader.Has(ConditionStateKey) && objectLoader.Get(ConditionStateKey);
+    IsMarkedForCleanup = objectLoader.Has(IsMarkedForCleanupKey) && objectLoader.Get(IsMarkedForCleanupKey);
+  }
+
+  /// <inheritdoc/>
+  public virtual void SaveTo(IObjectSaver objectSaver) {
+    objectSaver.Set(ConditionStateKey, ConditionState);
+    objectSaver.Set(IsMarkedForCleanupKey, IsMarkedForCleanup);
+  }
   #endregion
 
   #region API

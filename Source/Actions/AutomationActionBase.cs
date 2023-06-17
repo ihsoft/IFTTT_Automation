@@ -16,9 +16,6 @@ public abstract class AutomationActionBase : IAutomationAction, IAutomationCondi
   /// <summary>Serializer that handles persistence of all the action types.</summary>
   public static readonly DynamicClassSerializer<AutomationActionBase> ActionSerializer = new();
 
-  /// <summary>Key for the action condition.</summary>
-  protected static readonly PropertyKey<AutomationConditionBase> ConditionPropertyKey = new("Condition");
-
   #region ICondition implementation
   /// <inheritdoc/>
   public virtual AutomationBehavior Behavior {
@@ -61,9 +58,13 @@ public abstract class AutomationActionBase : IAutomationAction, IAutomationCondi
   #endregion
 
   #region IGameSerializable implemenation
+  static readonly PropertyKey<AutomationConditionBase> ConditionPropertyKey = new("Condition");
+  static readonly PropertyKey<bool> IsMarkedForCleanupKey = new("IsMarkedForCleanup");
+
   /// <inheritdoc/>
   public virtual void LoadFrom(IObjectLoader objectLoader) {
     Condition = objectLoader.GetValueOrNull(ConditionPropertyKey, AutomationConditionBase.ConditionSerializer);
+    IsMarkedForCleanup = objectLoader.Has(IsMarkedForCleanupKey) && objectLoader.Get(IsMarkedForCleanupKey);
   }
 
   /// <inheritdoc/>
@@ -71,6 +72,7 @@ public abstract class AutomationActionBase : IAutomationAction, IAutomationCondi
     if (Condition is AutomationConditionBase condition) {
       objectSaver.Set(ConditionPropertyKey, condition, AutomationConditionBase.ConditionSerializer);
     }
+    objectSaver.Set(IsMarkedForCleanupKey, IsMarkedForCleanup);
   }
   #endregion
 
