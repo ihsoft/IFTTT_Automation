@@ -13,16 +13,8 @@ public sealed class DroughtStartedCondition : WeatherTrackerConditionBase {
 
   /// <inheritdoc/>
   public override IAutomationCondition CloneDefinition() {
-    return new DroughtStartedCondition(this);
+    return new DroughtStartedCondition();
   }
-  #endregion
-
-  #region Implementation
-  /// <inheritdoc/>
-  public DroughtStartedCondition() {}
-
-  /// <inheritdoc/>
-  public DroughtStartedCondition(DroughtStartedCondition src) : base(src) {}
   #endregion
 }
 

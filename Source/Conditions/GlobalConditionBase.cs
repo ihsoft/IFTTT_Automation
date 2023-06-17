@@ -21,14 +21,6 @@ public abstract class GlobalConditionBase<T> : AutomationConditionBase where T :
     Behavior.AutomationService.GetGlobalBehavior<T>().DeleteCondition(this);
   }
   #endregion
-
-  #region Implementation
-  /// <inheritdoc/>
-  protected GlobalConditionBase() {}
-
-  /// <inheritdoc/>
-  protected GlobalConditionBase(GlobalConditionBase<T> src) : base(src) {}
-  #endregion
 }
 
 }

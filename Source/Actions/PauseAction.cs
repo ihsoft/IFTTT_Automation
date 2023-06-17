@@ -15,16 +15,8 @@ namespace Automation.Actions {
 public class PauseAction : AutomationActionBase {
   #region AutomationActionBase overrides
   /// <inheritdoc/>
-  public PauseAction() {
-  }
-
-  /// <inheritdoc/>
-  public PauseAction(PauseAction src) : base(src) {
-  }
-
-  /// <inheritdoc/>
   public override IAutomationAction CloneDefinition() {
-    return new PauseAction(this);
+    return new PauseAction();
   }
 
   /// <inheritdoc/>

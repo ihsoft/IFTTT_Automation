@@ -21,14 +21,6 @@ public abstract class BlockObjectConditionBase<T> : AutomationConditionBase wher
     Behavior.GetComponentFast<T>().DeleteCondition(this);
   }
   #endregion
-
-  #region Implementation
-  /// <inheritdoc/>
-  protected BlockObjectConditionBase() {}
-
-  /// <inheritdoc/>
-  protected BlockObjectConditionBase(BlockObjectConditionBase<T> src) : base(src) {}
-  #endregion
 }
 
 }

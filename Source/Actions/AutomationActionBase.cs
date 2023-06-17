@@ -112,13 +112,6 @@ public abstract class AutomationActionBase : IAutomationAction, IAutomationCondi
   #endregion
 
   #region Implementation
-  /// <summary>Default constructor is required for serialization.</summary>
-  protected AutomationActionBase() {}
-
-  /// <summary>Copy constructor is required for cloning.</summary>
-  /// <seealso cref="CloneDefinition"/>
-  protected AutomationActionBase(AutomationActionBase src) {}
-
   /// <inheritdoc/>
   public override string ToString() {
     return $"TypeId={GetType()},Condition={Condition?.GetType()}";

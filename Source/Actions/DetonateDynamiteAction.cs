@@ -39,17 +39,8 @@ public sealed class DetonateDynamiteAction : AutomationActionBase {
 
   #region AutomationActionBase overrides
   /// <inheritdoc/>
-  public DetonateDynamiteAction() {
-  }
-
-  /// <inheritdoc/>
-  public DetonateDynamiteAction(DetonateDynamiteAction src) : base(src) {
-    RepeatCount = src.RepeatCount;
-  }
-
-  /// <inheritdoc/>
   public override IAutomationAction CloneDefinition() {
-    return new DetonateDynamiteAction(this);
+    return new DetonateDynamiteAction { RepeatCount = RepeatCount };
   }
 
   /// <inheritdoc/>

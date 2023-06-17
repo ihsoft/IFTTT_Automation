@@ -26,21 +26,13 @@ public sealed class ObjectFinishedCondition : BlockObjectConditionBase<ObjectFin
 
   /// <inheritdoc/>
   public override IAutomationCondition CloneDefinition() {
-    return new ObjectFinishedCondition(this);
+    return new ObjectFinishedCondition();
   }
 
   /// <inheritdoc/>
   public override bool IsValidAt(AutomationBehavior behavior) {
     return !behavior.GetComponentFast<BlockObject>().Finished;
   }
-  #endregion
-
-  #region Implementation
-  /// <inheritdoc/>
-  public ObjectFinishedCondition() {}
-
-  /// <inheritdoc/>
-  ObjectFinishedCondition(ObjectFinishedCondition src) : base(src) {}
   #endregion
 }
 

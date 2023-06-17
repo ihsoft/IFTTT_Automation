@@ -113,13 +113,6 @@ public abstract class AutomationConditionBase : IAutomationCondition {
   #endregion
 
   #region Implementation
-  /// <summary>Default constructor is required for serialization.</summary>
-  protected AutomationConditionBase() {}
-
-  /// <summary>Copy constructor is required for cloning.</summary>
-  /// <seealso cref="CloneDefinition"/>
-  protected AutomationConditionBase(AutomationConditionBase src) {}
-
   /// <inheritdoc/>
   public override string ToString() {
     return $"TypeId={GetType()},Listener={Listener?.GetType()}";
