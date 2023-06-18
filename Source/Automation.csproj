@@ -43,6 +43,9 @@
       <Compile Include="Conditions\AutomationConditionBehaviorBase.cs" />
       <Compile Include="Conditions\BlockObjectConditionBase.cs" />
       <Compile Include="Conditions\GlobalConditionBase.cs" />
+      <Compile Include="Conditions\OutputStockAboveThresholdCondition.cs" />
+      <Compile Include="Conditions\OutputStockBelowThresholdCondition.cs" />
+      <Compile Include="Conditions\OutputStockThresholdConditionBase.cs" />
       <Compile Include="Conditions\WeatherTrackerConditionBase.cs" />
       <Compile Include="Conditions\DroughtEndedCondition.cs" />
       <Compile Include="Conditions\DroughtStartedCondition.cs" />
