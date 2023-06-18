@@ -3,24 +3,13 @@
 // License: Public Domain
 
 using Automation.Core;
-using Timberborn.BlockSystem;
+using Timberborn.ConstructibleSystem;
+using Timberborn.SingletonSystem;
 
 namespace Automation.Conditions {
 
-public sealed class ObjectFinishedCondition : BlockObjectConditionBase<ObjectFinishedConditionBehavior> {
+public sealed class ObjectFinishedCondition : AutomationConditionBase {
   #region BlockObjectConditionBase implementation
-
-  /// <inheritdoc/>
-  public override bool ConditionState {
-    get => base.ConditionState;
-    internal set {
-      base.ConditionState = value;
-      if (ConditionState) {
-        IsMarkedForCleanup = true; // Block object can be constructed only once.
-      }
-    }
-  }
-
   /// <inheritdoc/>
   public override string UiDescription => "<SolidHighlight>construction complete</SolidHighlight>";
 
@@ -32,6 +21,27 @@ public sealed class ObjectFinishedCondition : BlockObjectConditionBase<ObjectFin
   /// <inheritdoc/>
   public override bool IsValidAt(AutomationBehavior behavior) {
     return !behavior.BlockObject.Finished;
+  }
+
+  /// <inheritdoc/>
+  protected override void OnBehaviorAssigned() {
+    Behavior.EventBus.Register(this);
+  }
+
+  /// <inheritdoc/>
+  protected override void OnBehaviorToBeCleared() {
+    Behavior.EventBus.Unregister(this);
+  }
+  #endregion
+
+  #region Implementation
+  [OnEvent]
+  public void OnConstructibleEnteredFinishedStateEvent(ConstructibleEnteredFinishedStateEvent @event) {
+    if (@event.Constructible.GameObjectFast != Behavior.GameObjectFast) {
+      return;
+    }
+    ConditionState = true;
+    IsMarkedForCleanup = true;
   }
   #endregion
 }
