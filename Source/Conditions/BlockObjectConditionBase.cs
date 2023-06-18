@@ -12,7 +12,7 @@ public abstract class BlockObjectConditionBase<T> : AutomationConditionBase wher
   /// <inheritdoc/>
   protected override void OnBehaviorAssigned() {
     var behavior = Behavior.GetComponentFast<T>()
-        ?? Behavior.AutomationService.BaseInstantiator.AddComponent<T>(Behavior.GameObjectFast);
+        ?? Behavior.BaseInstantiator.AddComponent<T>(Behavior.GameObjectFast);
     behavior.AddCondition(this);
   }
 

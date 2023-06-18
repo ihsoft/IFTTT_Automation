@@ -8,16 +8,23 @@ using Automation.Actions;
 using Bindito.Core;
 using Timberborn.BaseComponentSystem;
 using Timberborn.BlockSystem;
+using Timberborn.Localization;
 using Timberborn.Persistence;
 using UnityDev.LogUtils;
 
 namespace Automation.Core {
 
 public class AutomationBehavior : BaseComponent, IPersistentEntity {
+  #region Injection shortcuts
   public AutomationService AutomationService { get; private set; }
+  public ILoc Loc => AutomationService.Loc;
+  public BaseInstantiator BaseInstantiator => AutomationService.BaseInstantiator;
+  #endregion
 
-  public BlockObject BlockObject => _blockObject ??= GetComponentFast<BlockObject>();
-  BlockObject _blockObject;
+  /// <summary>
+  /// Automation can only work on the block objects. This is the object which this behavior is attached to.
+  /// </summary>
+  public BlockObject BlockObject { get; private set; }
 
   public bool HasActions => _actions.Count > 0;
 
@@ -90,6 +97,10 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity {
   [Inject]
   public void InjectDependencies(AutomationService automationService) {
     AutomationService = automationService;
+  }
+
+  void Start() {
+    BlockObject = GetComponentFast<BlockObject>();
   }
 
   void OnDestroy() {
