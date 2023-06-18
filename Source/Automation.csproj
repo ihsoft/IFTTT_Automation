@@ -49,9 +49,7 @@
       <Compile Include="Conditions\WeatherTrackerConditionBase.cs" />
       <Compile Include="Conditions\DroughtEndedCondition.cs" />
       <Compile Include="Conditions\DroughtStartedCondition.cs" />
-      <Compile Include="Conditions\WeatherTrackerConditionBehavior.cs" />
       <Compile Include="Conditions\ObjectFinishedCondition.cs" />
-      <Compile Include="Conditions\ObjectFinishedConditionBehavior.cs" />
       <Compile Include="Core\AutomationBehavior.cs" />
       <Compile Include="Core\AutomationService.cs" />
       <Compile Include="Core\Configurator.cs" />
