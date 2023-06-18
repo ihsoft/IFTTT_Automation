@@ -10,6 +10,7 @@ using Timberborn.BaseComponentSystem;
 using Timberborn.BlockSystem;
 using Timberborn.Localization;
 using Timberborn.Persistence;
+using Timberborn.SingletonSystem;
 using UnityDev.LogUtils;
 
 namespace Automation.Core {
@@ -18,6 +19,7 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity {
   #region Injection shortcuts
   public AutomationService AutomationService { get; private set; }
   public ILoc Loc => AutomationService.Loc;
+  public EventBus EventBus => AutomationService.EventBus;
   public BaseInstantiator BaseInstantiator => AutomationService.BaseInstantiator;
   #endregion
 

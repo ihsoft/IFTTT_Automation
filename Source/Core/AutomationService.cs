@@ -27,10 +27,11 @@ public class AutomationService : IPostLoadableSingleton {
   #endregion
 
   public AutomationService(EventBus eventBus, Highlighter highlighter, BaseInstantiator baseInstantiator, ILoc loc) {
-    eventBus.Register(this);
-    _highlighter = highlighter;
+    EventBus = eventBus;
     BaseInstantiator = baseInstantiator;
     Loc = loc;
+    eventBus.Register(this);
+    _highlighter = highlighter;
   }
 
   #region Implemetation of IPostLoadableSingleton
@@ -39,11 +40,14 @@ public class AutomationService : IPostLoadableSingleton {
   #endregion
 
   #region API
-  /// <summary>Shortcut to get the instantiator for the conditions and actions.</summary>
+  /// <summary>Shortcut to the instantiator.</summary>
   public readonly BaseInstantiator BaseInstantiator;
 
-  /// <summary>Shortcut to get the localizator.</summary>
+  /// <summary>Shortcut to the localizator.</summary>
   public readonly ILoc Loc;
+
+  /// <summary>Shortcut to EventBus.</summary>
+  public readonly EventBus EventBus;
 
   /// <summary>All automation behaviors that has at least one active condition.</summary>
   public ReadOnlyHashSet<AutomationBehavior> AutomationBehaviors => _registeredBehaviors.AsReadOnly();
