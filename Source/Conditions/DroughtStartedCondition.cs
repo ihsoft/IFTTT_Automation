@@ -15,6 +15,11 @@ public sealed class DroughtStartedCondition : WeatherTrackerConditionBase {
   public override IAutomationCondition CloneDefinition() {
     return new DroughtStartedCondition();
   }
+
+  /// <inheritdoc/>
+  protected override void OnWeatherChanged(bool isDrought) {
+    ConditionState = isDrought;
+  }
   #endregion
 }
 
