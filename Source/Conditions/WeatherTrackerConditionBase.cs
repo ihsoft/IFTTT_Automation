@@ -2,6 +2,7 @@
 // Author: igor.zavoychinskiy@gmail.com
 // License: Public Domain
 
+using TimberApi.DependencyContainerSystem;
 using Timberborn.SingletonSystem;
 using Timberborn.WeatherSystem;
 
@@ -9,6 +10,12 @@ namespace Automation.Conditions {
 
 public abstract class WeatherTrackerConditionBase : AutomationConditionBase {
   #region AutomationConditionBase overrides
+  /// <inheritdoc/>
+  public override void SyncState() {
+    var droughtService = DependencyContainer.GetInstance<DroughtService>();
+    OnWeatherChanged(isDrought: droughtService.IsDrought);
+  }
+
   /// <inheritdoc/>
   protected override void OnBehaviorAssigned() {
     Behavior.EventBus.Register(this);

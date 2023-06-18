@@ -19,8 +19,13 @@ public sealed class ObjectFinishedCondition : AutomationConditionBase {
   }
 
   /// <inheritdoc/>
+  public override void SyncState() {
+    ConditionState = Behavior.BlockObject.Finished;
+  }
+
+  /// <inheritdoc/>
   public override bool IsValidAt(AutomationBehavior behavior) {
-    return !behavior.BlockObject.Finished;
+    return true;  // On the finished objects the condition will trigger immediately.
   }
 
   /// <inheritdoc/>

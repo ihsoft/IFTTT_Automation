@@ -42,6 +42,11 @@ public class AutomationBehavior : BaseComponent, IPersistentEntity {
     action.Condition = condition;
     condition.Behavior = this;
     action.Behavior = this;
+    condition.SyncState();
+    if (action.IsMarkedForCleanup || condition.IsMarkedForCleanup) {
+      HostedDebugLog.Fine(TransformFast, "Skipping rule that is marked for cleanup: {0}", action);
+      return true;
+    }
     _actions.Add(action);
     HostedDebugLog.Fine(TransformFast, "Adding rule: {0}", action);
     UpdateRegistration();

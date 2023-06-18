@@ -14,6 +14,11 @@ namespace Automation.Conditions {
 public abstract class OutputStockThresholdConditionBase : AutomationConditionBase {
   #region AutomationConditionBase implementation
   /// <inheritdoc/>
+  public override void SyncState() {
+    CheckInventory();
+  }
+
+  /// <inheritdoc/>
   public override bool IsValidAt(AutomationBehavior behavior) {
     if (!base.IsValidAt(behavior)) {
       return false;

@@ -63,6 +63,17 @@ public interface IAutomationCondition : IGameSerializable {
 
   /// <summary>Verifies that the condition can be used on the provided automation behavior.</summary>
   public bool IsValidAt(AutomationBehavior behavior);
+
+  /// <summary>
+  /// Sets the current state of the condition so that it matches the current state of the game and/or the automation
+  /// behavior.
+  /// </summary>
+  /// <remarks>
+  /// This method must only be called if the condition is active. The state change, if any, must be reported as usual.
+  /// </remarks>
+  /// <seealso cref="Behavior"/>
+  /// <seealso cref="ConditionState"/>
+  public void SyncState();
 }
 
 }

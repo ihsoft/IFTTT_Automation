@@ -95,6 +95,9 @@ public abstract class AutomationConditionBase : IAutomationCondition {
   public abstract IAutomationCondition CloneDefinition();
 
   /// <inheritdoc/>
+  public abstract void SyncState();
+
+  /// <inheritdoc/>
   public virtual bool CheckSameDefinition(IAutomationCondition other) {
     return other != null && other.GetType() == GetType();
   }
