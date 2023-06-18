@@ -35,7 +35,9 @@
     <ItemGroup>
       <Compile Include="Actions\AutomationActionBase.cs" />
       <Compile Include="Actions\DetonateDynamiteAction.cs" />
+      <Compile Include="Actions\MarkForEmptyingAction.cs" />
       <Compile Include="Actions\PauseAction.cs" />
+      <Compile Include="Actions\UnmarkForEmptyingAction.cs" />
       <Compile Include="Actions\UnpauseAction.cs" />
       <Compile Include="Conditions\AutomationConditionBase.cs" />
       <Compile Include="Conditions\AutomationConditionBehaviorBase.cs" />
@@ -129,6 +131,9 @@
       <Reference Include="Timberborn.CoreUI, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\Dependencies\Timberborn\Timberborn.CoreUI.dll</HintPath>
       </Reference>
+      <Reference Include="Timberborn.Emptying, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Dependencies\Timberborn\Timberborn.Emptying.dll</HintPath>
+      </Reference>
       <Reference Include="Timberborn.EntityPanelSystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\Dependencies\Timberborn\Timberborn.EntityPanelSystem.dll</HintPath>
       </Reference>
@@ -141,8 +146,14 @@
       <Reference Include="Timberborn.GameSaveRuntimeSystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\Dependencies\Timberborn\Timberborn.GameSaveRuntimeSystem.dll</HintPath>
       </Reference>
+      <Reference Include="Timberborn.Goods, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Dependencies\Timberborn\Timberborn.Goods.dll</HintPath>
+      </Reference>
       <Reference Include="Timberborn.InputSystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\Dependencies\Timberborn\Timberborn.InputSystem.dll</HintPath>
+      </Reference>
+      <Reference Include="Timberborn.InventorySystem, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Dependencies\Timberborn\Timberborn.InventorySystem.dll</HintPath>
       </Reference>
       <Reference Include="Timberborn.Localization, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\Dependencies\Timberborn\Timberborn.Localization.dll</HintPath>
