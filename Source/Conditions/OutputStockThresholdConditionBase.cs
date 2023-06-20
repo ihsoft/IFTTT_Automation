@@ -56,6 +56,7 @@ public abstract class OutputStockThresholdConditionBase : AutomationConditionBas
 
   /// <inheritdoc/>
   public override void LoadFrom(IObjectLoader objectLoader) {
+    base.LoadFrom(objectLoader);
     if (objectLoader.Has(ThresholdKey)) {
       Threshold = objectLoader.Get(ThresholdKey);
     }
@@ -63,6 +64,7 @@ public abstract class OutputStockThresholdConditionBase : AutomationConditionBas
 
   /// <inheritdoc/>
   public override void SaveTo(IObjectSaver objectSaver) {
+    base.SaveTo(objectSaver);
     objectSaver.Set(ThresholdKey, Threshold);
   }
   #endregion
