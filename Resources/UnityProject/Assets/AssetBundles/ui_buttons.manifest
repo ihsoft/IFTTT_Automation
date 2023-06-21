@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 780743551
+CRC: 1989722961
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c7f4142087b71757dc20a41521c68759
+    Hash: eac0a471e7389e2cc9de7c942b47ed3a
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2d8df09e698f722ada1caa03d3413830
@@ -22,6 +22,7 @@ Assets:
 - Assets/Sprites/Icons/cancel.png
 - Assets/Sprites/Icons/icon-dynamite-down-2.png
 - Assets/Sprites/Icons/automation-dynamite.png
+- Assets/Sprites/Icons/status-icon-emptying.png
 - Assets/Sprites/Icons/automation-group-storage.png
 - Assets/Sprites/Icons/icon-empty-50pct.png
 - Assets/Sprites/Icons/automation-water.png
