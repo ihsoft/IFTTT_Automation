@@ -17,7 +17,9 @@ IgorZ.Automation.Tool.tmpl.EmptyAt60pct.DisplayName,"Empty the storage if capaci
 IgorZ.Automation.Tool.tmpl.EmptyAt70pct.DisplayName,"Empty the storage if capacity is above 70%"
 IgorZ.Automation.Tool.tmpl.EmptyAt80pct.DisplayName,"Empty the storage if capacity is above 80%"
 IgorZ.Automation.Tool.tmpl.EmptyAt90pct.DisplayName,"Empty the storage if capacity is above 90%"
-IgorZ.Automation.Tool.tmpl.EmptyAtXpct.Description,"This template can be applied to any building involved in the production or distribution of goods. If the <i>output</i> stock level exceeds the predetermined threshold, the building will transition into an 'empty' mode, facilitating rapid removal of goods."
+IgorZ.Automation.Tool.tmpl.EmptyAtXpct.Description,"This template can be applied to building that produce one type of good and have no input stock. If the <i>output</i> stock level exceeds the predetermined threshold, the building will transition into an 'empty' mode, facilitating rapid removal of goods."
+
+IgorZ.Automation.EmptyOutputStore.CustomStatus,"The building is being emptied on a priority basis."
 
 IgorZ.Automation.Tool.tmpl.DroughtPause.DisplayName,"Template: Pause during drought"
 IgorZ.Automation.Tool.tmpl.DroughtPause.Description,"Apply this template on buildings that should stay paused during droughts."
