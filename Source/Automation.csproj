@@ -65,6 +65,7 @@
       <Compile Include="Tools\ResumeTool.cs" />
       <Compile Include="UI\AutomationFragment.cs" />
       <Compile Include="UI\Configurator.cs" />
+      <Compile Include="UnityDevCandidates\StatusSpriteLoaderPatcher.cs" />
       <Compile Include="UnityDevCandidates\ReflectedAction.cs" />
       <Compile Include="Utils\AbstractAreaSelectionTool.cs" />
       <Compile Include="Utils\AbstractLockingTool.cs" />
@@ -75,6 +76,9 @@
       <Compile Include="Utils\ToolWithDescription.cs" />
     </ItemGroup>
     <ItemGroup>
+      <Reference Include="0Harmony, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Dependencies\Timberborn\0Harmony.dll</HintPath>
+      </Reference>
       <Reference Include="BepInEx, Version=5.4.21.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\Dependencies\Timberborn\BepInEx.dll</HintPath>
       </Reference>
