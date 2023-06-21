@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 626092813
+CRC: 780743551
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6cc5c7d63950b3cb05e3d230966a1856
+    Hash: c7f4142087b71757dc20a41521c68759
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2d8df09e698f722ada1caa03d3413830
@@ -18,7 +18,6 @@ Assets:
 - Assets/Sprites/Icons/automation-power.png
 - Assets/Sprites/Icons/icon-dynamite-down-6.png
 - Assets/Sprites/Icons/icon-dynamite-down-5.png
-- Assets/Sprites/Icons/automation-empty-storage.png
 - Assets/Sprites/Icons/icon-empty-70pct.png
 - Assets/Sprites/Icons/cancel.png
 - Assets/Sprites/Icons/icon-dynamite-down-2.png
@@ -29,7 +28,6 @@ Assets:
 - Assets/Sprites/Icons/icon-temperate-pause.png
 - Assets/Sprites/Icons/automation-group.png
 - Assets/Sprites/Icons/icon-drought-pause.png
-- Assets/Sprites/Icons/automation-empty.png
 - Assets/Sprites/Icons/icon-empty-90pct.png
 - Assets/Sprites/Icons/icon-dynamite-down-3.png
 - Assets/Sprites/Icons/player-play.png

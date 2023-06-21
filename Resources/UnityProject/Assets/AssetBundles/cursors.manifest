@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 602064797
+CRC: 3486656265
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: cedaad0db1ac3c262696ec77ff272e95
+    Hash: 7dab5c4d106fa68bae1b8deda6fd704d
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2612ac43db082a73502ee80f2eceb73f
@@ -14,7 +14,6 @@ ClassTypes:
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Sprites/Cursors/cog-cursor-large.png
-- Assets/Sprites/Cursors/empty-cursor-large.png
 - Assets/Sprites/Cursors/pause-cursor-large.png
 - Assets/Sprites/Cursors/play-cursor-large.png
 Dependencies: []
