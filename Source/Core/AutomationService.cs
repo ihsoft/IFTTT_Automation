@@ -17,7 +17,7 @@ namespace Automation.Core {
 
 /// <summary>Central point for all the automation related logic.</summary>
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
-public class AutomationService : IPostLoadableSingleton {
+public sealed class AutomationService : IPostLoadableSingleton {
   #region Internal fields
   readonly HashSet<AutomationBehavior> _registeredBehaviors = new();
   readonly Color _highlightColor = Color.cyan * 0.5f;
@@ -82,7 +82,7 @@ public class AutomationService : IPostLoadableSingleton {
     }
     return _rootComponent.GetComponentFast<T>() ?? BaseInstantiator.AddComponent<T>(_rootComponent.GameObjectFast);
   }
-  internal class RootComponent : BaseComponent {}
+  internal sealed class RootComponent : BaseComponent {}
   #endregion
 
   #region Implementation

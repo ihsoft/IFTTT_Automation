@@ -15,7 +15,7 @@ using UnityDev.LogUtils;
 
 namespace Automation.Core {
 
-public class AutomationBehavior : BaseComponent, IPersistentEntity {
+public sealed class AutomationBehavior : BaseComponent, IPersistentEntity {
   #region Injection shortcuts
   public AutomationService AutomationService { get; private set; }
   public ILoc Loc => AutomationService.Loc;

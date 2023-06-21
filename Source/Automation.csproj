@@ -67,6 +67,7 @@
       <Compile Include="UI\Configurator.cs" />
       <Compile Include="UnityDevCandidates\StatusSpriteLoaderPatcher.cs" />
       <Compile Include="UnityDevCandidates\ReflectedAction.cs" />
+      <Compile Include="UnityDevCandidates\ReflectedField.cs" />
       <Compile Include="Utils\AbstractAreaSelectionTool.cs" />
       <Compile Include="Utils\AbstractLockingTool.cs" />
       <Compile Include="Utils\CustomToolSystem.cs" />

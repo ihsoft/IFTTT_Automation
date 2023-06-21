@@ -7,7 +7,7 @@ using UnityDev.LogUtils;
 
 namespace Automation.UnityDevCandidates {
 
-public class ReflectedAction<T, TArg0> {
+public sealed class ReflectedAction<T, TArg0> {
   readonly MethodInfo _methodInfo;
 
   public ReflectedAction(string methodName) {

@@ -55,6 +55,7 @@ sealed class AutomationFragment : IEntityPanelFragment {
       rules.Append(string.Format("If {0}, then {1}", action.Condition.UiDescription, action.UiDescription));
     }
     _caption.text = "Automation rules:";
+    //_rulesList.text = rules.ToString();
     _rulesList.text = TextColors.ColorizeText(rules.ToString());
     _root.ToggleDisplayStyle(visible: true);
   }
