@@ -65,7 +65,6 @@
       <Compile Include="Tools\ResumeTool.cs" />
       <Compile Include="UI\AutomationFragment.cs" />
       <Compile Include="UI\Configurator.cs" />
-      <Compile Include="UnityDevCandidates\StatusSpriteLoaderPatcher.cs" />
       <Compile Include="UnityDevCandidates\ReflectedAction.cs" />
       <Compile Include="UnityDevCandidates\ReflectedField.cs" />
       <Compile Include="Utils\AbstractAreaSelectionTool.cs" />
@@ -74,6 +73,7 @@
       <Compile Include="Utils\DynamicClassSerializer.cs" />
       <Compile Include="Utils\IGameSerializable.cs" />
       <Compile Include="Utils\StaticClassSerializer.cs" />
+      <Compile Include="Utils\StatusSpriteLoaderPatcher.cs" />
       <Compile Include="Utils\ToolWithDescription.cs" />
     </ItemGroup>
     <ItemGroup>

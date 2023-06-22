@@ -4,6 +4,7 @@
 
 using System;
 using Automation.Core;
+using Automation.Utils;
 using Timberborn.BaseComponentSystem;
 using Timberborn.Emptying;
 using Timberborn.Persistence;
@@ -104,7 +105,8 @@ public sealed class MarkForEmptyingAction : AutomationActionBase {
     void Start() {
       // The game must be patched to support prefix "?>". 
       _statusToggle = StatusToggle.CreatePriorityStatusWithFloatingIcon(
-          "?>" + CustomStatusIcon, GetComponentFast<AutomationBehavior>().Loc.T(CustomStatusDescriptionKey));
+          StatusSpriteLoaderPatch.ResetPathDelimiter + CustomStatusIcon,
+          GetComponentFast<AutomationBehavior>().Loc.T(CustomStatusDescriptionKey));
       GetComponentFast<Emptiable>().UnmarkedForEmptying += OnUnmarkedForEmptying;
       var subject = GetComponentFast<StatusSubject>();
       subject.RegisterStatus(_statusToggle);

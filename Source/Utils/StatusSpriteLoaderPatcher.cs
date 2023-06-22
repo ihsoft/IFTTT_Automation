@@ -2,6 +2,7 @@
 // Author: igor.zavoychinskiy@gmail.com
 // License: Public Domain
 
+using System.Diagnostics.CodeAnalysis;
 using HarmonyLib;
 using TimberApi.ConsoleSystem;
 using TimberApi.ModSystem;
@@ -9,7 +10,7 @@ using Timberborn.AssetSystem;
 using Timberborn.StatusSystem;
 using UnityEngine;
 
-namespace Automation.UnityDevCandidates {
+namespace Automation.Utils {
 
 // ReSharper disable once UnusedType.Global
 sealed class StatusSpriteLoaderPatcher : IModEntrypoint {
@@ -21,16 +22,24 @@ sealed class StatusSpriteLoaderPatcher : IModEntrypoint {
 /// <summary>Patch that allows using custom icons in status subject in teh stock logic.</summary>
 /// <remarks>
 /// The status specification gets name of teh icon and behind the hood translates it to a path to the stock game folder.
-/// In order to re-write the path to the plugin's asset folder, add prefix "?>" to the sprite name and provide full path
-/// to the custom icon. E.g. if icon is stored in "my.mod/icons/icon0", then provide sprite name "?>my.mod/icons/icon0". 
+/// In order to re-write the path to the plugin's asset folder, add prefix <see cref="ResetPathDelimiter"/> to the
+/// sprite name and provide full path to the custom icon. E.g. if icon is stored in "my.mod/icons/icon0", then provide
+/// sprite name <c>ResetPathDelimiter</c> + "my.mod/icons/icon0". 
 /// </remarks>
 [HarmonyPatch(typeof(StatusSpriteLoader), nameof(StatusSpriteLoader.LoadSprite), typeof(string))]
-static class StatusSpriteLoaderPatch {
+public static class StatusSpriteLoaderPatch {
+  /// <summary>
+  ///     Resource path delimiter that can be used to rewrite the stock game paths.
+  /// </summary>
+  public const string ResetPathDelimiter = "_TAPI_RESOURCE_/";
+
+  [SuppressMessage("ReSharper", "InconsistentNaming")]
+  // ReSharper disable once UnusedMember.Local
   static bool Prefix(string spriteName, IResourceAssetLoader ____resourceAssetLoader, ref Sprite __result) {
-    if (!spriteName.StartsWith("?>")) {
+    if (!spriteName.StartsWith(ResetPathDelimiter)) {
       return true;
     }
-    __result = ____resourceAssetLoader.Load<Sprite>(spriteName.Substring(2));
+    __result = ____resourceAssetLoader.Load<Sprite>(spriteName.Substring(ResetPathDelimiter.Length));
     return false;
   }
 }
