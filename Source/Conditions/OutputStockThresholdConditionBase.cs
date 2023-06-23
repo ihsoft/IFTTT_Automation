@@ -24,7 +24,7 @@ public abstract class OutputStockThresholdConditionBase : AutomationConditionBas
       return false;
     }
     var inventory = behavior.GetComponentFast<Inventory>();
-    return inventory != null && inventory.IsOutput && inventory.OutputGoods.Count == 1;
+    return inventory != null && inventory.IsOutput && !inventory.IsInput && inventory.OutputGoods.Count == 1;
   }
 
   /// <inheritdoc/>
