@@ -12,5 +12,11 @@
         "InGame",
       ]
     }
+  ],
+  "Dependencies": [
+    {
+      "UniqueId": "igorz.customresources",
+      "MinimumVersion": "1.0.0"
+    }
   ]
 }

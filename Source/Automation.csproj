@@ -73,7 +73,6 @@
       <Compile Include="Utils\DynamicClassSerializer.cs" />
       <Compile Include="Utils\IGameSerializable.cs" />
       <Compile Include="Utils\StaticClassSerializer.cs" />
-      <Compile Include="Utils\StatusSpriteLoaderPatcher.cs" />
       <Compile Include="Utils\ToolWithDescription.cs" />
     </ItemGroup>
     <ItemGroup>

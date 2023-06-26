@@ -103,9 +103,8 @@ public sealed class MarkForEmptyingAction : AutomationActionBase {
     public event EventHandler<EventArgs> StatusReset;
 
     void Start() {
-      // The game must be patched to support prefix "?>". 
       _statusToggle = StatusToggle.CreatePriorityStatusWithFloatingIcon(
-          StatusSpriteLoaderPatch.ResetPathDelimiter + CustomStatusIcon,
+          CustomStatusIcon,
           GetComponentFast<AutomationBehavior>().Loc.T(CustomStatusDescriptionKey));
       GetComponentFast<Emptiable>().UnmarkedForEmptying += OnUnmarkedForEmptying;
       var subject = GetComponentFast<StatusSubject>();
