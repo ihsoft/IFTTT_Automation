@@ -8,7 +8,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Automation.Conditions;
 using Automation.Core;
-using Automation.UnityDevCandidates;
 using TimberApi.DependencyContainerSystem;
 using Timberborn.BlockObjectTools;
 using Timberborn.BlockSystem;
@@ -19,6 +18,7 @@ using Timberborn.Navigation;
 using Timberborn.Persistence;
 using Timberborn.ToolSystem;
 using UnityDev.LogUtils;
+using UnityDev.Utils.ReflectionUtils;
 using UnityEngine;
 
 namespace Automation.Actions {

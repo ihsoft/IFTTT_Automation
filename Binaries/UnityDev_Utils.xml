@@ -86,6 +86,9 @@
             <summary>Returns list of config nodes from the repeated field.</summary>
             <returns>Collection of config nodes or empty list the field is not found or the type is wrong.</returns>
         </member>
+        <member name="M:UnityDev.Utils.Configs.ConfigNode.ToString">
+            <inheritdoc/>
+        </member>
         <member name="T:UnityDev.Utils.Configs.PersistentNode">
             <summary>Class that can save/restore its fields to/from <c>ConfigNode</c>.</summary>
             <remarks>
@@ -433,6 +436,62 @@
             <summary>Gets mouse position.</summary>
             <remarks>Detects if both old and new input systems installed into the system and avoids collision.</remarks>
         </member>
+        <member name="T:UnityDev.Utils.ReflectionUtils.ReflectedAction`2">
+            <summary>Wrapper to implement an efficient access to the class method via reflection.</summary>
+            <remarks>Implements access to a method that returns <c>void</c> and accepts exactly one argument.</remarks>
+            <typeparam name="T">type of the class.</typeparam>
+            <typeparam name="TArg0">type of the action argument.</typeparam>
+        </member>
+        <member name="M:UnityDev.Utils.ReflectionUtils.ReflectedAction`2.#ctor(System.String)">
+            <summary>Creates the reflection for the action.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.ReflectionUtils.ReflectedAction`2.IsValid">
+            <summary>Indicates if the target method was found and ready to use.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.ReflectionUtils.ReflectedAction`2.Invoke(`0,`1)">
+            <summary>Invokes the method or NOOP if the method is not found.</summary>
+        </member>
+        <member name="T:UnityDev.Utils.ReflectionUtils.ReflectedField`2">
+            <summary>Wrapper to implement efficient access to the class fields via reflection.</summary>
+            <remarks>It ignores access scope.</remarks>
+            <typeparam name="T">type of the class.</typeparam>
+            <typeparam name="TV">type of the field value.</typeparam>
+        </member>
+        <member name="M:UnityDev.Utils.ReflectionUtils.ReflectedField`2.#ctor(System.String)">
+            <summary>Creates the reflection for the field.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.ReflectionUtils.ReflectedField`2.IsValid">
+            <summary>Indicates if the target field was found and ready to use.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.ReflectionUtils.ReflectedField`2.Get(`0)">
+            <summary>Gets the field value or returns a default value if the field is not found.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.ReflectionUtils.ReflectedField`2.Get(`0,`1)">
+            <summary>Gets the field value or returns the provided default value if the field is not found.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.ReflectionUtils.ReflectedField`2.Set(`0,`1)">
+            <summary>Sets the field value or does nothing if the field is not found.</summary>
+        </member>
+        <member name="T:UnityDev.Utils.ReflectionUtils.ReflectedField`1">
+            <summary>Wrapper to implement efficient access to the class fields via reflection.</summary>
+            <remarks>It ignores access scope.</remarks>
+            <typeparam name="TV">type of the field value.</typeparam>
+        </member>
+        <member name="M:UnityDev.Utils.ReflectionUtils.ReflectedField`1.#ctor(System.Reflection.IReflect,System.String)">
+            <summary>Creates the reflection for the field.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.ReflectionUtils.ReflectedField`1.IsValid">
+            <summary>Indicates if the target field was found and ready to use.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.ReflectionUtils.ReflectedField`1.Get(System.Object)">
+            <summary>Gets the field value or returns a default value if the field is not found.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.ReflectionUtils.ReflectedField`1.Get(System.Object,`0)">
+            <summary>Gets the field value or returns the provided default value if the field is not found.</summary>
+        </member>
+        <member name="M:UnityDev.Utils.ReflectionUtils.ReflectedField`1.Set(System.Object,`0)">
+            <summary>Sets the field value or does nothing if the field is not found.</summary>
+        </member>
         <member name="T:UnityDev.LogUtils.DbgFormatter">
             <summary>A set of tools to format various game entities for debugging purposes.</summary>
         </member>
@@ -577,6 +636,12 @@
             <remarks>
             The settings are not loaded pro-actively. The config is supposed to be loaded when it's first time needed.
             </remarks>
+        </member>
+        <member name="T:UnityDev.LogUtils.LoggingSettings.SettingsGroup">
+            <summary>Logging settings.</summary>
+        </member>
+        <member name="F:UnityDev.LogUtils.LoggingSettings.SettingsGroup.verbosityLevel">
+            <summary>Defines which logs above "info" level are to be reported.</summary>
         </member>
         <member name="P:UnityDev.LogUtils.LoggingSettings.Settings">
             <summary>Settings group.</summary>
