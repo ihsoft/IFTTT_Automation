@@ -11,18 +11,18 @@ namespace Automation.Tools {
 
 // ReSharper disable once ClassNeverInstantiated.Global
 sealed class ResumeTool : AbstractLockingTool {
-  const string UnityCursorName = "igorz.automation/cursors/play-cursor-large";
-  
   #region CustomTool overrides
   /// <inheritdoc/>
   protected override void Initialize() {
     SetColorSchema(Color.green, Color.green, Color.white, Color.white);
-    SetUnityCursor(UnityCursorName);
     base.Initialize();
   }
   #endregion
 
   #region AbstractAreaSelectionTool overries
+  /// <inheritdoc/>
+  protected override string CursorName => "igorz.automation/cursors/play-cursor-large";
+
   /// <inheritdoc/>
   protected override bool ObjectFilterExpression(BlockObject blockObject) {
     if (!base.ObjectFilterExpression(blockObject)) {

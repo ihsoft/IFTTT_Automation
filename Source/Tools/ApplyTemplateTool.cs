@@ -16,7 +16,6 @@ namespace Automation.Templates {
 
 // ReSharper disable once ClassNeverInstantiated.Global
 sealed class ApplyTemplateTool : AbstractAreaSelectionTool, IAutomationModeEnabler {
-  const string UnityCursorName = "igorz.automation/cursors/cog-cursor-large";
   static readonly Color ToolColor = new(0, 1, 1, 0.7f);
 
   #region Tool information
@@ -32,6 +31,9 @@ sealed class ApplyTemplateTool : AbstractAreaSelectionTool, IAutomationModeEnabl
   #endregion
 
   #region AbstractAreaSelectionTool overries
+  /// <inheritdoc/>
+  protected override string CursorName => "igorz.automation/cursors/cog-cursor-large";
+
   /// <inheritdoc/>
   protected override bool ObjectFilterExpression(BlockObject blockObject) {
     var behavior = blockObject.GetComponentFast<AutomationBehavior>();
@@ -58,7 +60,6 @@ sealed class ApplyTemplateTool : AbstractAreaSelectionTool, IAutomationModeEnabl
   /// <inheritdoc/>
   protected override void Initialize() {
     SetColorSchema(ToolColor, ToolColor, Color.cyan, Color.cyan);
-    SetUnityCursor(UnityCursorName);
     base.Initialize();
   }
   #endregion

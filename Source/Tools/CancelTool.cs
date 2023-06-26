@@ -15,12 +15,14 @@ sealed class CancelTool : AbstractAreaSelectionTool, IAutomationModeEnabler {
   /// <inheritdoc/>
   protected override void Initialize() {
     SetColorSchema(Color.red, Color.red, Color.white, Color.white);
-    SetGameCursor("CancelCursor");
     base.Initialize();
   }
   #endregion
 
   #region AbstractAreaSelectionTool overrides
+  /// <inheritdoc/>
+  protected override string CursorName => "CancelCursor";
+
   /// <inheritdoc/>
   protected override bool ObjectFilterExpression(BlockObject blockObject) {
     var automationBehavior = blockObject.GetComponentFast<AutomationBehavior>();
